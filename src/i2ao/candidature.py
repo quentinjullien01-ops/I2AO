@@ -20,7 +20,8 @@ from docx.shared import Cm, Pt, RGBColor
 from pydantic import BaseModel, Field
 
 from .affaires import Affaire
-from .content_loader import load_repair_profile
+from .config import CANDIDAT_NOM
+from .content_loader import load_bet_profile
 from .extractor import AnalyseAO
 from .llm import LLMClient
 
@@ -93,10 +94,10 @@ Madame la Présidente / Monsieur le Directeur Général selon le pouvoir adjudic
 
 
 def generer_lettre(
-    client: LLMClient, analyse: AnalyseAO, candidat: str = "Repair Ingénierie"
+    client: LLMClient, analyse: AnalyseAO, candidat: str = CANDIDAT_NOM
 ) -> LettrePresentation:
     """Génère le brouillon de lettre via Gemini."""
-    profile = load_repair_profile()
+    profile = load_bet_profile()
 
     user_prompt = f"""## Analyse de l'AO
 
@@ -247,7 +248,7 @@ def exporter_lettre_docx(lettre: LettrePresentation, output_path: Path) -> Path:
 # ---------------------------------------------------------------------------
 
 
-def creer_pack_zip(affaire: Affaire, candidat: str = "Repair Ingenierie") -> Path:
+def creer_pack_zip(affaire: Affaire, candidat: str = CANDIDAT_NOM) -> Path:
     """Assemble en ZIP les pièces de la candidature.
 
     Le ZIP contient :

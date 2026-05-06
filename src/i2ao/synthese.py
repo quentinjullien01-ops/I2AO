@@ -19,7 +19,7 @@ from docx.oxml.ns import qn
 from docx.shared import Cm, Pt, RGBColor
 from pydantic import BaseModel, Field
 
-from .content_loader import load_repair_profile
+from .content_loader import load_bet_profile
 from .dpgf_engine import DPGFGeneree
 from .extractor import AnalyseAO
 from .llm import LLMClient
@@ -105,7 +105,7 @@ def generer_synthese(
     mt et dpgf peuvent être None : dans ce cas la synthèse se fait sans visibilité
     sur le contenu déjà rédigé (utile pour un go/no-go en amont du travail de réponse).
     """
-    repair_profile = load_repair_profile()
+    bet_profile = load_bet_profile()
 
     contexte_parts = [
         "## Analyse de l'AO\n",
@@ -129,9 +129,9 @@ def generer_synthese(
             f"**Montant DQE estimé : {dpgf.montant_dqe_he:,.0f} € HT**".replace(",", " ")
         )
 
-    if repair_profile:
+    if bet_profile:
         contexte_parts.append("\n## Profil entreprise\n")
-        contexte_parts.append(repair_profile)
+        contexte_parts.append(bet_profile)
 
     user_prompt = (
         "\n".join(contexte_parts)

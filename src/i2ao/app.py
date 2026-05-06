@@ -47,7 +47,7 @@ from i2ao.charts import (
     donut_repartition_dqe,
     gauge_score,
 )
-from i2ao.config import GOOGLE_API_KEY, LLM_MODEL
+from i2ao.config import CANDIDAT_NOM, GOOGLE_API_KEY, LLM_MODEL
 from i2ao.coverage import RapportCouverture, evaluer_couverture
 from i2ao.docx_export import exporter_mt_docx
 from i2ao.dpgf_engine import DPGFGeneree, generer_dpgf
@@ -1006,7 +1006,7 @@ def render_tab_dpgf(affaire: Affaire, client: LLMClient | None) -> None:
                 dpgf,
                 affaire.dpgf_xlsx_path,
                 marche_ref="2026-MOE-STRUCT-01",
-                candidat="Repair Ingénierie",
+                candidat=CANDIDAT_NOM,
             )
             st.write(f"XLSX produit ({affaire.dpgf_xlsx_path.stat().st_size / 1024:.1f} KB)")
             status.update(label="DPGF générée", state="complete", expanded=False)
@@ -1135,7 +1135,7 @@ def render_tab_synthese(affaire: Affaire, client: LLMClient | None) -> None:
             st.write(msg)
 
             st.write("Export DOCX 1-pager…")
-            exporter_synthese_docx(synth, affaire.synthese_docx_path, candidat="Repair Ingénierie")
+            exporter_synthese_docx(synth, affaire.synthese_docx_path, candidat=CANDIDAT_NOM)
             st.write(f"DOCX produit ({affaire.synthese_docx_path.stat().st_size / 1024:.1f} KB)")
             status.update(label="Synthèse générée", state="complete", expanded=False)
 
@@ -1226,7 +1226,7 @@ def render_tab_candidature(affaire: Affaire, client: LLMClient | None) -> None:
         analyse = charger_analyse(affaire)
         with st.status("Génération de la lettre…", expanded=True) as status:
             st.write(f"Appel Gemini ({LLM_MODEL})…")
-            lettre = generer_lettre(client, analyse, candidat="Repair Ingénierie")
+            lettre = generer_lettre(client, analyse, candidat=CANDIDAT_NOM)
             affaire.lettre_json_path.write_text(
                 lettre.model_dump_json(indent=2), encoding="utf-8"
             )
@@ -1310,7 +1310,7 @@ def render_tab_candidature(affaire: Affaire, client: LLMClient | None) -> None:
             use_container_width=True,
             key="btn_assembler_pack",
         ):
-            zip_path = creer_pack_zip(affaire, candidat="Repair Ingenierie")
+            zip_path = creer_pack_zip(affaire, candidat=CANDIDAT_NOM)
             st.success(f"ZIP créé ({zip_path.stat().st_size / 1024:.1f} KB)")
 
     if affaire.pack_zip_path.exists():

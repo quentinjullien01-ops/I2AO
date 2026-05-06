@@ -9,7 +9,7 @@ import frontmatter
 import yaml
 from pydantic import BaseModel, Field
 
-from .config import DPGF_CATALOG_DIR, MT_LIBRARY_DIR, REPAIR_PROFILE_PATH
+from .config import DPGF_CATALOG_DIR, MT_LIBRARY_DIR, BET_PROFILE_PATH
 
 
 class ParagrapheMT(BaseModel):
@@ -78,8 +78,8 @@ def load_dpgf_catalog() -> list[PrestationDPGF]:
     return prestations
 
 
-def load_repair_profile() -> str:
+def load_bet_profile() -> str:
     """Charge le profil entreprise (références, équipe, certifs)."""
-    if not REPAIR_PROFILE_PATH.exists():
+    if not BET_PROFILE_PATH.exists():
         return ""
-    return REPAIR_PROFILE_PATH.read_text(encoding="utf-8")
+    return BET_PROFILE_PATH.read_text(encoding="utf-8")

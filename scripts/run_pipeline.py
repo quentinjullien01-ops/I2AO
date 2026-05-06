@@ -21,6 +21,7 @@ from i2ao.affaires import (  # noqa: E402
     initialiser_demo_si_absente,
     lister_affaires,
 )
+from i2ao.config import CANDIDAT_NOM  # noqa: E402
 from i2ao.coverage import evaluer_couverture  # noqa: E402
 from i2ao.docx_export import exporter_mt_docx  # noqa: E402
 from i2ao.dpgf_engine import generer_dpgf  # noqa: E402
@@ -35,11 +36,11 @@ from i2ao.xlsx_export import exporter_dpgf_xlsx  # noqa: E402
 AFFAIRE_META = {
     "demo-oph-vallees-isere": {
         "marche_ref": "Marché 2026-MOE-STRUCT-01",
-        "candidat": "Repair Ingénierie",
+        "candidat": CANDIDAT_NOM,
     },
     "demo-confortement-saint-marcellin": {
         "marche_ref": "Marché 2026-MAPA-MOE-04",
-        "candidat": "Repair Ingénierie",
+        "candidat": CANDIDAT_NOM,
     },
 }
 
@@ -47,7 +48,7 @@ AFFAIRE_META = {
 def _meta_pour(slug: str) -> dict[str, str]:
     return AFFAIRE_META.get(
         slug,
-        {"marche_ref": slug, "candidat": "Repair Ingénierie"},
+        {"marche_ref": slug, "candidat": CANDIDAT_NOM},
     )
 
 

@@ -16,7 +16,7 @@ from pathlib import Path
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(PROJECT_ROOT / "src"))
 
-from i2ao.config import OUTPUT_DIR
+from i2ao.config import CANDIDAT_NOM, OUTPUT_DIR
 from i2ao.dpgf_engine import generer_dpgf
 from i2ao.extractor import AnalyseAO, concatener_dce, extraire_analyse_ao
 from i2ao.llm import LLMClient
@@ -77,7 +77,7 @@ def main() -> int:
         dpgf,
         xlsx_path,
         marche_ref="2026-MOE-STRUCT-01",
-        candidat="Repair Ingénierie",
+        candidat=CANDIDAT_NOM,
     )
     size_kb = xlsx_path.stat().st_size / 1024
     print(f"  XLSX produit : {xlsx_path.relative_to(PROJECT_ROOT)}  ({size_kb:.1f} KB)")

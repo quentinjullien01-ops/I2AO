@@ -13,7 +13,7 @@ from datetime import date
 
 from pydantic import BaseModel, Field
 
-from .content_loader import ParagrapheMT, load_mt_library, load_repair_profile
+from .content_loader import ParagrapheMT, load_mt_library, load_bet_profile
 from .extractor import AnalyseAO
 from .llm import LLMClient
 
@@ -85,7 +85,7 @@ def generer_mt(client: LLMClient, analyse: AnalyseAO) -> MemoireTechniqueGenere:
     if not library:
         raise RuntimeError("Bibliothèque MT vide. Vérifier content/mt-library/*.md")
 
-    repair_profile = load_repair_profile()
+    bet_profile = load_bet_profile()
 
     user_prompt = f"""## Analyse de l'AO
 
@@ -95,7 +95,7 @@ def generer_mt(client: LLMClient, analyse: AnalyseAO) -> MemoireTechniqueGenere:
 
 ## Profil de l'entreprise candidate
 
-{repair_profile if repair_profile else '(profil entreprise non fourni — utiliser des tournures génériques)'}
+{bet_profile if bet_profile else '(profil entreprise non fourni — utiliser des tournures génériques)'}
 
 ## Bibliothèque de paragraphes à contextualiser
 

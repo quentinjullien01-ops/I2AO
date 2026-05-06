@@ -2,11 +2,9 @@
 
 Outil d'aide à la rédaction de réponses aux marchés publics pour bureau d'études structures, calibré sur le créneau **pathologie / diagnostic / confortement**.
 
-## Cible business
+Le pipeline complet ingère un DCE (RC + CCAP + CCTP + BPU/DPGF) en PDF, en extrait les exigences structurées via LLM, génère un mémoire technique contextualisé, une DPGF chiffrée à partir d'un catalogue de prestations, un score de couverture du MT, une synthèse direction Go/No-go et un pack candidature ZIP prêt à transmettre.
 
-**Repair Ingénierie** — spécialiste expertise structurelle et travaux de consolidation (béton, métal, bois). Filiale travaux : Syma Consolidation. Aujourd'hui positionné sur les sinistres assurance privés, ce projet vise à ouvrir le canal des **marchés publics** (bailleurs sociaux, OPH, collectivités, MH).
-
-Voir [SCENARIO-DEMO.md](SCENARIO-DEMO.md) pour le storyboard du pitch d'entretien.
+Voir [SCENARIO-DEMO.md](SCENARIO-DEMO.md) pour le scénario de démonstration commenté.
 
 ## Périmètre fonctionnel
 
@@ -38,13 +36,16 @@ python -m venv .venv
 .venv/Scripts/pip install -e .
 ```
 
-Puis créer le fichier `.env` à la racine avec votre clé Gemini :
+Puis créer le fichier `.env` à la racine avec votre clé Gemini et le nom du candidat :
 
 ```
 GOOGLE_API_KEY=AIza...
+CANDIDAT_NOM=Mon BET SA
 ```
 
-(clé gratuite récupérable sur https://aistudio.google.com/apikey)
+(clé Gemini gratuite récupérable sur https://aistudio.google.com/apikey · `CANDIDAT_NOM` est utilisé par défaut dans la lettre de présentation, le MT et la DPGF)
+
+Compléter ensuite [content/bet-profile.md](content/bet-profile.md) avec les données réelles du BET (effectif, références, qualifications, logiciels, etc.) — le fichier livré est un template avec des marqueurs `[À RENSEIGNER]`.
 
 ### Lancer l'app
 
@@ -91,9 +92,9 @@ L'app détecte automatiquement la disponibilité de Tesseract — si absent, un 
 ```
 I2AO/
 ├── content/
-│   ├── mt-library/         14 paragraphes MT calibrés pathologie/consolidation
+│   ├── mt-library/         17 paragraphes MT calibrés pathologie/consolidation
 │   ├── dpgf-catalog/       55 prestations DPGF avec prix marché 2026
-│   └── repair-profile.md   Profil entreprise (Repair Ingénierie)
+│   └── bet-profile.md      Profil entreprise candidate (template à compléter)
 ├── data/
 │   ├── samples/source/     Sources markdown des DCE fictifs de démo
 │   ├── samples/            DCE fictifs de démo (PDF générés)

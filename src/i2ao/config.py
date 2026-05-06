@@ -14,7 +14,7 @@ load_dotenv(PROJECT_ROOT / ".env", override=True)
 CONTENT_DIR = PROJECT_ROOT / "content"
 MT_LIBRARY_DIR = CONTENT_DIR / "mt-library"
 DPGF_CATALOG_DIR = CONTENT_DIR / "dpgf-catalog"
-REPAIR_PROFILE_PATH = CONTENT_DIR / "repair-profile.md"
+BET_PROFILE_PATH = CONTENT_DIR / "bet-profile.md"
 
 DATA_DIR = PROJECT_ROOT / "data"
 SAMPLES_DIR = DATA_DIR / "samples"
@@ -28,3 +28,7 @@ for d in (DATA_DIR, SAMPLES_DIR, UPLOADS_DIR, OUTPUT_DIR):
 GOOGLE_API_KEY = os.environ.get("GOOGLE_API_KEY") or os.environ.get("GEMINI_API_KEY") or ""
 LLM_MODEL = "gemini-2.5-flash"
 LLM_MAX_TOKENS = 8000
+
+# Nom du candidat utilisé par défaut dans les livrables (lettre, MT, DPGF…).
+# Surclassable via la variable d'environnement CANDIDAT_NOM dans .env.
+CANDIDAT_NOM = os.environ.get("CANDIDAT_NOM", "BET candidat")

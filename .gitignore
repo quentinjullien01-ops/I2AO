@@ -40,3 +40,7 @@ Thumbs.db
 # Generated outputs
 data/output/
 data/uploads/
+
+# Affaires (creees automatiquement au premier lancement, contenu specifique
+# au candidat utilisateur — pas a versionner publiquement)
+data/affaires/

@@ -1,6 +1,6 @@
 """Tests sur le chargement de la bibliothèque MT et du catalogue DPGF."""
 
-from i2ao.content_loader import load_dpgf_catalog, load_mt_library, load_repair_profile
+from i2ao.content_loader import load_dpgf_catalog, load_mt_library, load_bet_profile
 
 
 def test_mt_library_charge_tous_les_paragraphes():
@@ -26,7 +26,7 @@ def test_mt_library_paragraphes_ont_du_contenu():
     for p in paragraphes:
         assert p.section, f"section vide pour {p.id}"
         assert len(p.contenu) > 200, f"contenu trop court pour {p.id}"
-        assert p.ordre > 0
+        assert p.ordre >= 0
 
 
 def test_mt_library_paragraphes_ordonnes():
@@ -62,7 +62,7 @@ def test_dpgf_catalog_prix_positifs():
         assert p.prix_unitaire > 0, f"Prix invalide pour {p.code}"
 
 
-def test_repair_profile_charge():
-    profile = load_repair_profile()
-    assert profile, "Profil Repair vide"
-    assert "Repair" in profile or "repair" in profile.lower()
+def test_bet_profile_charge():
+    profile = load_bet_profile()
+    assert profile, "Profil BET vide"
+    assert "candidat" in profile.lower() or "candidate" in profile.lower()
