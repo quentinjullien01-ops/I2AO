@@ -23,13 +23,33 @@ from .config import GOOGLE_API_KEY, LLM_MAX_TOKENS, LLM_MODEL
 
 logger = logging.getLogger(__name__)
 
+T = TypeVar("T", bound=BaseModel)
+
+
+class LLMError(RuntimeError):
+    pass
+
+
+class LLMOverloadError(LLMError):
+    """Gemini est sature (5xx ou 429) au-dela des tentatives de retry.
+
+    L'appelant peut afficher un message convivial et proposer de relancer.
+    """
+
+
 _RETRY_STATUS_CODES = {429, 500, 502, 503, 504}
-_RETRY_MAX_ATTEMPTS = 5
+_RETRY_MAX_ATTEMPTS = 8
 _RETRY_BASE_DELAY = 2.0  # secondes
+_RETRY_MAX_DELAY = 60.0  # plafond pour eviter d'attendre 256s+ sur la 8e tentative
 
 
 def _with_retry(fn: Callable[[], object]) -> object:
-    """Retry exponentiel sur 429/5xx (free tier Gemini sujet à pics)."""
+    """Retry exponentiel sur 429/5xx (Gemini sujet a des pics de saturation).
+
+    Levee LLMOverloadError si toutes les tentatives echouent — ce qui permet
+    a l'UI Streamlit de l'attraper et d'afficher un message lisible plutot
+    qu'une stack trace.
+    """
     last_exc: Exception | None = None
     for attempt in range(_RETRY_MAX_ATTEMPTS):
         try:
@@ -39,7 +59,7 @@ def _with_retry(fn: Callable[[], object]) -> object:
             if status not in _RETRY_STATUS_CODES:
                 raise
             last_exc = e
-            delay = _RETRY_BASE_DELAY * (2**attempt)
+            delay = min(_RETRY_BASE_DELAY * (2**attempt), _RETRY_MAX_DELAY)
             logger.warning(
                 "Gemini %s sur tentative %d/%d, retry dans %.1fs",
                 status,
@@ -48,14 +68,10 @@ def _with_retry(fn: Callable[[], object]) -> object:
                 delay,
             )
             time.sleep(delay)
-    assert last_exc is not None
-    raise last_exc
-
-T = TypeVar("T", bound=BaseModel)
-
-
-class LLMError(RuntimeError):
-    pass
+    raise LLMOverloadError(
+        f"Gemini est sature : {_RETRY_MAX_ATTEMPTS} tentatives ont retourne une erreur "
+        f"transitoire (5xx/429). Reessaye dans quelques minutes."
+    ) from last_exc
 
 
 @dataclass

@@ -52,7 +52,7 @@ from i2ao.coverage import RapportCouverture, evaluer_couverture
 from i2ao.docx_export import exporter_mt_docx
 from i2ao.dpgf_engine import DPGFGeneree, generer_dpgf
 from i2ao.extractor import AnalyseAO, concatener_dce, extraire_analyse_ao
-from i2ao.llm import LLMClient, LLMError
+from i2ao.llm import LLMClient, LLMError, LLMOverloadError
 from i2ao.mt_engine import (
     MemoireTechniqueGenere,
     detecter_variables_non_remplies,
@@ -251,6 +251,21 @@ def get_llm_client() -> LLMClient | None:
 def is_mode_presentation() -> bool:
     """Renvoie True si l'utilisateur a activé le mode pitch épuré."""
     return bool(st.session_state.get("mode_presentation", False))
+
+
+def afficher_erreur_llm(exc: Exception, etape: str) -> None:
+    """Affiche un message convivial pour les erreurs LLM (5xx, quota, etc.)."""
+    if isinstance(exc, LLMOverloadError):
+        st.error(
+            f"⏳ Gemini est temporairement saturé pendant l'étape « {etape} ». "
+            "Plusieurs retries automatiques ont échoué. **Réessaye dans 1 à 5 minutes** "
+            "en cliquant sur le bouton « Regénérer » — c'est généralement transitoire."
+        )
+    else:
+        st.error(
+            f"❌ Erreur LLM pendant l'étape « {etape} » : {exc}. "
+            "Vérifie ta clé API Gemini (sidebar) et le quota de ton projet Google AI Studio."
+        )
 
 
 def piece_humaine(code: str) -> str:
@@ -677,7 +692,12 @@ def render_tab_analyse(affaire: Affaire, client: LLMClient | None) -> None:
             st.write(f"DCE concaténé : {len(dce):,} caractères")
 
             st.write(f"Appel Gemini ({LLM_MODEL})…")
-            analyse = extraire_analyse_ao(client, dce)
+            try:
+                analyse = extraire_analyse_ao(client, dce)
+            except LLMError as e:
+                status.update(label="Échec de l'extraction", state="error", expanded=True)
+                afficher_erreur_llm(e, "extraction du DCE")
+                return
             affaire.analyse_path.write_text(
                 analyse.model_dump_json(indent=2), encoding="utf-8"
             )
@@ -806,7 +826,12 @@ def render_tab_mt(affaire: Affaire, client: LLMClient | None) -> None:
         analyse = charger_analyse(affaire)
         with st.status("Génération du mémoire technique…", expanded=True) as status:
             st.write(f"Appel Gemini ({LLM_MODEL}) avec bibliothèque MT + profil entreprise…")
-            mt = generer_mt(client, analyse)
+            try:
+                mt = generer_mt(client, analyse)
+            except LLMError as e:
+                status.update(label="Échec de la génération MT", state="error", expanded=True)
+                afficher_erreur_llm(e, "génération du mémoire technique")
+                return
             affaire.mt_json_path.write_text(
                 mt.model_dump_json(indent=2), encoding="utf-8"
             )
@@ -881,7 +906,12 @@ def render_tab_mt(affaire: Affaire, client: LLMClient | None) -> None:
                 st.write(
                     f"Appel Gemini ({LLM_MODEL}) sur les exigences bloquantes et importantes…"
                 )
-                rapport = evaluer_couverture(client, analyse, mt)
+                try:
+                    rapport = evaluer_couverture(client, analyse, mt)
+                except LLMError as e:
+                    status.update(label="Échec de l'évaluation", state="error", expanded=True)
+                    afficher_erreur_llm(e, "évaluation de la couverture")
+                    return
                 affaire.couverture_path.write_text(
                     rapport.model_dump_json(indent=2), encoding="utf-8"
                 )
@@ -987,11 +1017,16 @@ def render_tab_dpgf(affaire: Affaire, client: LLMClient | None) -> None:
     if generer_btn or regenerer_btn:
         analyse = charger_analyse(affaire)
         pieces = charger_pieces(affaire)
-        dce = concatener_dce([(t, txt) for _, t, txt, _ in pieces])
+        dce = concatener_dce([(t, txt) for _, t, txt, _, _ in pieces])
 
         with st.status("Génération de la DPGF…", expanded=True) as status:
             st.write(f"Appel Gemini ({LLM_MODEL}) pour le programme indicatif…")
-            dpgf = generer_dpgf(client, analyse, dce)
+            try:
+                dpgf = generer_dpgf(client, analyse, dce)
+            except LLMError as e:
+                status.update(label="Échec de la génération DPGF", state="error", expanded=True)
+                afficher_erreur_llm(e, "génération DPGF")
+                return
             affaire.dpgf_json_path.write_text(
                 dpgf.model_dump_json(indent=2), encoding="utf-8"
             )
@@ -1118,7 +1153,12 @@ def render_tab_synthese(affaire: Affaire, client: LLMClient | None) -> None:
         dpgf = charger_dpgf(affaire)
         with st.status("Génération de la synthèse…", expanded=True) as status:
             st.write(f"Appel Gemini ({LLM_MODEL})…")
-            synth = generer_synthese(client, analyse, mt, dpgf)
+            try:
+                synth = generer_synthese(client, analyse, mt, dpgf)
+            except LLMError as e:
+                status.update(label="Échec de la synthèse", state="error", expanded=True)
+                afficher_erreur_llm(e, "génération de la synthèse direction")
+                return
             affaire.synthese_json_path.write_text(
                 synth.model_dump_json(indent=2), encoding="utf-8"
             )
@@ -1226,7 +1266,12 @@ def render_tab_candidature(affaire: Affaire, client: LLMClient | None) -> None:
         analyse = charger_analyse(affaire)
         with st.status("Génération de la lettre…", expanded=True) as status:
             st.write(f"Appel Gemini ({LLM_MODEL})…")
-            lettre = generer_lettre(client, analyse, candidat=CANDIDAT_NOM)
+            try:
+                lettre = generer_lettre(client, analyse, candidat=CANDIDAT_NOM)
+            except LLMError as e:
+                status.update(label="Échec de la lettre", state="error", expanded=True)
+                afficher_erreur_llm(e, "génération de la lettre de présentation")
+                return
             affaire.lettre_json_path.write_text(
                 lettre.model_dump_json(indent=2), encoding="utf-8"
             )
