@@ -1,0 +1,410 @@
+# Catalogue de prix unitaires HT pour les prestations BET structures pathologie/confortement.
+# Valeurs marché 2026 indicatives, à ajuster selon politique commerciale du candidat.
+#
+# Champs :
+#   code            : référence unique de la prestation
+#   libelle         : libellé apparaissant au BPU/DPGF
+#   unite           : unité de chiffrage (forfait, jour, sondage, mesure, % travaux, ...)
+#   prix_unitaire   : prix HT en euros (ou pourcentage pour les missions MOE)
+#   categorie       : chapitre du BPU
+#   tags            : étiquettes pour matching avec les exigences extraites
+#   note            : commentaire interne (non exporté)
+
+prestations:
+
+  # === Chapitre 1 : Diagnostic structurel ===
+  - code: "1.01"
+    libelle: "Visite préalable et note de cadrage"
+    unite: "forfait"
+    prix_unitaire: 850
+    categorie: "Diagnostic structurel"
+    tags: [diagnostic, visite, cadrage]
+
+  - code: "1.02"
+    libelle: "Diagnostic structurel — immeuble R+4 à R+7, ouvrage simple"
+    unite: "forfait"
+    prix_unitaire: 6800
+    categorie: "Diagnostic structurel"
+    tags: [diagnostic, collectif, courant]
+
+  - code: "1.03"
+    libelle: "Diagnostic structurel — immeuble R+7 à R+10, ouvrage simple"
+    unite: "forfait"
+    prix_unitaire: 11500
+    categorie: "Diagnostic structurel"
+    tags: [diagnostic, collectif, courant]
+
+  - code: "1.04"
+    libelle: "Diagnostic structurel — pavillon ou petit collectif R+2 max"
+    unite: "forfait"
+    prix_unitaire: 3400
+    categorie: "Diagnostic structurel"
+    tags: [diagnostic, pavillon]
+
+  - code: "1.05"
+    libelle: "Diagnostic structurel approfondi avec modélisation EF"
+    unite: "forfait"
+    prix_unitaire: 14800
+    categorie: "Diagnostic structurel"
+    tags: [diagnostic, modelisation, EF]
+
+  - code: "1.06"
+    libelle: "Surcoût pour bâtiment classé MH ou bâti antérieur à 1948"
+    unite: "forfait"
+    prix_unitaire: 2900
+    categorie: "Diagnostic structurel"
+    tags: [diagnostic, MH, bati-ancien]
+    note: "Forfait additionnel, à appliquer aux postes 1.02 à 1.05"
+
+  - code: "1.07"
+    libelle: "Note de programmation des investigations"
+    unite: "forfait"
+    prix_unitaire: 950
+    categorie: "Diagnostic structurel"
+    tags: [diagnostic, programmation]
+
+  # === Chapitre 2 : Investigations non destructives ===
+  - code: "2.01"
+    libelle: "Pacométrie — repérage armatures"
+    unite: "demi-journée"
+    prix_unitaire: 480
+    categorie: "Investigations non destructives"
+    tags: [investigation, pacometrie, beton-arme]
+
+  - code: "2.02"
+    libelle: "Sclérométrie — mesure de résistance béton"
+    unite: "mesure"
+    prix_unitaire: 35
+    categorie: "Investigations non destructives"
+    tags: [investigation, sclerometrie, beton]
+
+  - code: "2.03"
+    libelle: "Auscultation ultrasonique du béton"
+    unite: "mesure"
+    prix_unitaire: 55
+    categorie: "Investigations non destructives"
+    tags: [investigation, ultrasons, beton]
+
+  - code: "2.04"
+    libelle: "Thermographie infrarouge — relevé de façade"
+    unite: "demi-journée"
+    prix_unitaire: 720
+    categorie: "Investigations non destructives"
+    tags: [investigation, thermographie]
+
+  - code: "2.05"
+    libelle: "Endoscopie — exploration vide ou chaînage"
+    unite: "sondage"
+    prix_unitaire: 320
+    categorie: "Investigations non destructives"
+    tags: [investigation, endoscopie]
+
+  # === Chapitre 3 : Investigations destructives ===
+  - code: "3.01"
+    libelle: "Carottage béton ⌀ 75 mm jusqu'à 30 cm"
+    unite: "carotte"
+    prix_unitaire: 280
+    categorie: "Investigations destructives"
+    tags: [investigation, carottage, beton]
+
+  - code: "3.02"
+    libelle: "Carottage béton ⌀ 75 mm de 30 à 60 cm"
+    unite: "carotte"
+    prix_unitaire: 380
+    categorie: "Investigations destructives"
+    tags: [investigation, carottage, beton]
+
+  - code: "3.03"
+    libelle: "Sondage destructif sur armature avec rebouchage"
+    unite: "sondage"
+    prix_unitaire: 410
+    categorie: "Investigations destructives"
+    tags: [investigation, destructif, armature]
+
+  - code: "3.04"
+    libelle: "Fenêtre d'investigation sur fondation"
+    unite: "unité"
+    prix_unitaire: 850
+    categorie: "Investigations destructives"
+    tags: [investigation, fondation, RGA]
+
+  - code: "3.05"
+    libelle: "Tranchée de reconnaissance fondation, longueur ≤ 1,5 m"
+    unite: "unité"
+    prix_unitaire: 1100
+    categorie: "Investigations destructives"
+    tags: [investigation, fondation, tranchee]
+
+  - code: "3.06"
+    libelle: "Prélèvement d'enduit ou matériau pour analyse"
+    unite: "unité"
+    prix_unitaire: 95
+    categorie: "Investigations destructives"
+    tags: [investigation, prelevement]
+
+  # === Chapitre 4 : Essais en laboratoire ===
+  - code: "4.01"
+    libelle: "Essai compression sur carotte béton"
+    unite: "essai"
+    prix_unitaire: 195
+    categorie: "Essais laboratoire"
+    tags: [labo, compression, beton]
+
+  - code: "4.02"
+    libelle: "Mesure profondeur de carbonatation"
+    unite: "essai"
+    prix_unitaire: 110
+    categorie: "Essais laboratoire"
+    tags: [labo, carbonatation, beton]
+
+  - code: "4.03"
+    libelle: "Analyse limites d'Atterberg"
+    unite: "échantillon"
+    prix_unitaire: 145
+    categorie: "Essais laboratoire"
+    tags: [labo, geotechnique, RGA]
+
+  - code: "4.04"
+    libelle: "Mesure valeur de bleu de méthylène (VBS)"
+    unite: "échantillon"
+    prix_unitaire: 95
+    categorie: "Essais laboratoire"
+    tags: [labo, geotechnique, VBS, RGA]
+
+  - code: "4.05"
+    libelle: "Teneur en eau et masse volumique sèche"
+    unite: "échantillon"
+    prix_unitaire: 75
+    categorie: "Essais laboratoire"
+    tags: [labo, geotechnique]
+
+  - code: "4.06"
+    libelle: "Analyse chimique d'acier — teneur en chlorures"
+    unite: "essai"
+    prix_unitaire: 165
+    categorie: "Essais laboratoire"
+    tags: [labo, acier, chlorures]
+
+  # === Chapitre 5 : Investigations géotechniques ===
+  - code: "5.01"
+    libelle: "Sondage pressiométrique 6 m avec essais"
+    unite: "sondage"
+    prix_unitaire: 1850
+    categorie: "Investigations géotechniques"
+    tags: [geotechnique, pressiometre, RGA]
+
+  - code: "5.02"
+    libelle: "Sondage pressiométrique 8 m avec essais"
+    unite: "sondage"
+    prix_unitaire: 2350
+    categorie: "Investigations géotechniques"
+    tags: [geotechnique, pressiometre, RGA]
+
+  - code: "5.03"
+    libelle: "Pénétromètre dynamique DPT, refus 4 m max"
+    unite: "sondage"
+    prix_unitaire: 720
+    categorie: "Investigations géotechniques"
+    tags: [geotechnique, penetrometre]
+
+  - code: "5.04"
+    libelle: "Étude géotechnique G2 AVP — bâtiment courant"
+    unite: "forfait"
+    prix_unitaire: 4200
+    categorie: "Investigations géotechniques"
+    tags: [geotechnique, G2, AVP]
+
+  - code: "5.05"
+    libelle: "Étude géotechnique G2 PRO — confortement"
+    unite: "forfait"
+    prix_unitaire: 7800
+    categorie: "Investigations géotechniques"
+    tags: [geotechnique, G2, PRO, confortement]
+
+  # === Chapitre 6 : Instrumentation et suivi ===
+  - code: "6.01"
+    libelle: "Pose de fissuromètre Saugnac à pointes"
+    unite: "unité"
+    prix_unitaire: 75
+    categorie: "Instrumentation et suivi"
+    tags: [instrumentation, fissurometre]
+
+  - code: "6.02"
+    libelle: "Pose de fissuromètre électronique avec datalogger"
+    unite: "unité"
+    prix_unitaire: 480
+    categorie: "Instrumentation et suivi"
+    tags: [instrumentation, fissurometre, datalogger]
+
+  - code: "6.03"
+    libelle: "Suivi mensuel — relevé manuel et compte rendu"
+    unite: "mois"
+    prix_unitaire: 290
+    categorie: "Instrumentation et suivi"
+    tags: [instrumentation, suivi, mensuel]
+
+  - code: "6.04"
+    libelle: "Cible topographique avec relevé station totale"
+    unite: "unité"
+    prix_unitaire: 65
+    categorie: "Instrumentation et suivi"
+    tags: [instrumentation, topographie]
+
+  - code: "6.05"
+    libelle: "Campagne suivi topographique (5 cibles)"
+    unite: "passage"
+    prix_unitaire: 480
+    categorie: "Instrumentation et suivi"
+    tags: [instrumentation, topographie, campagne]
+
+  - code: "6.06"
+    libelle: "Rapport de synthèse fin de période instrumentation"
+    unite: "forfait"
+    prix_unitaire: 1200
+    categorie: "Instrumentation et suivi"
+    tags: [instrumentation, rapport]
+
+  # === Chapitre 7 : MOE confortement (% travaux) ===
+  - code: "7.01"
+    libelle: "Mission MOE base — travaux ≤ 100 k€ HT"
+    unite: "% travaux"
+    prix_unitaire: 14.0
+    categorie: "Maîtrise d'œuvre confortement"
+    tags: [moe, confortement, base]
+    note: "Mission de base : DIAG + AVP + PRO + ACT + DET + AOR"
+
+  - code: "7.02"
+    libelle: "Mission MOE base — travaux 100 à 300 k€ HT"
+    unite: "% travaux"
+    prix_unitaire: 11.0
+    categorie: "Maîtrise d'œuvre confortement"
+    tags: [moe, confortement, base]
+
+  - code: "7.03"
+    libelle: "Mission MOE base — travaux 300 à 800 k€ HT"
+    unite: "% travaux"
+    prix_unitaire: 9.0
+    categorie: "Maîtrise d'œuvre confortement"
+    tags: [moe, confortement, base]
+
+  - code: "7.04"
+    libelle: "Phase EXE complète si exécutée par MOE"
+    unite: "% travaux"
+    prix_unitaire: 3.0
+    categorie: "Maîtrise d'œuvre confortement"
+    tags: [moe, EXE]
+
+  - code: "7.05"
+    libelle: "Phase VISA des EXE de l'entreprise"
+    unite: "% travaux"
+    prix_unitaire: 1.5
+    categorie: "Maîtrise d'œuvre confortement"
+    tags: [moe, VISA]
+
+  - code: "7.06"
+    libelle: "Phase OPC si confiée à la MOE"
+    unite: "% travaux"
+    prix_unitaire: 2.0
+    categorie: "Maîtrise d'œuvre confortement"
+    tags: [moe, OPC]
+
+  # === Chapitre 8 : Expertise ===
+  - code: "8.01"
+    libelle: "Mission d'expertise urgente — visite + rapport 4 sem"
+    unite: "forfait"
+    prix_unitaire: 3200
+    categorie: "Expertise"
+    tags: [expertise, urgence]
+
+  - code: "8.02"
+    libelle: "Mission d'expertise urgente — intervention 24h"
+    unite: "forfait"
+    prix_unitaire: 5800
+    categorie: "Expertise"
+    tags: [expertise, urgence, 24h]
+
+  - code: "8.03"
+    libelle: "Visite contradictoire avec partie tierce"
+    unite: "demi-journée"
+    prix_unitaire: 920
+    categorie: "Expertise"
+    tags: [expertise, contradictoire]
+
+  - code: "8.04"
+    libelle: "Rédaction de note technique complémentaire"
+    unite: "forfait"
+    prix_unitaire: 1450
+    categorie: "Expertise"
+    tags: [expertise, note]
+
+  # === Chapitre 9 : Études spécifiques ===
+  - code: "9.01"
+    libelle: "Note de descente de charges sur ouvrage existant"
+    unite: "forfait"
+    prix_unitaire: 1450
+    categorie: "Études spécifiques"
+    tags: [etudes, descente-charges]
+
+  - code: "9.02"
+    libelle: "Vérification de capacité portante après modification"
+    unite: "forfait"
+    prix_unitaire: 2400
+    categorie: "Études spécifiques"
+    tags: [etudes, capacite-portante]
+
+  - code: "9.03"
+    libelle: "Calcul d'élément isolé — poutre, poteau, console"
+    unite: "forfait"
+    prix_unitaire: 720
+    categorie: "Études spécifiques"
+    tags: [etudes, calcul-element]
+
+  - code: "9.04"
+    libelle: "Étude de stabilité provisoire avant intervention"
+    unite: "forfait"
+    prix_unitaire: 2200
+    categorie: "Études spécifiques"
+    tags: [etudes, stabilite-provisoire]
+
+  - code: "9.05"
+    libelle: "Modélisation EF complète d'un ouvrage existant"
+    unite: "forfait"
+    prix_unitaire: 5400
+    categorie: "Études spécifiques"
+    tags: [etudes, modelisation, EF]
+
+  # === Chapitre 10 : Vacations ===
+  - code: "10.01"
+    libelle: "Ingénieur structures senior — chef de projet"
+    unite: "jour"
+    prix_unitaire: 1100
+    categorie: "Vacations"
+    tags: [vacation, ingenieur, senior]
+
+  - code: "10.02"
+    libelle: "Ingénieur calculs"
+    unite: "jour"
+    prix_unitaire: 950
+    categorie: "Vacations"
+    tags: [vacation, ingenieur, calculs]
+
+  - code: "10.03"
+    libelle: "Ingénieur géotechnicien"
+    unite: "jour"
+    prix_unitaire: 1050
+    categorie: "Vacations"
+    tags: [vacation, geotechnicien]
+
+  - code: "10.04"
+    libelle: "Technicien d'investigations"
+    unite: "jour"
+    prix_unitaire: 580
+    categorie: "Vacations"
+    tags: [vacation, technicien]
+
+  - code: "10.05"
+    libelle: "Projeteur structures"
+    unite: "jour"
+    prix_unitaire: 720
+    categorie: "Vacations"
+    tags: [vacation, projeteur]

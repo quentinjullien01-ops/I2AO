@@ -1,0 +1,26 @@
+{
+  "en_tete_candidat": "Repair Ingénierie\n12, Rue des Structures\n38000 Grenoble\nTél: 04 76 XX XX XX\nEmail: contact@repairingenierie.fr",
+  "destinataire_bloc": "Monsieur le Directeur Général\nOPH des Vallées de l'Isère\n25, Avenue de l'Habitat\n38100 Grenoble",
+  "lieu_date": "Grenoble, le 05 mai 2026",
+  "objet": "Objet : Candidature au marché public n° [Référence AO] - Mission de diagnostic structurel et de maîtrise d'œuvre de travaux de confortement sur le patrimoine bâti de l'OPH des Vallées de l'Isère",
+  "introduction": "Monsieur le Directeur Général,Nous avons pris connaissance de l'appel d'offres relatif à la mission de diagnostic structurel et de maîtrise d'œuvre de travaux de confortement sur le patrimoine bâti de l'OPH des Vallées de l'Isère. Spécialiste reconnu dans ce domaine, Repair Ingénierie est particulièrement intéressée par cette consultation. Nous vous confirmons notre engagement à respecter l'intégralité des clauses du Cahier des Clauses Administratives Particulières (CCAP) et du Cahier des Clauses Techniques Particulières (CCTP).",
+  "presentation_candidat": "Repair Ingénierie est un bureau d'études structures dédié à la pathologie, à l'expertise et à la conception de solutions de consolidation pour les ouvrages existants. Notre cœur de métier est l'analyse des désordres, la définition de diagnostics précis et l'élaboration de projets de confortement adaptés aux spécificités du bâti ancien et moderne. Nous disposons d'une équipe d'ingénieurs expérimentés et des moyens techniques nécessaires pour mener à bien des missions complexes.",
+  "atouts_specifiques": "Notre expertise avérée dans le traitement des désordres liés au Retrait-Gonflement des Argiles (RGA), attestée par plus de 50 références récentes, constitue un atout majeur au regard des problématiques identifiées dans le DCE. De plus, notre capacité à intervenir en site occupé, avec une coordination éprouvée auprès des locataires, et la synergie avec notre filiale travaux Syma Consolidation, garantissent une approche intégrée et une réactivité optimale. Nous détenons les qualifications OPQIBI 1801, 1802, 1803 et 1812, et notre équipe inclut l'ingénieur structures expérimenté requis.",
+  "pieces_jointes": [
+    "1. Lettre de candidature (DC1)",
+    "2. Déclaration du candidat (DC2)",
+    "3. Attestation sur l'honneur de non-condamnation et de régularité",
+    "4. Liste détaillée des références exécutées",
+    "5. CV des intervenants pressentis",
+    "6. Attestation d'assurance Responsabilité Civile Professionnelle et Décennale",
+    "7. Acte d'engagement complété, daté et signé",
+    "8. Bordereau des Prix Unitaires (BPU) complété",
+    "9. Détail Quantitatif Estimatif (DQE) chiffré",
+    "10. Mémoire technique",
+    "11. Planning prévisionnel type pour MOE confortement",
+    "12. Relevé d'Identité Bancaire (RIB)"
+  ],
+  "formule_politesse": "Dans l'attente de votre décision, nous vous prions d'agréer, Monsieur le Directeur Général, l'expression de nos salutations distinguées.",
+  "signataire_nom": "Jean Dupont",
+  "signataire_qualite": "Gérant"
+}

@@ -1,0 +1,427 @@
+{
+  "objet_resume": "Mission de maîtrise d'œuvre complète (DIAG à AOR) pour le confortement structurel de la salle des fêtes municipale de Saint-Marcellin, sinistrée par le retrait-gonflement des argiles.",
+  "pouvoir_adjudicateur": "Commune de Saint-Marcellin",
+  "type_marche": "ordinaire",
+  "materiau_dominant": "mixte",
+  "typologie_mission": "MOE-confortement",
+  "montant_max_he": "non précisé",
+  "duree": "18 mois prévisionnels (notification à levée des réserves AOR)",
+  "date_remise": "26 mai 2026 à 17h00",
+  "delai_validite_offre": "120 jours à compter de la date limite de remise",
+  "points_attention_majeurs": [
+    "Le marché est fortement axé sur la pathologie liée au retrait-gonflement des argiles (RGA), nécessitant une expertise pointue et une méthodologie spécifique détaillée dans l'offre.",
+    "La mission MOP est complète (DIAG à AOR) mais la phase EXE est à la charge de l'entreprise de travaux, le MOE ayant un rôle de VISA, ce qui implique une coordination particulière.",
+    "L'AVP exige la comparaison d'au moins trois scénarios de confortement avec des fourchettes de coûts précises, offrant une opportunité de démontrer l'ingéniosité technique et économique.",
+    "Des exigences strictes sur les moyens humains (chef de projet expérimenté, ingénieur calculs, accès géotechnique G2 AVP, diagnostiqueur amiante/plomb) sont bloquantes pour la candidature.",
+    "Le site est occasionnellement occupé, et les investigations destructives sont à la charge du titulaire et soumises à validation, nécessitant une planification et une gestion des risques rigoureuses.",
+    "La valeur technique (50%) est le critère le plus pondéré, avec une granularité importante sur la méthodologie de diagnostic, de confortement et l'approche RGA spécifique."
+  ],
+  "exigences": [
+    {
+      "categorie": "piece-a-fournir",
+      "libelle": "Lettre de candidature (DC1 ou équivalent)",
+      "detail": "Le candidat doit fournir une lettre de candidature, soit via le formulaire DC1, soit un document équivalent.",
+      "source_piece": "RC",
+      "importance": "bloquant"
+    },
+    {
+      "categorie": "piece-a-fournir",
+      "libelle": "Déclaration du candidat (DC2 ou équivalent)",
+      "detail": "Le candidat doit fournir une déclaration du candidat, soit via le formulaire DC2, soit un document équivalent.",
+      "source_piece": "RC",
+      "importance": "bloquant"
+    },
+    {
+      "categorie": "piece-a-fournir",
+      "libelle": "Attestation sur l'honneur de non-condamnation et régularité",
+      "detail": "Le candidat doit fournir une attestation sur l'honneur de non-condamnation et de régularité au regard des articles L.2141-1 à L.2141-5 du Code de la commande publique.",
+      "source_piece": "RC",
+      "importance": "bloquant"
+    },
+    {
+      "categorie": "piece-a-fournir",
+      "libelle": "Fiches de référence des deux références obligatoires",
+      "detail": "Le candidat doit fournir des fiches de référence (modèle libre) pour les deux références obligatoires exigées au titre de la capacité technique.",
+      "source_piece": "RC",
+      "importance": "bloquant"
+    },
+    {
+      "categorie": "piece-a-fournir",
+      "libelle": "CV des intervenants pressentis",
+      "detail": "Le candidat doit fournir les CV du chef de projet et de l'ingénieur calculs pressentis pour la mission.",
+      "source_piece": "RC",
+      "importance": "bloquant"
+    },
+    {
+      "categorie": "piece-a-fournir",
+      "libelle": "Attestation d'assurance RC professionnelle et décennale",
+      "detail": "Le candidat doit fournir une attestation d'assurance Responsabilité Civile professionnelle et décennale en cours de validité.",
+      "source_piece": "RC",
+      "importance": "bloquant"
+    },
+    {
+      "categorie": "piece-a-fournir",
+      "libelle": "Acte d'engagement complété, daté et signé",
+      "detail": "Le candidat doit fournir l'Acte d'engagement (AE) complété, daté et signé. La signature électronique est requise.",
+      "source_piece": "RC",
+      "importance": "bloquant"
+    },
+    {
+      "categorie": "piece-a-fournir",
+      "libelle": "DPGF au forfait complétée",
+      "detail": "Le candidat doit compléter la Décomposition du Prix Global et Forfaitaire (DPGF) sans modifier sa structure. Le prix total est ferme et forfaitaire pour la mission complète DIAG à AOR.",
+      "source_piece": "RC",
+      "importance": "bloquant"
+    },
+    {
+      "categorie": "piece-a-fournir",
+      "libelle": "Mémoire technique de 15 pages maximum",
+      "detail": "Le candidat doit fournir un mémoire technique de 15 pages maximum (annexes non comprises) présentant sa compréhension, ses méthodologies, son approche RGA, ses moyens humains et son organisation.",
+      "source_piece": "RC",
+      "importance": "important"
+    },
+    {
+      "categorie": "piece-a-fournir",
+      "libelle": "Planning prévisionnel de la phase ETU",
+      "detail": "Le candidat doit fournir un planning prévisionnel détaillé pour la phase ETU (DIAG à PRO).",
+      "source_piece": "RC",
+      "importance": "important"
+    },
+    {
+      "categorie": "piece-a-fournir",
+      "libelle": "RIB du candidat",
+      "detail": "Le candidat doit fournir son Relevé d'Identité Bancaire (RIB).",
+      "source_piece": "RC",
+      "importance": "mineur"
+    },
+    {
+      "categorie": "critere-jugement",
+      "libelle": "Critère Valeur technique (50%)",
+      "detail": "La valeur technique est notée sur 50% de la pondération totale. Elle est décomposée en sous-critères : Méthodologie diagnostic (15%), Méthodologie MOE confortement (15%), Approche RGA spécifique (10%), Pertinence des références (10%).",
+      "source_piece": "RC",
+      "importance": "important"
+    },
+    {
+      "categorie": "critere-jugement",
+      "libelle": "Critère Prix (40%)",
+      "detail": "Le prix est noté sur 40% de la pondération totale. La note est calculée selon la formule : (prix le plus bas / prix offre) × 40.",
+      "source_piece": "RC",
+      "importance": "important"
+    },
+    {
+      "categorie": "critere-jugement",
+      "libelle": "Critère Délais (10%)",
+      "detail": "Les délais sont notés sur 10% de la pondération totale. L'évaluation porte sur les engagements de délais pour les phases ETU (DIAG à PRO).",
+      "source_piece": "RC",
+      "importance": "important"
+    },
+    {
+      "categorie": "delai",
+      "libelle": "Délai maximal phase DIAG",
+      "detail": "La phase DIAG doit être réalisée en 4 semaines maximum à compter de la notification du marché.",
+      "source_piece": "CCAP",
+      "importance": "important"
+    },
+    {
+      "categorie": "delai",
+      "libelle": "Délai maximal phase AVP",
+      "detail": "La phase AVP doit être réalisée en 6 semaines maximum à partir de la validation de la phase DIAG.",
+      "source_piece": "CCAP",
+      "importance": "important"
+    },
+    {
+      "categorie": "delai",
+      "libelle": "Délai maximal phase PRO",
+      "detail": "La phase PRO doit être réalisée en 8 semaines maximum à partir de la validation de la phase AVP.",
+      "source_piece": "CCAP",
+      "importance": "important"
+    },
+    {
+      "categorie": "delai",
+      "libelle": "Délai maximal phase ACT",
+      "detail": "La phase ACT doit être réalisée en 8 semaines maximum à partir de la validation de la phase PRO.",
+      "source_piece": "CCAP",
+      "importance": "important"
+    },
+    {
+      "categorie": "delai",
+      "libelle": "Délai maximal phase ETU (DIAG à PRO)",
+      "detail": "La durée maximale pour l'ensemble des phases ETU (DIAG à PRO) est de 18 semaines à compter de la notification du marché.",
+      "source_piece": "RC",
+      "importance": "important"
+    },
+    {
+      "categorie": "delai",
+      "libelle": "Délai de retour VISA des études d'exécution",
+      "detail": "Le délai indicatif de retour pour le VISA des plans EXE et notes de calcul produits par l'entreprise est de 10 jours ouvrés par dossier.",
+      "source_piece": "CCTP",
+      "importance": "important"
+    },
+    {
+      "categorie": "delai",
+      "libelle": "Pénalités de retard par phase",
+      "detail": "Une pénalité forfaitaire de 120 € HT par jour calendaire de retard est appliquée en cas de dépassement non justifié des délais d'une phase, plafonnée à 8 % du montant du marché.",
+      "source_piece": "CCAP",
+      "importance": "bloquant"
+    },
+    {
+      "categorie": "delai",
+      "libelle": "Délai de paiement des factures",
+      "detail": "Le délai de paiement des factures est de 30 jours à compter de la réception de la facture conforme.",
+      "source_piece": "CCAP",
+      "importance": "mineur"
+    },
+    {
+      "categorie": "exigence-technique",
+      "libelle": "Mission complète de maîtrise d'œuvre loi MOP",
+      "detail": "La mission couvre les éléments DIAG, AVP, PRO, ACT, VISA, DET, AOR. La phase EXE n'est pas confiée au titulaire, mais ses études sont soumises à son VISA.",
+      "source_piece": "CCAP",
+      "importance": "bloquant"
+    },
+    {
+      "categorie": "exigence-technique",
+      "libelle": "Désignation d'un chef de projet unique",
+      "detail": "Le titulaire doit désigner un chef de projet unique, identifié dans son offre, qui sera l'interlocuteur principal du pouvoir adjudicateur et participera aux réunions.",
+      "source_piece": "CCAP",
+      "importance": "important"
+    },
+    {
+      "categorie": "exigence-technique",
+      "libelle": "Prise en compte du risque amiante",
+      "detail": "Le titulaire doit prendre connaissance du Diagnostic Technique Amiante (DTA) mis à disposition avant toute intervention destructive, l'ouvrage étant antérieur à 1997.",
+      "source_piece": "CCAP",
+      "importance": "bloquant"
+    },
+    {
+      "categorie": "exigence-technique",
+      "libelle": "Investigations DIAG minimales",
+      "detail": "Le programme d'investigations DIAG doit inclure a minima : visite contradictoire, relevé visuel hiérarchisé, pacométrie, endoscopie, sondages destructifs (2), mesures sclérométriques, investigations géotechniques (2 sondages pressiométriques 6m avec prélèvements).",
+      "source_piece": "CCTP",
+      "importance": "important"
+    },
+    {
+      "categorie": "exigence-technique",
+      "libelle": "Livrables DIAG",
+      "detail": "Les livrables de la phase DIAG comprennent un rapport de diagnostic (synthèse + dossier technique), une note d'investigations et des préconisations chiffrées (± 25%) avec programme AVP.",
+      "source_piece": "CCTP",
+      "importance": "important"
+    },
+    {
+      "categorie": "exigence-technique",
+      "libelle": "Étude de 3 scénarios de confortement en AVP",
+      "detail": "Le candidat doit étudier au minimum trois scénarios de confortement (périphérique léger, injection, micropieux) avec des fourchettes de coûts attendues (30-60 k€ HT, 80-150 k€ HT, 250-400 k€ HT).",
+      "source_piece": "CCTP",
+      "importance": "important"
+    },
+    {
+      "categorie": "exigence-technique",
+      "libelle": "Contenu de l'AVP pour chaque scénario",
+      "detail": "Pour chaque scénario, l'AVP doit présenter : description technique, dimensionnement préliminaire, chiffrage à ± 15%, contraintes d'intervention, durée prévisionnelle des travaux, niveau de pérennité attendu, recommandations de suivi post-travaux.",
+      "source_piece": "CCTP",
+      "importance": "important"
+    },
+    {
+      "categorie": "exigence-technique",
+      "libelle": "Livrables AVP",
+      "detail": "Les livrables de la phase AVP comprennent un rapport AVP (synthèse + dossier technique), des plans schématiques par scénario, une estimation chiffrée comparée et une note de recommandation.",
+      "source_piece": "CCTP",
+      "importance": "important"
+    },
+    {
+      "categorie": "exigence-technique",
+      "libelle": "Dimensionnement définitif PRO selon Eurocodes",
+      "detail": "Le dimensionnement définitif en phase PRO doit être réalisé au sens des Eurocodes (EC0/1/2 ; EC8 si applicable pour la zone sismique 4 de l'Isère).",
+      "source_piece": "CCTP",
+      "importance": "bloquant"
+    },
+    {
+      "categorie": "exigence-technique",
+      "libelle": "Livrables PRO",
+      "detail": "Les livrables PRO incluent : dimensionnement définitif, plans cotés (DWG AutoCAD 2018 min et PDF), notes de calcul justificatives, descriptif technique détaillé, DPGF prévisionnelle, estimation chiffrée à ± 5%.",
+      "source_piece": "CCTP",
+      "importance": "important"
+    },
+    {
+      "categorie": "exigence-technique",
+      "libelle": "Prise en compte amiante/plomb/SST en PRO",
+      "detail": "Le candidat doit prendre en compte les contraintes liées au repérage amiante et plomb avant travaux et intégrer les points d'attention pour le PGCSPS dans le DCE travaux.",
+      "source_piece": "CCTP",
+      "importance": "important"
+    },
+    {
+      "categorie": "exigence-technique",
+      "libelle": "Conformité aux référentiels techniques",
+      "detail": "L'ensemble des études et livrables doit se conformer aux Eurocodes (EC0, EC1, EC2, EC3, EC5, EC8), aux DTU applicables (13.1, 13.2, 21, 23.x, 31.1), à la norme NF P 94-500 (G2 AVP) et aux guides RGA du MTE/Cerema.",
+      "source_piece": "CCTP",
+      "importance": "bloquant"
+    },
+    {
+      "categorie": "exigence-technique",
+      "libelle": "Application de l'EC8 pour reprise structurale",
+      "detail": "L'Eurocode 8 doit être appliqué pour toute reprise structurale impactant un élément principal au sens de l'arrêté du 22 octobre 2010, sauf justification documentée.",
+      "source_piece": "CCTP",
+      "importance": "bloquant"
+    },
+    {
+      "categorie": "exigence-technique",
+      "libelle": "Démarche spécifique RGA dans le mémoire technique",
+      "detail": "Le mémoire technique doit décrire une démarche spécifique RGA incluant : caractérisation de l'aléa local, cartographie de la végétation, programme géotechnique calibré, comparaison des solutions de confortement adaptées, recommandations de suivi post-travaux.",
+      "source_piece": "CCTP",
+      "importance": "important"
+    },
+    {
+      "categorie": "exigence-technique",
+      "libelle": "Formats des livrables",
+      "detail": "Les livrables doivent être remis en formats spécifiques : Rapports (PDF HD + Word), Plans (DWG AutoCAD 2018 min + PDF), Notes de calcul (PDF + sources des modèles), Photographies (JPEG HD 5 Mpx min datées).",
+      "source_piece": "CCTP",
+      "importance": "important"
+    },
+    {
+      "categorie": "exigence-technique",
+      "libelle": "Référencement normé des livrables",
+      "detail": "Chaque livrable doit porter une référence normée combinant numéro de marché, phase, indice de version et date.",
+      "source_piece": "CCTP",
+      "importance": "mineur"
+    },
+    {
+      "categorie": "qualification",
+      "libelle": "Capacité économique minimale",
+      "detail": "Le candidat doit justifier d'un chiffre d'affaires annuel HT minimum de 250 000 € sur les trois derniers exercices clos.",
+      "source_piece": "RC",
+      "importance": "bloquant"
+    },
+    {
+      "categorie": "reference-experience",
+      "libelle": "Deux références sur opérations équivalentes",
+      "detail": "Le candidat doit présenter au minimum deux références sur des opérations équivalentes (MOE complète sur confortement de pathologie structurelle, travaux > 200 000 € HT) au cours des cinq dernières années.",
+      "source_piece": "RC",
+      "importance": "bloquant"
+    },
+    {
+      "categorie": "reference-experience",
+      "libelle": "Au moins une référence sur sinistre RGA",
+      "detail": "Parmi les deux références obligatoires, au moins une doit concerner un sinistre lié au retrait-gonflement des argiles (RGA).",
+      "source_piece": "RC",
+      "importance": "bloquant"
+    },
+    {
+      "categorie": "moyen",
+      "libelle": "Ingénieur structures (Bac+5) avec 5 ans d'expérience",
+      "detail": "L'équipe doit inclure au moins un ingénieur structures (Bac+5) avec 5 années minimum d'expérience en pathologie / confortement. Ce profil est attendu pour le chef de projet.",
+      "source_piece": "RC",
+      "importance": "bloquant"
+    },
+    {
+      "categorie": "moyen",
+      "libelle": "Ingénieur calculs maîtrisant Eurocodes et éléments finis",
+      "detail": "L'équipe pressentie doit comprendre un ingénieur calculs maîtrisant les Eurocodes et la modélisation aux éléments finis.",
+      "source_piece": "CCTP",
+      "importance": "important"
+    },
+    {
+      "categorie": "moyen",
+      "libelle": "Accès à compétences en géotechnique (G2 AVP)",
+      "detail": "Le candidat doit avoir accès, en interne ou par sous-traitance, à des compétences en géotechnique pour une mission G2 AVP à minima.",
+      "source_piece": "CCTP",
+      "importance": "bloquant"
+    },
+    {
+      "categorie": "moyen",
+      "libelle": "Accès à diagnostiqueur amiante / plomb certifié",
+      "detail": "Le candidat doit avoir accès à un diagnostiqueur amiante / plomb avant travaux certifié.",
+      "source_piece": "CCTP",
+      "importance": "bloquant"
+    },
+    {
+      "categorie": "moyen",
+      "libelle": "Accord préalable pour changement de chef de projet",
+      "detail": "Tout changement d'affectation du chef de projet en cours de marché est soumis à l'accord préalable du pouvoir adjudicateur.",
+      "source_piece": "CCTP",
+      "importance": "bloquant"
+    },
+    {
+      "categorie": "autre",
+      "libelle": "Prix fermes et forfaitaires, non révisables",
+      "detail": "Les prix proposés par le candidat sont fermes et forfaitaires, et ne sont pas révisables, la durée d'exécution étant inférieure à 18 mois.",
+      "source_piece": "CCAP",
+      "importance": "bloquant"
+    },
+    {
+      "categorie": "autre",
+      "libelle": "Avance forfaitaire de 5%",
+      "detail": "Une avance forfaitaire de 5% du montant du marché sera versée au titulaire dans les conditions de l'article R.2191-3 du Code de la commande publique.",
+      "source_piece": "CCAP",
+      "importance": "mineur"
+    },
+    {
+      "categorie": "autre",
+      "libelle": "Retenue de garantie de 5%",
+      "detail": "Une retenue de garantie de 5% est appliquée sur les facturations, libérable un an après la levée des réserves de réception.",
+      "source_piece": "CCAP",
+      "importance": "mineur"
+    },
+    {
+      "categorie": "autre",
+      "libelle": "Assurance RC professionnelle minimale",
+      "detail": "Le titulaire doit justifier d'une police Responsabilité Civile professionnelle à hauteur d'un montant minimum de 3 000 000 € par sinistre.",
+      "source_piece": "CCAP",
+      "importance": "bloquant"
+    },
+    {
+      "categorie": "autre",
+      "libelle": "Assurance RC décennale",
+      "detail": "Le titulaire doit justifier d'une police Responsabilité Civile décennale au titre de l'article 1792 du Code civil.",
+      "source_piece": "CCAP",
+      "importance": "bloquant"
+    },
+    {
+      "categorie": "autre",
+      "libelle": "Interventions en site occupé",
+      "detail": "Toute intervention sur l'ouvrage doit être planifiée en concertation avec le secrétariat de mairie et respecter les périodes de manifestations municipales.",
+      "source_piece": "CCAP",
+      "importance": "important"
+    },
+    {
+      "categorie": "autre",
+      "libelle": "Validation préalable des sondages destructifs",
+      "detail": "Tout sondage destructif est soumis à validation préalable du pouvoir adjudicateur. Les rebouchages et remises en état sont à la charge du titulaire et inclus dans le forfait.",
+      "source_piece": "CCAP",
+      "importance": "bloquant"
+    },
+    {
+      "categorie": "autre",
+      "libelle": "Propriété des livrables",
+      "detail": "Les livrables (rapports, notes de calcul, plans, modélisations) deviennent propriété de la Commune dès leur acceptation. Le titulaire conserve la propriété intellectuelle de ses méthodes.",
+      "source_piece": "CCAP",
+      "importance": "mineur"
+    },
+    {
+      "categorie": "autre",
+      "libelle": "Variantes non autorisées",
+      "detail": "Les variantes ne sont pas autorisées. Le candidat peut toutefois proposer des optimisations à titre de suggestion non contractuelle dans son mémoire technique.",
+      "source_piece": "RC",
+      "importance": "bloquant"
+    },
+    {
+      "categorie": "autre",
+      "libelle": "Visite sur site recommandée",
+      "detail": "Une visite sur site est organisée le 15 mai 2026 à 10h00. Elle est facultative mais fortement recommandée pour une bonne compréhension du contexte.",
+      "source_piece": "RC",
+      "importance": "important"
+    },
+    {
+      "categorie": "autre",
+      "libelle": "Frais inclus dans le forfait",
+      "detail": "Les frais de déplacement (illimités), la reproduction (3 exemplaires papier par phase), les frais d'envoi numériques et toutes prestations annexes nécessaires sont inclus dans le forfait.",
+      "source_piece": "DPGF",
+      "importance": "bloquant"
+    },
+    {
+      "categorie": "autre",
+      "libelle": "Postes complémentaires facturables séparément",
+      "detail": "Les investigations destructives au-delà de 2 sondages, les sondages géotechniques au-delà de 2 pressiométriques, la modélisation aux éléments finis si non requise, et les frais de laboratoire au-delà de 6 essais sont facturables à part sur BPU complémentaire.",
+      "source_piece": "DPGF",
+      "importance": "mineur"
+    }
+  ]
+}
