@@ -65,6 +65,14 @@ from i2ao.mt_engine import (
     generer_mt,
 )
 from i2ao.pdf_parser import detect_type_piece, parse_pdf
+from i2ao.profiles_admin import (
+    creer_profil,
+    exporter_profil_zip,
+    importer_profil_zip,
+    lister_profils_avec_stats,
+    slug_valide,
+    supprimer_profil,
+)
 from i2ao.synthese import SyntheseDirection, exporter_synthese_docx, generer_synthese
 from i2ao.usage_tracker import get_session_usage, reset_session_usage
 from i2ao.xlsx_export import exporter_dpgf_xlsx
@@ -304,6 +312,12 @@ def charger_pieces(affaire: Affaire) -> list[tuple[str, str, str, int, list[str]
     return out
 
 
+def dce_concatene_pour(affaire: Affaire) -> str:
+    """Concatène toutes les pièces du DCE de l'affaire en un seul texte balisé."""
+    pieces = charger_pieces(affaire)
+    return concatener_dce([(type_p, texte) for _, type_p, texte, _, _ in pieces])
+
+
 def charger_analyse(affaire: Affaire) -> AnalyseAO | None:
     if not affaire.has_analyse():
         return None
@@ -439,11 +453,19 @@ def render_sidebar() -> Affaire | None:
     if "vue_active" not in st.session_state:
         st.session_state.vue_active = "affaire"
 
+    options_vue = ["affaire", "comparaison", "profils"]
+    libelles_vue = {
+        "affaire": "📂 Une affaire",
+        "comparaison": "📊 Comparaison",
+        "profils": "🧰 Gestion des profils",
+    }
+    if st.session_state.vue_active not in options_vue:
+        st.session_state.vue_active = "affaire"
     st.session_state.vue_active = st.sidebar.radio(
         "Vue",
-        options=["affaire", "comparaison"],
-        format_func=lambda v: {"affaire": "📂 Une affaire", "comparaison": "📊 Comparaison"}[v],
-        index=0 if st.session_state.vue_active == "affaire" else 1,
+        options=options_vue,
+        format_func=lambda v: libelles_vue[v],
+        index=options_vue.index(st.session_state.vue_active),
         label_visibility="collapsed",
     )
 
@@ -718,8 +740,7 @@ def render_tab_analyse(affaire: Affaire, client: LLMClient | None) -> None:
         st.session_state.pop("analyse_demande", None)
         with st.status("Extraction en cours…", expanded=True) as status:
             st.write("Lecture des PDF…")
-            pieces = charger_pieces(affaire)
-            dce = concatener_dce([(t, txt) for _, t, txt, _, _ in pieces])
+            dce = dce_concatene_pour(affaire)
             st.write(f"DCE concaténé : {len(dce):,} caractères")
 
             st.write(f"Appel Gemini ({LLM_MODEL})…")
@@ -1047,8 +1068,7 @@ def render_tab_dpgf(affaire: Affaire, client: LLMClient | None) -> None:
 
     if generer_btn or regenerer_btn:
         analyse = charger_analyse(affaire)
-        pieces = charger_pieces(affaire)
-        dce = concatener_dce([(t, txt) for _, t, txt, _, _ in pieces])
+        dce = dce_concatene_pour(affaire)
 
         with st.status("Génération de la DPGF…", expanded=True) as status:
             st.write(f"Appel Gemini ({LLM_MODEL}) pour le programme indicatif…")
@@ -1630,9 +1650,190 @@ def render_comparaison() -> None:
                 st.markdown("_Synthèse non générée_")
 
 
+def render_profils_admin() -> None:
+    """Page de gestion des profils métier : listing, création, import/export ZIP."""
+    st.title("🧰 Gestion des profils métier")
+    st.caption(
+        "Un profil = une combinaison de bibliothèque MT + catalogue DPGF + profil entreprise, "
+        "calibrée pour un type de BET. Tu peux en créer, importer un ZIP, exporter, supprimer."
+    )
+
+    # ----- Liste des profils existants -----
+    st.subheader("Profils disponibles")
+    stats = lister_profils_avec_stats()
+    if not stats:
+        st.info("Aucun profil pour l'instant. Crée-en un ci-dessous.")
+    else:
+        for p in stats:
+            with st.container(border=True):
+                cols = st.columns([3, 1, 1, 1, 1, 1])
+                with cols[0]:
+                    st.markdown(f"### `{p.slug}`")
+                    if p.profil_template:
+                        st.caption("⚠️ Profil template — `bet-profile.md` contient encore des `[À RENSEIGNER]`")
+                    else:
+                        st.caption("✓ Profil rempli")
+                cols[1].metric("MT", p.nb_paragraphes)
+                cols[2].metric("DPGF", p.nb_prestations)
+                cols[3].metric("Taille", f"{p.taille_octets / 1024:.0f} KB")
+
+                with cols[4]:
+                    try:
+                        zip_bytes = exporter_profil_zip(p.slug)
+                        st.download_button(
+                            "📦 ZIP",
+                            data=zip_bytes,
+                            file_name=f"profil-{p.slug}.zip",
+                            mime="application/zip",
+                            key=f"export_{p.slug}",
+                            use_container_width=True,
+                        )
+                    except Exception as e:
+                        st.caption(f"Export KO : {e}")
+
+                with cols[5]:
+                    if st.button(
+                        "🗑️",
+                        key=f"del_{p.slug}",
+                        use_container_width=True,
+                        help=f"Supprimer le profil {p.slug}",
+                    ):
+                        st.session_state[f"_confirm_del_{p.slug}"] = True
+
+                if st.session_state.get(f"_confirm_del_{p.slug}"):
+                    st.warning(f"Confirmer la suppression de **{p.slug}** ? Action irréversible.")
+                    cc = st.columns([1, 1, 4])
+                    if cc[0].button("Oui, supprimer", type="primary", key=f"del_yes_{p.slug}"):
+                        try:
+                            supprimer_profil(p.slug)
+                            st.session_state.pop(f"_confirm_del_{p.slug}", None)
+                            if st.session_state.get("profil_actif") == p.slug:
+                                st.session_state.pop("profil_actif", None)
+                            st.rerun()
+                        except Exception as e:
+                            st.error(f"Échec : {e}")
+                    if cc[1].button("Annuler", key=f"del_no_{p.slug}"):
+                        st.session_state.pop(f"_confirm_del_{p.slug}", None)
+                        st.rerun()
+
+    st.divider()
+
+    # ----- Wizard de création -----
+    st.subheader("✨ Créer un nouveau profil")
+    with st.form("form_creer_profil"):
+        cols = st.columns([1, 1])
+        slug_nouveau = cols[0].text_input(
+            "Slug du profil",
+            help="Identifiant URL-friendly. Minuscules, chiffres, tirets. Ex : 'fluides-thermique'.",
+            placeholder="ex : ma-specialite",
+        )
+        specialite = cols[1].text_input(
+            "Nom de la spécialité",
+            help="Affiché dans les templates générés.",
+            placeholder="ex : BET fluides et thermique",
+        )
+
+        cols = st.columns([2, 1])
+        slugs_existants = [p.slug for p in stats]
+        copier_depuis = cols[0].selectbox(
+            "Démarrer depuis…",
+            options=["(profil vierge avec templates)"] + slugs_existants,
+            help="Soit on génère des fichiers vierges (avec marqueurs [À RENSEIGNER]), "
+            "soit on duplique un profil existant qu'on adaptera.",
+        )
+
+        submitted = st.form_submit_button("Créer le profil", type="primary")
+
+        if submitted:
+            if not slug_nouveau:
+                st.error("Slug obligatoire.")
+            elif not slug_valide(slug_nouveau):
+                st.error(
+                    "Slug invalide : doit commencer par une lettre, contenir uniquement "
+                    "minuscules / chiffres / tirets, 2 à 50 caractères."
+                )
+            elif not specialite:
+                st.error("Spécialité obligatoire.")
+            else:
+                copier = (
+                    copier_depuis
+                    if copier_depuis != "(profil vierge avec templates)"
+                    else None
+                )
+                try:
+                    target = creer_profil(slug_nouveau, specialite, copier_depuis=copier)
+                    st.success(
+                        f"✓ Profil **`{slug_nouveau}`** créé sous "
+                        f"`{target.relative_to(target.parents[2])}`. "
+                        "Édite les fichiers markdown / YAML pour le calibrer à ton métier, "
+                        "puis sélectionne-le dans la sidebar."
+                    )
+                    if copier:
+                        st.info(f"Copié depuis le profil **{copier}**.")
+                    st.rerun()
+                except ValueError as e:
+                    st.error(str(e))
+
+    st.divider()
+
+    # ----- Import ZIP -----
+    st.subheader("📥 Importer un profil depuis un ZIP")
+    st.caption(
+        "Le ZIP doit contenir un seul dossier racine au format produit par l'export "
+        "(`<slug>/bet-profile.md` + `<slug>/mt-library/` + `<slug>/dpgf-catalog/`)."
+    )
+    cols = st.columns([2, 1])
+    uploaded = cols[0].file_uploader(
+        "Fichier ZIP du profil",
+        type=["zip"],
+        key="import_profil_zip",
+    )
+    slug_import = cols[1].text_input(
+        "Slug cible (optionnel)",
+        help="Pour renommer le profil à l'import. Laisser vide pour conserver le slug du ZIP.",
+        placeholder="optionnel",
+    )
+
+    if uploaded is not None and st.button("Importer", type="primary", key="btn_importer_profil"):
+        try:
+            slug_resultant = importer_profil_zip(
+                uploaded.getvalue(),
+                slug_cible=slug_import.strip() or None,
+            )
+            st.success(f"✓ Profil **`{slug_resultant}`** importé. Disponible immédiatement dans la sidebar.")
+            st.rerun()
+        except (ValueError, RuntimeError) as e:
+            st.error(f"Échec import : {e}")
+
+    st.divider()
+
+    # ----- Conseils persistance -----
+    with st.expander("ℹ️ À propos de la persistance des profils créés ici"):
+        st.markdown(
+            """
+            **Le filesystem de l'app déployée (Streamlit Cloud) est éphémère.** Tout profil créé
+            ou importé via cette interface vit dans le container Streamlit jusqu'au prochain
+            redéploiement (push GitHub, reboot, mise en veille prolongée).
+
+            Pour persister un profil que tu viens de créer :
+
+            1. **Télécharge son ZIP** via le bouton 📦 dans la liste ci-dessus
+            2. **Dézippe-le** dans `content/profiles/` de ton fork local du repo
+            3. **Commite + push** sur GitHub → Streamlit Cloud redéploie avec le profil persistant
+
+            Si tu utilises l'app **en local** (`streamlit run`), aucun problème — les profils
+            créés sont sauvegardés sur ton disque tant que tu ne supprimes pas le dossier.
+            """
+        )
+
+
 def render_main(affaire: Affaire | None) -> None:
     if st.session_state.get("vue_active") == "comparaison":
         render_comparaison()
+        return
+
+    if st.session_state.get("vue_active") == "profils":
+        render_profils_admin()
         return
 
     if affaire is None:
