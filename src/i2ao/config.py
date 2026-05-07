@@ -54,8 +54,15 @@ UPLOADS_DIR = DATA_DIR / "uploads"
 OUTPUT_DIR = DATA_DIR / "output"
 DB_PATH = DATA_DIR / "i2ao.db"
 
+# Création défensive : sur Streamlit Cloud (et environnements à FS partiellement
+# read-only) la création peut échouer pour certains dossiers. On ne fait pas
+# planter l'import du module pour autant — les sites consommateurs créeront ce
+# dont ils ont besoin à l'usage et géreront leurs propres erreurs.
 for d in (DATA_DIR, SAMPLES_DIR, UPLOADS_DIR, OUTPUT_DIR):
-    d.mkdir(parents=True, exist_ok=True)
+    try:
+        d.mkdir(parents=True, exist_ok=True)
+    except OSError:
+        pass
 
 GOOGLE_API_KEY = os.environ.get("GOOGLE_API_KEY") or os.environ.get("GEMINI_API_KEY") or ""
 LLM_MODEL = "gemini-2.5-flash"
