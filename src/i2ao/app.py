@@ -19,6 +19,21 @@ PROJECT_ROOT = Path(__file__).resolve().parents[2]
 if str(PROJECT_ROOT / "src") not in sys.path:
     sys.path.insert(0, str(PROJECT_ROOT / "src"))
 
+# === Purge defensive du cache de modules i2ao.* avant chaque rerun ===
+#
+# Streamlit (notamment sur Streamlit Cloud) ré-exécute ce script à chaque
+# interaction utilisateur sans relancer le process Python. Conséquence :
+# `sys.modules` conserve les références aux anciennes versions des modules
+# i2ao.*, ce qui provoque des `ImportError` ou `KeyError` parasites quand le
+# code change (renommage de fonctions, ajout de nouveaux modules, refactor).
+#
+# Nettoyer ces entrées avant les imports force Python à recharger les fichiers
+# .py depuis le disque à chaque run. Coût : quelques millisecondes au rerun.
+# Bénéfice : zéro KeyError/ImportError de cache après une mise à jour.
+for _mod_name in list(sys.modules.keys()):
+    if _mod_name == "i2ao" or _mod_name.startswith("i2ao."):
+        del sys.modules[_mod_name]
+
 LOGO_PATH = PROJECT_ROOT / "assets" / "logo.svg"
 
 import streamlit as st
