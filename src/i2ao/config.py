@@ -12,9 +12,41 @@ PROJECT_ROOT = Path(__file__).resolve().parents[2]
 load_dotenv(PROJECT_ROOT / ".env", override=True)
 
 CONTENT_DIR = PROJECT_ROOT / "content"
-MT_LIBRARY_DIR = CONTENT_DIR / "mt-library"
-DPGF_CATALOG_DIR = CONTENT_DIR / "dpgf-catalog"
-BET_PROFILE_PATH = CONTENT_DIR / "bet-profile.md"
+PROFILES_DIR = CONTENT_DIR / "profiles"
+
+# Profil actif par défaut (slug d'un dossier sous content/profiles/).
+# Surclassable via la variable d'env PROFIL_ACTIF, et au runtime via la sidebar.
+PROFIL_ACTIF_DEFAUT = os.environ.get("PROFIL_ACTIF", "pathologie-confortement")
+
+
+def chemins_profil(slug: str) -> dict:
+    """Renvoie les chemins (mt-library, dpgf-catalog, bet-profile) pour un profil donné."""
+    base = PROFILES_DIR / slug
+    return {
+        "base": base,
+        "mt_library": base / "mt-library",
+        "dpgf_catalog": base / "dpgf-catalog",
+        "bet_profile": base / "bet-profile.md",
+    }
+
+
+def lister_profils_disponibles() -> list[str]:
+    """Renvoie la liste des slugs de profils valides (qui contiennent une mt-library)."""
+    if not PROFILES_DIR.exists():
+        return []
+    return sorted(
+        d.name
+        for d in PROFILES_DIR.iterdir()
+        if d.is_dir() and (d / "mt-library").exists()
+    )
+
+
+# Compatibilité rétroactive — pointe vers le profil actif par défaut au moment de l'import.
+# Le code applicatif moderne devrait privilégier chemins_profil(slug).
+_chemins = chemins_profil(PROFIL_ACTIF_DEFAUT)
+MT_LIBRARY_DIR = _chemins["mt_library"]
+DPGF_CATALOG_DIR = _chemins["dpgf_catalog"]
+BET_PROFILE_PATH = _chemins["bet_profile"]
 
 DATA_DIR = PROJECT_ROOT / "data"
 SAMPLES_DIR = DATA_DIR / "samples"

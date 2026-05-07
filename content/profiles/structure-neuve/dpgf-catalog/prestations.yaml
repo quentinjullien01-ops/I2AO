@@ -1,0 +1,157 @@
+# Catalogue de prix unitaires HT pour BET structure neuve (généraliste).
+# Valeurs marché 2026 indicatives. À ajuster selon politique commerciale du candidat.
+
+prestations:
+
+  # === Chapitre 1 : Études de faisabilité ===
+  - code: "1.01"
+    libelle: "Note de faisabilité structurelle pré-esquisse"
+    unite: "forfait"
+    prix_unitaire: 1800
+    categorie: "Études de faisabilité"
+    tags: [faisabilite, esquisse]
+
+  - code: "1.02"
+    libelle: "Comparatif technico-économique 2-3 variantes structure"
+    unite: "forfait"
+    prix_unitaire: 4200
+    categorie: "Études de faisabilité"
+    tags: [faisabilite, variantes]
+
+  - code: "1.03"
+    libelle: "Étude bas carbone comparée RE2020 (IcC variantes)"
+    unite: "forfait"
+    prix_unitaire: 3200
+    categorie: "Études de faisabilité"
+    tags: [bas-carbone, re2020, faisabilite]
+
+  # === Chapitre 2 : Mission MOE structure (% travaux structure HT) ===
+  - code: "2.01"
+    libelle: "Mission MOE structure — travaux ≤ 500 k€ HT"
+    unite: "% travaux"
+    prix_unitaire: 6.5
+    categorie: "Maîtrise d'œuvre structure"
+    tags: [moe, structure, base]
+    note: "Phases ESQ/APS/APD/PRO/ACT/DET/AOR (hors EXE)"
+
+  - code: "2.02"
+    libelle: "Mission MOE structure — travaux 500 k€ à 2 M€ HT"
+    unite: "% travaux"
+    prix_unitaire: 5.2
+    categorie: "Maîtrise d'œuvre structure"
+    tags: [moe, structure, base]
+
+  - code: "2.03"
+    libelle: "Mission MOE structure — travaux 2 à 5 M€ HT"
+    unite: "% travaux"
+    prix_unitaire: 4.3
+    categorie: "Maîtrise d'œuvre structure"
+    tags: [moe, structure, base]
+
+  - code: "2.04"
+    libelle: "Mission MOE structure — travaux > 5 M€ HT"
+    unite: "% travaux"
+    prix_unitaire: 3.6
+    categorie: "Maîtrise d'œuvre structure"
+    tags: [moe, structure, base, gros-projet]
+
+  - code: "2.05"
+    libelle: "Phase EXE complète (plans d'exécution structure)"
+    unite: "% travaux"
+    prix_unitaire: 2.0
+    categorie: "Maîtrise d'œuvre structure"
+    tags: [moe, EXE]
+
+  - code: "2.06"
+    libelle: "Phase VISA EXE de l'entreprise"
+    unite: "% travaux"
+    prix_unitaire: 1.0
+    categorie: "Maîtrise d'œuvre structure"
+    tags: [moe, VISA]
+
+  # === Chapitre 3 : Production BIM ===
+  - code: "3.01"
+    libelle: "Maquette BIM Structure LOD 300 — bâtiment courant"
+    unite: "forfait"
+    prix_unitaire: 8500
+    categorie: "Production BIM"
+    tags: [bim, lod300]
+
+  - code: "3.02"
+    libelle: "Maquette BIM Structure LOD 350 — bâtiment courant"
+    unite: "forfait"
+    prix_unitaire: 14500
+    categorie: "Production BIM"
+    tags: [bim, lod350]
+
+  - code: "3.03"
+    libelle: "Clash detection inter-disciplines (3 maquettes)"
+    unite: "campagne"
+    prix_unitaire: 1800
+    categorie: "Production BIM"
+    tags: [bim, coordination]
+
+  # === Chapitre 4 : Études ponctuelles ===
+  - code: "4.01"
+    libelle: "Note de descente de charges sur ouvrage existant"
+    unite: "forfait"
+    prix_unitaire: 1850
+    categorie: "Études ponctuelles"
+    tags: [calcul, ponctuel]
+
+  - code: "4.02"
+    libelle: "Étude parasismique complémentaire EC8"
+    unite: "forfait"
+    prix_unitaire: 4500
+    categorie: "Études ponctuelles"
+    tags: [parasismique, ec8]
+
+  - code: "4.03"
+    libelle: "Étude de plancher mixte bois-béton (calcul + détails)"
+    unite: "forfait"
+    prix_unitaire: 6200
+    categorie: "Études ponctuelles"
+    tags: [bois-beton, plancher-mixte]
+
+  - code: "4.04"
+    libelle: "Note d'optimisation matière sur structure pré-dimensionnée"
+    unite: "forfait"
+    prix_unitaire: 3400
+    categorie: "Études ponctuelles"
+    tags: [optimisation, bas-carbone]
+
+  - code: "4.05"
+    libelle: "Modélisation EF complète d'ouvrage complexe"
+    unite: "forfait"
+    prix_unitaire: 7200
+    categorie: "Études ponctuelles"
+    tags: [modelisation, ef]
+
+  # === Chapitre 5 : Vacations ===
+  - code: "5.01"
+    libelle: "Ingénieur structures senior — chef de projet"
+    unite: "jour"
+    prix_unitaire: 1100
+    categorie: "Vacations"
+    tags: [vacation, ingenieur, senior]
+
+  - code: "5.02"
+    libelle: "Ingénieur calculs"
+    unite: "jour"
+    prix_unitaire: 950
+    categorie: "Vacations"
+    tags: [vacation, ingenieur, calculs]
+
+  - code: "5.03"
+    libelle: "Ingénieur BIM"
+    unite: "jour"
+    prix_unitaire: 850
+    categorie: "Vacations"
+    tags: [vacation, bim]
+
+  - code: "5.04"
+    libelle: "Projeteur structure"
+    unite: "jour"
+    prix_unitaire: 720
+    categorie: "Vacations"
+    tags: [vacation, projeteur]

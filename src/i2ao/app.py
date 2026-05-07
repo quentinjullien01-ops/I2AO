@@ -47,7 +47,13 @@ from i2ao.charts import (
     donut_repartition_dqe,
     gauge_score,
 )
-from i2ao.config import CANDIDAT_NOM, GOOGLE_API_KEY, LLM_MODEL
+from i2ao.config import (
+    CANDIDAT_NOM,
+    GOOGLE_API_KEY,
+    LLM_MODEL,
+    PROFIL_ACTIF_DEFAUT,
+    lister_profils_disponibles,
+)
 from i2ao.coverage import RapportCouverture, evaluer_couverture
 from i2ao.docx_export import exporter_mt_docx
 from i2ao.dpgf_engine import DPGFGeneree, generer_dpgf
@@ -253,6 +259,11 @@ def is_mode_presentation() -> bool:
     return bool(st.session_state.get("mode_presentation", False))
 
 
+def get_profil_actif() -> str:
+    """Renvoie le slug du profil actuellement sélectionné (sidebar ou défaut)."""
+    return st.session_state.get("profil_actif", PROFIL_ACTIF_DEFAUT)
+
+
 def afficher_erreur_llm(exc: Exception, etape: str) -> None:
     """Affiche un message convivial pour les erreurs LLM (5xx, quota, etc.)."""
     if isinstance(exc, LLMOverloadError):
@@ -396,6 +407,26 @@ def render_sidebar() -> Affaire | None:
         value=is_mode_presentation(),
         help="Masque les détails techniques (tokens, slugs, debug) pour un pitch épuré.",
     )
+
+    # Sélecteur de profil métier (bibliothèque MT + catalogue DPGF + bet-profile)
+    profils_disponibles = lister_profils_disponibles()
+    if profils_disponibles:
+        if "profil_actif" not in st.session_state or st.session_state.profil_actif not in profils_disponibles:
+            st.session_state.profil_actif = (
+                PROFIL_ACTIF_DEFAUT
+                if PROFIL_ACTIF_DEFAUT in profils_disponibles
+                else profils_disponibles[0]
+            )
+        st.session_state.profil_actif = st.sidebar.selectbox(
+            "🧰 Profil métier",
+            options=profils_disponibles,
+            index=profils_disponibles.index(st.session_state.profil_actif),
+            help=(
+                "Choisit la bibliothèque MT, le catalogue DPGF et le profil entreprise "
+                "à utiliser. Pour ajouter un profil, créer un dossier sous "
+                "content/profiles/<slug>/ avec mt-library/, dpgf-catalog/ et bet-profile.md."
+            ),
+        )
 
     st.sidebar.divider()
 
@@ -827,7 +858,7 @@ def render_tab_mt(affaire: Affaire, client: LLMClient | None) -> None:
         with st.status("Génération du mémoire technique…", expanded=True) as status:
             st.write(f"Appel Gemini ({LLM_MODEL}) avec bibliothèque MT + profil entreprise…")
             try:
-                mt = generer_mt(client, analyse)
+                mt = generer_mt(client, analyse, profil=get_profil_actif())
             except LLMError as e:
                 status.update(label="Échec de la génération MT", state="error", expanded=True)
                 afficher_erreur_llm(e, "génération du mémoire technique")
@@ -1022,7 +1053,7 @@ def render_tab_dpgf(affaire: Affaire, client: LLMClient | None) -> None:
         with st.status("Génération de la DPGF…", expanded=True) as status:
             st.write(f"Appel Gemini ({LLM_MODEL}) pour le programme indicatif…")
             try:
-                dpgf = generer_dpgf(client, analyse, dce)
+                dpgf = generer_dpgf(client, analyse, dce, profil=get_profil_actif())
             except LLMError as e:
                 status.update(label="Échec de la génération DPGF", state="error", expanded=True)
                 afficher_erreur_llm(e, "génération DPGF")
@@ -1154,7 +1185,7 @@ def render_tab_synthese(affaire: Affaire, client: LLMClient | None) -> None:
         with st.status("Génération de la synthèse…", expanded=True) as status:
             st.write(f"Appel Gemini ({LLM_MODEL})…")
             try:
-                synth = generer_synthese(client, analyse, mt, dpgf)
+                synth = generer_synthese(client, analyse, mt, dpgf, profil=get_profil_actif())
             except LLMError as e:
                 status.update(label="Échec de la synthèse", state="error", expanded=True)
                 afficher_erreur_llm(e, "génération de la synthèse direction")
@@ -1267,7 +1298,9 @@ def render_tab_candidature(affaire: Affaire, client: LLMClient | None) -> None:
         with st.status("Génération de la lettre…", expanded=True) as status:
             st.write(f"Appel Gemini ({LLM_MODEL})…")
             try:
-                lettre = generer_lettre(client, analyse, candidat=CANDIDAT_NOM)
+                lettre = generer_lettre(
+                    client, analyse, candidat=CANDIDAT_NOM, profil=get_profil_actif()
+                )
             except LLMError as e:
                 status.update(label="Échec de la lettre", state="error", expanded=True)
                 afficher_erreur_llm(e, "génération de la lettre de présentation")

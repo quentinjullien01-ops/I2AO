@@ -79,13 +79,21 @@ def _format_analyse_for_prompt(analyse: AnalyseAO) -> str:
     return analyse.model_dump_json(indent=2)
 
 
-def generer_mt(client: LLMClient, analyse: AnalyseAO) -> MemoireTechniqueGenere:
-    """Génère le mémoire technique complet pour un AO donné."""
-    library = load_mt_library()
-    if not library:
-        raise RuntimeError("Bibliothèque MT vide. Vérifier content/mt-library/*.md")
+def generer_mt(
+    client: LLMClient, analyse: AnalyseAO, profil: str | None = None
+) -> MemoireTechniqueGenere:
+    """Génère le mémoire technique complet pour un AO donné.
 
-    bet_profile = load_bet_profile()
+    `profil` : slug du profil (cf. content/profiles/<slug>/). Si None, profil par défaut.
+    """
+    library = load_mt_library(profil)
+    if not library:
+        raise RuntimeError(
+            f"Bibliothèque MT vide pour le profil '{profil or 'default'}'. "
+            "Vérifier content/profiles/<profil>/mt-library/*.md"
+        )
+
+    bet_profile = load_bet_profile(profil)
 
     user_prompt = f"""## Analyse de l'AO
 

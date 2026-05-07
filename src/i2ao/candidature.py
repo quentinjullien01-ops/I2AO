@@ -94,10 +94,13 @@ Madame la Présidente / Monsieur le Directeur Général selon le pouvoir adjudic
 
 
 def generer_lettre(
-    client: LLMClient, analyse: AnalyseAO, candidat: str = CANDIDAT_NOM
+    client: LLMClient,
+    analyse: AnalyseAO,
+    candidat: str = CANDIDAT_NOM,
+    profil: str | None = None,
 ) -> LettrePresentation:
     """Génère le brouillon de lettre via Gemini."""
-    profile = load_bet_profile()
+    profile = load_bet_profile(profil)
 
     user_prompt = f"""## Analyse de l'AO
 

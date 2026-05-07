@@ -148,10 +148,13 @@ def _format_catalog_for_prompt(catalog: list[PrestationDPGF]) -> str:
 
 
 def extraire_programme_dqe(
-    client: LLMClient, analyse: AnalyseAO, dce_concatene: str
+    client: LLMClient,
+    analyse: AnalyseAO,
+    dce_concatene: str,
+    profil: str | None = None,
 ) -> ProgrammeDQE:
     """Demande à Gemini d'extraire le programme indicatif pour DQE."""
-    catalog = load_dpgf_catalog()
+    catalog = load_dpgf_catalog(profil)
     if not catalog:
         raise RuntimeError("Catalogue DPGF vide. Vérifier content/dpgf-catalog/*.yaml")
 
@@ -187,13 +190,16 @@ traduis-le en lignes (code catalogue + quantité + justification courte).
 
 
 def generer_dpgf(
-    client: LLMClient, analyse: AnalyseAO, dce_concatene: str
+    client: LLMClient,
+    analyse: AnalyseAO,
+    dce_concatene: str,
+    profil: str | None = None,
 ) -> DPGFGeneree:
     """Génère la DPGF complète : BPU au catalogue + DQE chiffré du programme indicatif."""
-    catalog = load_dpgf_catalog()
+    catalog = load_dpgf_catalog(profil)
     catalog_by_code: dict[str, PrestationDPGF] = {p.code: p for p in catalog}
 
-    programme = extraire_programme_dqe(client, analyse, dce_concatene)
+    programme = extraire_programme_dqe(client, analyse, dce_concatene, profil)
 
     dqe: list[LigneChiffree] = []
     orphelines: list[str] = []

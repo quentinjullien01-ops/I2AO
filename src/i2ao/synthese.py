@@ -99,13 +99,15 @@ def generer_synthese(
     analyse: AnalyseAO,
     mt: MemoireTechniqueGenere | None,
     dpgf: DPGFGeneree | None,
+    profil: str | None = None,
 ) -> SyntheseDirection:
     """Génère la synthèse direction.
 
     mt et dpgf peuvent être None : dans ce cas la synthèse se fait sans visibilité
     sur le contenu déjà rédigé (utile pour un go/no-go en amont du travail de réponse).
+    `profil` : slug du profil pour charger le bet-profile.md correspondant.
     """
-    bet_profile = load_bet_profile()
+    bet_profile = load_bet_profile(profil)
 
     contexte_parts = [
         "## Analyse de l'AO\n",
