@@ -431,6 +431,8 @@ def render_sidebar() -> Affaire | None:
             st.sidebar.success(f"🤖 Connecté à `{LLM_MODEL}`")
 
     # Mode présentation toggle
+    if "mode_presentation" not in st.session_state:
+        st.session_state.mode_presentation = True
     st.session_state.mode_presentation = st.sidebar.toggle(
         "🎤 Mode présentation",
         value=is_mode_presentation(),
@@ -770,7 +772,7 @@ def render_tab_analyse(affaire: Affaire, client: LLMClient | None) -> None:
             )
             u = client.last_usage
             msg = f"OK — {len(analyse.exigences)} exigences extraites"
-            if not is_mode_presentation():
+            if not is_mode_presentation() and u:
                 msg += (
                     f" · prompt={u.prompt_tokens} output={u.output_tokens} "
                     f"thinking={u.thoughts_tokens}"
@@ -803,7 +805,6 @@ def render_tab_analyse(affaire: Affaire, client: LLMClient | None) -> None:
 
     st.subheader(f"Exigences extraites ({len(analyse.exigences)})")
     cats = Counter(e.categorie for e in analyse.exigences)
-    imps = Counter(e.importance for e in analyse.exigences)
     src = Counter(e.source_piece for e in analyse.exigences)
 
     # Distribution par importance — bar empilée
@@ -904,7 +905,7 @@ def render_tab_mt(affaire: Affaire, client: LLMClient | None) -> None:
             )
             u = client.last_usage
             msg = f"OK — {len(mt.sections)} sections"
-            if not is_mode_presentation():
+            if not is_mode_presentation() and u:
                 msg += (
                     f" · prompt={u.prompt_tokens} output={u.output_tokens} "
                     f"thinking={u.thoughts_tokens}"
@@ -987,7 +988,7 @@ def render_tab_mt(affaire: Affaire, client: LLMClient | None) -> None:
                     f"OK — score {rapport.score_pct:.0f}% sur "
                     f"{rapport.nb_total_evaluees - rapport.nb_non_applicables} exigences applicables"
                 )
-                if not is_mode_presentation():
+                if not is_mode_presentation() and u:
                     msg += (
                         f" · prompt={u.prompt_tokens} output={u.output_tokens} "
                         f"thinking={u.thoughts_tokens}"
@@ -1096,7 +1097,6 @@ def render_tab_dpgf(affaire: Affaire, client: LLMClient | None) -> None:
             affaire.dpgf_json_path.write_text(
                 dpgf.model_dump_json(indent=2), encoding="utf-8"
             )
-            u = client.last_usage
             st.write(
                 f"OK — {len(dpgf.bpu)} prestations · {len(dpgf.dqe)} lignes DQE · "
                 f"montant {dpgf.montant_dqe_he:,.2f} € HT".replace(",", " ")
@@ -1233,7 +1233,7 @@ def render_tab_synthese(affaire: Affaire, client: LLMClient | None) -> None:
                 f"OK — {len(synth.atouts_candidat)} atouts · "
                 f"{len(synth.risques_principaux)} risques"
             )
-            if not is_mode_presentation():
+            if not is_mode_presentation() and u:
                 msg += (
                     f" · prompt={u.prompt_tokens} output={u.output_tokens} "
                     f"thinking={u.thoughts_tokens}"
@@ -1344,7 +1344,7 @@ def render_tab_candidature(affaire: Affaire, client: LLMClient | None) -> None:
                 lettre.model_dump_json(indent=2), encoding="utf-8"
             )
             u = client.last_usage
-            if is_mode_presentation():
+            if is_mode_presentation() or not u:
                 st.write("OK — lettre générée.")
             else:
                 st.write(

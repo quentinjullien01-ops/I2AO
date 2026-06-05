@@ -195,16 +195,20 @@ _DEMOS = [
         "slug": "demo-oph-vallees-isere",
         "nom": "OPH des Vallées de l'Isère — diag + MOE confortement (à bons de commande)",
         "source_subdir": "dce-oph-isere",
+        "artefacts_subdir": "demo-artefacts-oph-isere",
     },
     {
         "slug": "demo-confortement-saint-marcellin",
         "nom": "Commune de Saint-Marcellin — MOE confortement salle des fêtes (MAPA forfait)",
         "source_subdir": "dce-confortement-saint-marcellin",
+        "artefacts_subdir": "demo-artefacts-saint-marcellin",
     },
 ]
 
 
-def _initialiser_une_demo(slug: str, nom: str, source_subdir: str) -> Affaire | None:
+def _initialiser_une_demo(
+    slug: str, nom: str, source_subdir: str, artefacts_subdir: str = ""
+) -> Affaire | None:
     AFFAIRES_DIR.mkdir(parents=True, exist_ok=True)
     dossier = AFFAIRES_DIR / slug
     if dossier.exists():
@@ -219,6 +223,15 @@ def _initialiser_une_demo(slug: str, nom: str, source_subdir: str) -> Affaire | 
     pieces.mkdir()
     for pdf in source.glob("*.pdf"):
         shutil.copy2(pdf, pieces / pdf.name)
+
+    # Copie les artefacts pré-générés (JSON, DOCX, XLSX) pour que la démo soit
+    # immédiatement explorable sans nécessiter d'appel API.
+    if artefacts_subdir:
+        artefacts_src = SAMPLES_DIR / artefacts_subdir
+        if artefacts_src.exists():
+            for f in artefacts_src.iterdir():
+                if f.is_file():
+                    shutil.copy2(f, dossier / f.name)
 
     meta = {
         "slug": slug,
@@ -236,7 +249,9 @@ def initialiser_demo_si_absente() -> Affaire | None:
     """Crée les affaires de démo (si absentes) et renvoie la première (par défaut OPH)."""
     premiere: Affaire | None = None
     for d in _DEMOS:
-        a = _initialiser_une_demo(d["slug"], d["nom"], d["source_subdir"])
+        a = _initialiser_une_demo(
+            d["slug"], d["nom"], d["source_subdir"], d.get("artefacts_subdir", "")
+        )
         if premiere is None and a is not None:
             premiere = a
     return premiere
