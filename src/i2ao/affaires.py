@@ -8,8 +8,6 @@ Chaque affaire = un dossier sous data/affaires/<slug>/
   - dpgf.json/.xlsx : DPGF générée
 """
 
-from __future__ import annotations
-
 import json
 import re
 import shutil

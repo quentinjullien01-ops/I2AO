@@ -11,8 +11,6 @@ pack de langue française (`fra`). Sur Windows :
 https://github.com/UB-Mannheim/tesseract/wiki
 """
 
-from __future__ import annotations
-
 import io
 import logging
 import re

@@ -9,8 +9,6 @@ Tarifs Gemini 2.5 Flash (USD / 1M tokens, contexte ≤ 128k) :
 On accumule les comptes dans st.session_state pour tracker visible côté UI.
 """
 
-from __future__ import annotations
-
 from dataclasses import asdict, dataclass
 
 # Tarifs USD par million de tokens (≤ 128k context)

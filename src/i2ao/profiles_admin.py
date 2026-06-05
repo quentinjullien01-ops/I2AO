@@ -6,8 +6,6 @@ aussi un ZIP téléchargeable que l'utilisateur peut conserver et committer dans
 sa fork pour persistence durable.
 """
 
-from __future__ import annotations
-
 import io
 import re
 import shutil

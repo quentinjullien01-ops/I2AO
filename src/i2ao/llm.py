@@ -6,8 +6,6 @@ utilisateur ; le context caching explicite (caches.create) sera ajouté si la
 consommation l'exige (rentable au-delà de ~32k tokens cumulés).
 """
 
-from __future__ import annotations
-
 import json
 import logging
 import time
