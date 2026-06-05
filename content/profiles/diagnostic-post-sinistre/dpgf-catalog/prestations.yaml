@@ -1,0 +1,311 @@
+# Catalogue de prix unitaires HT — BET structures diagnostic post-sinistre.
+# Valeurs marché 2026 indicatives, à ajuster selon politique commerciale du candidat.
+#
+# Champs :
+#   code            : référence unique de la prestation
+#   libelle         : libellé apparaissant au BPU/DPGF
+#   unite           : unité de chiffrage (forfait, jour, bâtiment, sinistre, ...)
+#   prix_unitaire   : prix HT en euros
+#   categorie       : chapitre du BPU
+#   tags            : étiquettes pour matching avec les exigences extraites
+#   note            : commentaire interne (non exporté)
+
+prestations:
+
+  # === Chapitre 1 : Expertise et diagnostic post-sinistre — missions standard ===
+
+  - code: "1.01"
+    libelle: "Intervention d'urgence — compte-rendu de sécurité (péril / effondrement)"
+    unite: "forfait"
+    prix_unitaire: 950
+    categorie: "Expertise post-sinistre — missions standard"
+    tags: [urgence, peril, securite, intervention-rapide]
+    note: "Intervention sous 24h, compte-rendu transmis dans la journée"
+
+  - code: "1.02"
+    libelle: "Expertise post-sinistre — pavillon individuel ou petit collectif R+2 max"
+    unite: "sinistre"
+    prix_unitaire: 2800
+    categorie: "Expertise post-sinistre — missions standard"
+    tags: [expertise, diagnostic, pavillon, petit-collectif]
+
+  - code: "1.03"
+    libelle: "Expertise post-sinistre — immeuble collectif R+3 à R+7, sinistre localisé"
+    unite: "sinistre"
+    prix_unitaire: 5500
+    categorie: "Expertise post-sinistre — missions standard"
+    tags: [expertise, collectif, sinistre-localise]
+
+  - code: "1.04"
+    libelle: "Expertise post-sinistre — immeuble collectif R+3 à R+7, sinistre généralisé"
+    unite: "sinistre"
+    prix_unitaire: 9800
+    categorie: "Expertise post-sinistre — missions standard"
+    tags: [expertise, collectif, sinistre-generalise]
+
+  - code: "1.05"
+    libelle: "Expertise post-sinistre — bâtiment tertiaire ou industriel complexe"
+    unite: "sinistre"
+    prix_unitaire: 12500
+    categorie: "Expertise post-sinistre — missions standard"
+    tags: [expertise, tertiaire, industriel]
+
+  - code: "1.06"
+    libelle: "Surcoût sinistre sur bâtiment classé MH ou bâti antérieur à 1948"
+    unite: "forfait"
+    prix_unitaire: 2200
+    categorie: "Expertise post-sinistre — missions standard"
+    tags: [expertise, MH, bati-ancien]
+    note: "Forfait additionnel, à appliquer aux postes 1.02 à 1.05"
+
+  - code: "1.07"
+    libelle: "Rapport de synthèse complémentaire (pour assureur / juridiction)"
+    unite: "forfait"
+    prix_unitaire: 1100
+    categorie: "Expertise post-sinistre — missions standard"
+    tags: [rapport, synthese, assureur]
+
+  # === Chapitre 2 : Expertise CATNAT ===
+
+  - code: "2.01"
+    libelle: "Expertise CATNAT RGA — pavillon individuel"
+    unite: "sinistre"
+    prix_unitaire: 2400
+    categorie: "Expertise CATNAT"
+    tags: [CATNAT, RGA, pavillon, retrait-gonflement]
+
+  - code: "2.02"
+    libelle: "Expertise CATNAT RGA — collectif ou ERP"
+    unite: "sinistre"
+    prix_unitaire: 4900
+    categorie: "Expertise CATNAT"
+    tags: [CATNAT, RGA, collectif]
+
+  - code: "2.03"
+    libelle: "Expertise CATNAT inondation — pavillon individuel"
+    unite: "sinistre"
+    prix_unitaire: 2100
+    categorie: "Expertise CATNAT"
+    tags: [CATNAT, inondation, pavillon]
+
+  - code: "2.04"
+    libelle: "Expertise CATNAT inondation — collectif ou ERP"
+    unite: "sinistre"
+    prix_unitaire: 4400
+    categorie: "Expertise CATNAT"
+    tags: [CATNAT, inondation, collectif]
+
+  - code: "2.05"
+    libelle: "Mission de masse CATNAT — tarif dégressif par sinistre (lot 10 à 30)"
+    unite: "sinistre"
+    prix_unitaire: 1900
+    categorie: "Expertise CATNAT"
+    tags: [CATNAT, masse, lot, serie]
+    note: "Tarif pour lots de 10 à 30 sinistres similaires sur périmètre géographique commun"
+
+  - code: "2.06"
+    libelle: "Mission de masse CATNAT — tarif dégressif par sinistre (lot > 30)"
+    unite: "sinistre"
+    prix_unitaire: 1500
+    categorie: "Expertise CATNAT"
+    tags: [CATNAT, masse, lot, serie]
+    note: "Tarif pour lots > 30 sinistres similaires sur périmètre géographique commun"
+
+  - code: "2.07"
+    libelle: "Rapport de recours CATNAT (contestation d'arrêté ou de classification)"
+    unite: "forfait"
+    prix_unitaire: 3200
+    categorie: "Expertise CATNAT"
+    tags: [CATNAT, recours, contestation]
+
+  # === Chapitre 3 : Expertise incendie / explosion ===
+
+  - code: "3.01"
+    libelle: "Expertise post-incendie — structure béton armé, sinistre localisé"
+    unite: "sinistre"
+    prix_unitaire: 5800
+    categorie: "Expertise incendie / explosion"
+    tags: [incendie, beton-arme, structure, thermique]
+
+  - code: "3.02"
+    libelle: "Expertise post-incendie — structure béton armé, sinistre généralisé (bâtiment entier)"
+    unite: "sinistre"
+    prix_unitaire: 11500
+    categorie: "Expertise incendie / explosion"
+    tags: [incendie, beton-arme, generalise]
+
+  - code: "3.03"
+    libelle: "Expertise post-incendie — structure métallique"
+    unite: "sinistre"
+    prix_unitaire: 6500
+    categorie: "Expertise incendie / explosion"
+    tags: [incendie, metal, charpente-metallique]
+
+  - code: "3.04"
+    libelle: "Expertise post-incendie — structure bois"
+    unite: "sinistre"
+    prix_unitaire: 5200
+    categorie: "Expertise incendie / explosion"
+    tags: [incendie, bois, charpente-bois]
+
+  - code: "3.05"
+    libelle: "Expertise post-explosion — évaluation de la continuité structurale"
+    unite: "sinistre"
+    prix_unitaire: 8900
+    categorie: "Expertise incendie / explosion"
+    tags: [explosion, continuité-structurale, effondrement-progressif]
+
+  - code: "3.06"
+    libelle: "Surcoût modélisation éléments finis pour sinistre incendie / explosion complexe"
+    unite: "forfait"
+    prix_unitaire: 3800
+    categorie: "Expertise incendie / explosion"
+    tags: [modelisation, EF, incendie, calcul]
+
+  # === Chapitre 4 : Investigations non destructives ===
+
+  - code: "4.01"
+    libelle: "Pacomètre — repérage armatures et mesure enrobage"
+    unite: "demi-journée"
+    prix_unitaire: 480
+    categorie: "Investigations non destructives"
+    tags: [investigation, pacometrie, beton-arme]
+
+  - code: "4.02"
+    libelle: "Scléromètre — mesure de résistance de surface béton"
+    unite: "mesure"
+    prix_unitaire: 35
+    categorie: "Investigations non destructives"
+    tags: [investigation, sclerometrie, beton]
+
+  - code: "4.03"
+    libelle: "Thermographie infrarouge — inspection façade ou toiture"
+    unite: "demi-journée"
+    prix_unitaire: 690
+    categorie: "Investigations non destructives"
+    tags: [investigation, thermographie, humidite, incendie]
+
+  - code: "4.04"
+    libelle: "Inspection drone — façade haute ou toiture inaccessible"
+    unite: "demi-journée"
+    prix_unitaire: 780
+    categorie: "Investigations non destructives"
+    tags: [investigation, drone, façade, toiture, inaccessible]
+
+  - code: "4.05"
+    libelle: "Endoscopie — inspection de vides, appuis, noeuds structuraux"
+    unite: "point"
+    prix_unitaire: 95
+    categorie: "Investigations non destructives"
+    tags: [investigation, endoscopie, appui, vide]
+
+  - code: "4.06"
+    libelle: "Hygromètre sonde profonde — mesure teneur en eau (béton, bois)"
+    unite: "mesure"
+    prix_unitaire: 45
+    categorie: "Investigations non destructives"
+    tags: [investigation, humidite, bois, beton, inondation]
+
+  - code: "4.07"
+    libelle: "Fissuromètre — pose et relevé de suivi (par unité)"
+    unite: "fissuromètre"
+    prix_unitaire: 220
+    categorie: "Investigations non destructives"
+    tags: [investigation, fissurometre, suivi, fissure]
+
+  # === Chapitre 5 : Investigations destructives ===
+
+  - code: "5.01"
+    libelle: "Sondage destructif — dégagement d'armature ou de fondation"
+    unite: "sondage"
+    prix_unitaire: 580
+    categorie: "Investigations destructives"
+    tags: [investigation, sondage-destructif, armature, fondation]
+
+  - code: "5.02"
+    libelle: "Carottage béton et essai de résistance (préparation + envoi labo)"
+    unite: "carotte"
+    prix_unitaire: 280
+    categorie: "Investigations destructives"
+    tags: [investigation, carottage, beton, resistance]
+
+  - code: "5.03"
+    libelle: "Puits de reconnaissance géotechnique (main courante)"
+    unite: "puits"
+    prix_unitaire: 650
+    categorie: "Investigations destructives"
+    tags: [investigation, geotechnique, fondation, RGA]
+
+  # === Chapitre 6 : Expertise contradictoire et judiciaire ===
+
+  - code: "6.01"
+    libelle: "Assistance maître d'ouvrage en réunion contradictoire (par réunion)"
+    unite: "réunion"
+    prix_unitaire: 1450
+    categorie: "Expertise contradictoire et judiciaire"
+    tags: [contradictoire, assurance, assistance-MO, reunion]
+
+  - code: "6.02"
+    libelle: "Note de contre-expertise écrite (analyse du rapport adverse)"
+    unite: "forfait"
+    prix_unitaire: 2200
+    categorie: "Expertise contradictoire et judiciaire"
+    tags: [contre-expertise, rapport-adverse, analyse]
+
+  - code: "6.03"
+    libelle: "Mission de sapiteur dans une expertise judiciaire (prix par journée)"
+    unite: "jour"
+    prix_unitaire: 1300
+    categorie: "Expertise contradictoire et judiciaire"
+    tags: [judiciaire, sapiteur, expertise-judiciaire]
+
+  - code: "6.04"
+    libelle: "Attestation de résistance et note de calcul (pour recours assureur)"
+    unite: "forfait"
+    prix_unitaire: 1800
+    categorie: "Expertise contradictoire et judiciaire"
+    tags: [attestation, calcul, resistance, recours]
+
+  # === Chapitre 7 : Prestations complémentaires ===
+
+  - code: "7.01"
+    libelle: "Note de définition des mesures conservatoires"
+    unite: "forfait"
+    prix_unitaire: 750
+    categorie: "Prestations complémentaires"
+    tags: [conservatoire, urgence, mesures-provisoires]
+
+  - code: "7.02"
+    libelle: "Chiffrage des travaux de remise en état (AVP détaillé)"
+    unite: "forfait"
+    prix_unitaire: 2400
+    categorie: "Prestations complémentaires"
+    tags: [chiffrage, remise-en-etat, AVP, estimation]
+
+  - code: "7.03"
+    libelle: "Assistance à la consultation des entreprises de réparation"
+    unite: "forfait"
+    prix_unitaire: 1900
+    categorie: "Prestations complémentaires"
+    tags: [assistance, consultation, entreprises, reparation]
+
+  - code: "7.04"
+    libelle: "Suivi de chantier de réparation (par visite)"
+    unite: "visite"
+    prix_unitaire: 680
+    categorie: "Prestations complémentaires"
+    tags: [suivi-chantier, reparation, visite]
+
+  - code: "7.05"
+    libelle: "Rapport de levée de réserves / réception des travaux de réparation"
+    unite: "forfait"
+    prix_unitaire: 850
+    categorie: "Prestations complémentaires"
+    tags: [reception, levee-reserves, reparation]
+
+  - code: "7.06"
+    libelle: "Journée ingénieur supplémentaire (dépassement de mission)"
+    unite: "jour"
+    prix_unitaire: 1100
+    categorie: "Prestations complémentaires"
+    tags: [regie, ingenieur, depassement]
