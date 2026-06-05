@@ -11,48 +11,34 @@ from collections import Counter
 
 import plotly.graph_objects as go
 
-# Palette projet (alignée DOCX/XLSX/CSS)
-COULEUR_PRIMAIRE = "#1a3d6e"
-COULEUR_PRIMAIRE_CLAIR = "#8baed6"  # version pour fond sombre
-COULEUR_SECONDAIRE = "#5b85b8"
-COULEUR_VERT = "#10b981"            # vert plus vif (visible light + dark)
-COULEUR_ORANGE = "#f59e0b"          # orange plus vif
-COULEUR_ROUGE = "#ef4444"           # rouge plus vif
-COULEUR_GRIS = "#9ca3af"
+# Palette projet — alignée sur le thème "Mission Control" (#38bdf8 primary)
+COULEUR_PRIMAIRE = "#38bdf8"
+COULEUR_PRIMAIRE_CLAIR = "#7dd3fc"
+COULEUR_SECONDAIRE = "#818cf8"
+COULEUR_VERT = "#10b981"
+COULEUR_ORANGE = "#f59e0b"
+COULEUR_ROUGE = "#ef4444"
+COULEUR_GRIS = "#64748b"
 
-# Palette catégories — couleurs vives lisibles sur fond clair ET sombre
+# Palette catégories — couleurs vives, visibles sur fond sombre
 PALETTE_CATEGORIES = [
-    "#3b82f6",
+    "#38bdf8",
     "#10b981",
     "#f59e0b",
     "#ef4444",
-    "#8b5cf6",
+    "#818cf8",
     "#06b6d4",
-    "#ec4899",
-    "#84cc16",
-    "#f97316",
-    "#6366f1",
-    "#14b8a6",
+    "#f472b6",
+    "#a3e635",
+    "#fb923c",
+    "#c084fc",
+    "#2dd4bf",
 ]
 
 
 def _is_dark_theme() -> bool:
-    """Détecte si Streamlit est en thème sombre (avec fallback gracieux)."""
-    try:
-        import streamlit as st
-
-        # Streamlit 1.40+ : runtime theme
-        if hasattr(st, "context") and hasattr(st.context, "theme"):
-            theme_type = getattr(st.context.theme, "type", None)
-            if theme_type:
-                return theme_type == "dark"
-        # Fallback config
-        base = st.get_option("theme.base")
-        if base:
-            return base == "dark"
-    except Exception:
-        pass
-    return False
+    """Toujours True — l'app utilise le thème Mission Control (fond sombre forcé)."""
+    return True
 
 
 def _theme_colors() -> dict:

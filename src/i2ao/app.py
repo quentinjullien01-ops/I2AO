@@ -128,138 +128,439 @@ def _logo_data_url() -> str:
 
 
 # ---------------------------------------------------------------------------
-# Style custom (palette inspirée des exports DOCX/XLSX)
+# Style custom — "Mission Control" dark theme avec effets 3D et animations
 # ---------------------------------------------------------------------------
 
 _CUSTOM_CSS = """
 <style>
+/* ============================================================
+   I2AO — Design System 2.0  |  "Mission Control"
+   ============================================================ */
+
 :root {
-    --i2ao-primary: #1a3d6e;
-    --i2ao-primary-light: #8baed6;
-    --i2ao-success: #10b981;
-    --i2ao-warning: #f59e0b;
-    --i2ao-danger: #ef4444;
+    --c-bg:           #030d1f;
+    --c-bg2:          #071428;
+    --c-glass:        rgba(255,255,255,0.04);
+    --c-glass-border: rgba(255,255,255,0.09);
+    --c-primary:      #38bdf8;
+    --c-primary-glow: rgba(56,189,248,0.35);
+    --c-indigo:       #818cf8;
+    --c-success:      #10b981;
+    --c-warning:      #f59e0b;
+    --c-danger:       #ef4444;
+    --c-text:         rgba(255,255,255,0.90);
+    --c-muted:        rgba(255,255,255,0.40);
 }
 
-/* Titres principaux en bleu marine sur thème clair */
-.main h1, .main h2 {
-    color: var(--i2ao-primary);
+/* === FOND GÉNÉRAL ============================================= */
+[data-testid="stAppViewContainer"] {
+    background: var(--c-bg) !important;
+}
+
+/* Orbes lumineux animés en arrière-plan */
+[data-testid="stAppViewContainer"]::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background:
+        radial-gradient(ellipse 900px 700px at 10% 35%,  rgba(56,189,248,0.07)  0%, transparent 65%),
+        radial-gradient(ellipse 700px 900px at 88% 15%,  rgba(129,140,248,0.06) 0%, transparent 65%),
+        radial-gradient(ellipse 800px 500px at 55% 95%,  rgba(16,185,129,0.04)  0%, transparent 65%);
+    animation: bgPulse 14s ease-in-out infinite alternate;
+    pointer-events: none;
+    z-index: 0;
+}
+@keyframes bgPulse {
+    0%   { opacity:.6; transform: scale(1)    translate(0,0); }
+    50%  { opacity:1;  transform: scale(1.06) translate(1%,-1%); }
+    100% { opacity:.7; transform: scale(.97)  translate(-1%,1%); }
+}
+
+/* Grille fine en arrière-plan */
+[data-testid="stAppViewContainer"]::after {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image:
+        linear-gradient(rgba(56,189,248,.025) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(56,189,248,.025) 1px, transparent 1px);
+    background-size: 64px 64px;
+    pointer-events: none;
+    z-index: 0;
+}
+
+/* === SIDEBAR ================================================== */
+section[data-testid="stSidebar"] {
+    background: rgba(3,13,31,.96) !important;
+    border-right: 1px solid rgba(56,189,248,.14) !important;
+    backdrop-filter: blur(20px);
+}
+section[data-testid="stSidebar"]::before {
+    content: '';
+    position: absolute; inset: 0;
+    background: linear-gradient(180deg, rgba(56,189,248,.06) 0%, transparent 35%);
+    pointer-events: none;
+}
+section[data-testid="stSidebar"] * { color: var(--c-text) !important; }
+section[data-testid="stSidebar"] h1 {
+    background: linear-gradient(135deg, #e0f2fe, var(--c-primary));
+    -webkit-background-clip: text !important;
+    -webkit-text-fill-color: transparent !important;
+    background-clip: text !important;
     font-family: 'Times New Roman', Georgia, serif;
-}
-.main h1 { font-weight: 700; letter-spacing: -0.5px; }
-.main h2 { font-weight: 600; }
-
-/* Sur thème sombre, on bascule sur la version claire du bleu */
-@media (prefers-color-scheme: dark) {
-    .main h1, .main h2 { color: var(--i2ao-primary-light); }
-}
-[data-testid="stAppViewContainer"][class*="dark"] .main h1,
-[data-testid="stAppViewContainer"][class*="dark"] .main h2,
-.stApp[data-theme="dark"] .main h1,
-.stApp[data-theme="dark"] .main h2 {
-    color: var(--i2ao-primary-light);
+    font-weight: 800 !important;
 }
 
-/* Header de l'app : barre fine en haut */
-.block-container {
-    padding-top: 2rem;
+/* === CONTENU PRINCIPAL ======================================= */
+.block-container { padding-top: 2rem !important; }
+.main p, .main li, .main td { color: var(--c-text); }
+.main strong { color: #fff; }
+
+/* Titres avec gradient animé */
+.main h1 {
+    background: linear-gradient(120deg, #e0f2fe 0%, var(--c-primary) 45%, var(--c-indigo) 100%);
+    background-size: 200% auto;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    font-family: 'Times New Roman', Georgia, serif;
+    font-weight: 800;
+    letter-spacing: -.5px;
+    animation: gradShift 6s linear infinite alternate;
+}
+@keyframes gradShift {
+    from { background-position: 0% center; }
+    to   { background-position: 100% center; }
 }
 
-/* Metric cards : value en bleu primaire (claire si dark) */
+.main h2 {
+    color: var(--c-primary);
+    font-weight: 600;
+    position: relative;
+    padding-bottom: 6px;
+}
+.main h2::after {
+    content: '';
+    position: absolute;
+    bottom: 0; left: 0;
+    height: 2px; width: 0;
+    background: linear-gradient(90deg, var(--c-primary), transparent);
+    border-radius: 2px;
+    animation: lineGrow .55s ease forwards;
+}
+@keyframes lineGrow {
+    to { width: 48px; }
+}
+
+.main h3, .main h4, .main h5 {
+    color: rgba(255,255,255,.85);
+}
+
+/* === CARTES MÉTRIQUES — glassmorphism + 3D tilt ============= */
+[data-testid="stMetric"] {
+    background: var(--c-glass) !important;
+    border: 1px solid var(--c-glass-border) !important;
+    border-radius: 18px !important;
+    padding: 1.3rem 1.5rem !important;
+    backdrop-filter: blur(14px) !important;
+    transition: transform .25s ease, box-shadow .25s ease !important;
+    transform-style: preserve-3d;
+    position: relative;
+    overflow: hidden;
+    cursor: default;
+}
+[data-testid="stMetric"]::before {
+    content: '';
+    position: absolute; top:-60%; left:-60%;
+    width: 220%; height: 220%;
+    background: radial-gradient(circle at 50% 50%, rgba(56,189,248,.07), transparent 55%);
+    opacity: 0;
+    transition: opacity .3s;
+}
+[data-testid="stMetric"]:hover {
+    transform: translateY(-7px) rotateX(5deg) scale(1.03) !important;
+    box-shadow:
+        0 22px 55px rgba(56,189,248,.22),
+        0 0 0 1px rgba(56,189,248,.22) !important;
+}
+[data-testid="stMetric"]:hover::before { opacity: 1; }
+
 [data-testid="stMetricValue"] {
-    color: var(--i2ao-primary);
-    font-weight: 700;
-}
-@media (prefers-color-scheme: dark) {
-    [data-testid="stMetricValue"] { color: var(--i2ao-primary-light); }
+    color: var(--c-primary) !important;
+    font-weight: 800 !important;
+    font-size: 2rem !important;
+    text-shadow: 0 0 22px var(--c-primary-glow);
 }
 [data-testid="stMetricLabel"] {
-    color: inherit;
-    opacity: 0.7;
-    font-size: 0.85rem !important;
+    color: var(--c-muted) !important;
+    font-size: .74rem !important;
     text-transform: uppercase;
-    letter-spacing: 0.5px;
+    letter-spacing: 1.4px;
 }
 
-/* Sidebar : titre plus impactant */
-section[data-testid="stSidebar"] .stRadio > label {
-    font-size: 0.9rem;
+/* === ONGLETS ================================================= */
+[data-testid="stTabs"] {
+    border-bottom: 1px solid rgba(56,189,248,.12) !important;
 }
-
-/* Tabs : style plus marqué */
 [data-testid="stTabs"] button[role="tab"] {
+    color: var(--c-muted) !important;
     font-weight: 500;
+    border-radius: 10px 10px 0 0 !important;
+    transition: all .2s ease !important;
+    position: relative;
+}
+[data-testid="stTabs"] button[role="tab"]:hover {
+    color: var(--c-primary) !important;
+    background: rgba(56,189,248,.07) !important;
 }
 [data-testid="stTabs"] button[role="tab"][aria-selected="true"] {
-    color: var(--i2ao-primary);
+    color: var(--c-primary) !important;
     font-weight: 700;
-    border-bottom: 2px solid var(--i2ao-primary);
+    background: rgba(56,189,248,.09) !important;
 }
-@media (prefers-color-scheme: dark) {
-    [data-testid="stTabs"] button[role="tab"][aria-selected="true"] {
-        color: var(--i2ao-primary-light);
-        border-bottom: 2px solid var(--i2ao-primary-light);
-    }
+[data-testid="stTabs"] button[role="tab"][aria-selected="true"]::after {
+    content: '';
+    position: absolute;
+    bottom: 0; left: 10%; right: 10%;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, var(--c-primary), transparent);
+    border-radius: 2px;
+    box-shadow: 0 0 10px var(--c-primary-glow);
 }
 
-/* Boutons primaires : couleur cohérente */
+/* Fade-in sur chaque rendu de panneau d'onglet */
+[data-testid="stTabPanel"] {
+    animation: fadeUp .38s ease;
+}
+@keyframes fadeUp {
+    from { opacity: 0; transform: translateY(14px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+
+/* === BOUTONS ================================================= */
+.stButton button {
+    border-radius: 11px !important;
+    font-weight: 600 !important;
+    transition: all .22s ease !important;
+    position: relative;
+    overflow: hidden;
+}
 .stButton button[kind="primary"] {
-    background-color: var(--i2ao-primary);
-    border-color: var(--i2ao-primary);
+    background: linear-gradient(135deg, #0ea5e9 0%, #1a3d6e 100%) !important;
+    border: none !important;
+    color: #fff !important;
+    box-shadow: 0 4px 22px rgba(14,165,233,.32) !important;
 }
 .stButton button[kind="primary"]:hover {
-    background-color: #15325b;
-    border-color: #15325b;
+    transform: translateY(-3px) !important;
+    box-shadow: 0 10px 32px rgba(14,165,233,.5) !important;
+}
+/* Shimmer continu sur les boutons primaires */
+.stButton button[kind="primary"]::after {
+    content: '';
+    position: absolute;
+    top: -50%; left: -70%;
+    width: 35%; height: 200%;
+    background: rgba(255,255,255,.18);
+    transform: skewX(-22deg);
+    animation: shimmer 3.5s ease infinite;
+}
+@keyframes shimmer {
+    0%   { left: -70%; }
+    100% { left: 170%; }
 }
 
-/* Captions plus discrets — utilise la couleur héritée pour s'adapter */
+/* Boutons de téléchargement */
+.stDownloadButton button {
+    background: rgba(16,185,129,.1) !important;
+    border: 1px solid rgba(16,185,129,.35) !important;
+    color: var(--c-success) !important;
+    border-radius: 11px !important;
+    transition: all .2s ease !important;
+}
+.stDownloadButton button:hover {
+    background: rgba(16,185,129,.2) !important;
+    box-shadow: 0 6px 22px rgba(16,185,129,.3) !important;
+    transform: translateY(-2px) !important;
+}
+
+/* === LIGNE DE STATUT ========================================= */
+.i2ao-status-line {
+    background: rgba(56,189,248,.05);
+    border: 1px solid rgba(56,189,248,.18);
+    border-left: 3px solid var(--c-primary);
+    border-radius: 12px;
+    padding: 12px 18px;
+    font-size: .88rem;
+    color: var(--c-text);
+    margin-bottom: 1.3rem;
+    box-shadow: 0 0 24px rgba(56,189,248,.06);
+    animation: fadeUp .4s ease;
+}
+.i2ao-status-line .ok {
+    color: var(--c-success);
+    font-weight: 700;
+    text-shadow: 0 0 10px rgba(16,185,129,.45);
+}
+.i2ao-status-line .ko { opacity: .28; }
+
+/* === HERO LANDING ============================================ */
+.i2ao-hero {
+    background: linear-gradient(135deg, #020d1e 0%, #071428 45%, #0d2247 100%);
+    border: 1px solid rgba(56,189,248,.18);
+    border-radius: 22px;
+    padding: 3.5rem 3rem;
+    margin: .5rem 0 2rem;
+    position: relative;
+    overflow: hidden;
+    box-shadow:
+        0 28px 80px rgba(56,189,248,.10),
+        inset 0 1px 0 rgba(255,255,255,.06);
+}
+/* Orbe droit */
+.i2ao-hero::before {
+    content: '';
+    position: absolute; top:-120px; right:-120px;
+    width: 450px; height: 450px;
+    background: radial-gradient(circle, rgba(56,189,248,.13) 0%, transparent 65%);
+    animation: heroOrb 7s ease-in-out infinite alternate;
+}
+/* Orbe gauche */
+.i2ao-hero::after {
+    content: '';
+    position: absolute; bottom:-100px; left:-100px;
+    width: 350px; height: 350px;
+    background: radial-gradient(circle, rgba(129,140,248,.09) 0%, transparent 65%);
+    animation: heroOrb2 9s ease-in-out infinite alternate;
+}
+@keyframes heroOrb  { to { transform: translate(-35px,35px) scale(1.22); } }
+@keyframes heroOrb2 { to { transform: translate(25px,-25px) scale(1.18); } }
+
+.i2ao-hero h1 {
+    color: #fff !important;
+    -webkit-text-fill-color: #fff !important;
+    font-size: 2.9rem;
+    font-weight: 800;
+    margin: 0 0 .6rem;
+    text-shadow: 0 0 40px rgba(56,189,248,.4);
+    position: relative; z-index: 1;
+}
+.i2ao-hero p {
+    color: rgba(255,255,255,.75);
+    font-size: 1.12rem;
+    position: relative; z-index: 1;
+}
+
+/* === EXPANDERS =============================================== */
+[data-testid="stExpander"] {
+    background: var(--c-glass) !important;
+    border: 1px solid var(--c-glass-border) !important;
+    border-radius: 14px !important;
+    backdrop-filter: blur(10px);
+    transition: border-color .2s;
+}
+[data-testid="stExpander"]:hover {
+    border-color: rgba(56,189,248,.26) !important;
+}
+[data-testid="stExpander"] summary {
+    color: var(--c-text) !important;
+}
+
+/* === DATAFRAMES ============================================== */
+[data-testid="stDataFrame"] {
+    border-radius: 14px !important;
+    overflow: hidden;
+    border: 1px solid var(--c-glass-border) !important;
+}
+
+/* === ALERTES ================================================= */
+[data-testid="stAlert"] {
+    border-radius: 14px !important;
+    border-left-width: 3px !important;
+    backdrop-filter: blur(8px);
+}
+
+/* === CONTAINERS À BORD ====================================== */
+[data-testid="stVerticalBlockBorderWrapper"] {
+    background: var(--c-glass) !important;
+    border: 1px solid var(--c-glass-border) !important;
+    border-radius: 18px !important;
+    backdrop-filter: blur(10px);
+}
+
+/* === DIVIDERS =============================================== */
+hr {
+    border: none !important;
+    border-top: 1px solid rgba(56,189,248,.10) !important;
+    margin: 1.8rem 0 !important;
+}
+
+/* === CAPTIONS =============================================== */
 .stCaption, [data-testid="stCaptionContainer"] {
-    color: inherit;
-    opacity: 0.7;
+    color: var(--c-muted) !important;
     font-style: italic;
 }
 
-/* Status banner customisé — fond semi-transparent qui marche light + dark */
-.i2ao-status-line {
-    background: rgba(26, 61, 110, 0.10);
-    padding: 10px 14px;
-    border-left: 3px solid var(--i2ao-primary);
+/* Scrollbar fine et discrète */
+::-webkit-scrollbar { width: 5px; height: 5px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb {
+    background: rgba(56,189,248,.25);
     border-radius: 4px;
-    font-size: 0.9rem;
-    color: inherit;
-    margin-bottom: 1rem;
 }
-@media (prefers-color-scheme: dark) {
-    .i2ao-status-line {
-        background: rgba(139, 174, 214, 0.12);
-        border-left-color: var(--i2ao-primary-light);
-    }
-}
-.i2ao-status-line .ok { color: var(--i2ao-success); font-weight: 600; }
-.i2ao-status-line .ko { opacity: 0.45; }
-
-/* Landing hero — palette bleu marine -> bleu vif, blanc en texte (marche partout) */
-.i2ao-hero {
-    background: linear-gradient(135deg, var(--i2ao-primary) 0%, #2d5a9e 100%);
-    color: white;
-    padding: 3rem 2rem;
-    border-radius: 8px;
-    margin: 1rem 0 2rem 0;
-}
-.i2ao-hero h1 {
-    color: white !important;
-    font-size: 2.5rem;
-    margin: 0 0 0.5rem 0;
-}
-.i2ao-hero p {
-    color: rgba(255,255,255,0.92);
-    font-size: 1.1rem;
-    margin: 0;
+::-webkit-scrollbar-thumb:hover {
+    background: rgba(56,189,248,.45);
 }
 </style>
 """
 
+# Particules flottantes via canvas JS (exécuté une fois au chargement de la page)
+_PARTICLES_JS = """
+<canvas id="i2ao-cv" style="position:fixed;top:0;left:0;width:100vw;height:100vh;pointer-events:none;z-index:1;opacity:.35;"></canvas>
+<script>
+(function(){
+  var cv=document.getElementById('i2ao-cv');
+  if(!cv)return;
+  var ctx=cv.getContext('2d');
+  var W=cv.width=window.innerWidth, H=cv.height=window.innerHeight;
+  window.addEventListener('resize',function(){W=cv.width=window.innerWidth;H=cv.height=window.innerHeight;});
+  var N=55, pts=[];
+  for(var i=0;i<N;i++) pts.push({
+    x:Math.random()*W, y:Math.random()*H,
+    vx:(Math.random()-.5)*.4, vy:(Math.random()-.5)*.4,
+    r:Math.random()*1.8+.6
+  });
+  function draw(){
+    ctx.clearRect(0,0,W,H);
+    for(var i=0;i<N;i++){
+      var p=pts[i];
+      p.x+=p.vx; p.y+=p.vy;
+      if(p.x<0)p.x=W; if(p.x>W)p.x=0;
+      if(p.y<0)p.y=H; if(p.y>H)p.y=0;
+      ctx.beginPath();
+      ctx.arc(p.x,p.y,p.r,0,Math.PI*2);
+      ctx.fillStyle='rgba(56,189,248,.7)';
+      ctx.fill();
+      for(var j=i+1;j<N;j++){
+        var q=pts[j], dx=p.x-q.x, dy=p.y-q.y, d=Math.sqrt(dx*dx+dy*dy);
+        if(d<130){
+          ctx.beginPath();
+          ctx.moveTo(p.x,p.y); ctx.lineTo(q.x,q.y);
+          ctx.strokeStyle='rgba(56,189,248,'+(1-d/130)*.18+')';
+          ctx.lineWidth=.6;
+          ctx.stroke();
+        }
+      }
+    }
+    requestAnimationFrame(draw);
+  }
+  draw();
+})();
+</script>
+"""
+
 st.markdown(_CUSTOM_CSS, unsafe_allow_html=True)
+st.markdown(_PARTICLES_JS, unsafe_allow_html=True)
 
 
 # ---------------------------------------------------------------------------
