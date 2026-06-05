@@ -10,8 +10,10 @@ avec téléchargement des livrables (DOCX, XLSX, JSON).
 from __future__ import annotations
 
 import json
+import re
 import sys
 from collections import Counter
+from datetime import datetime
 from pathlib import Path
 
 # Permet le `import i2ao.*` quand streamlit run est appele depuis la racine projet
@@ -897,6 +899,7 @@ def render_tab_overview(affaire: Affaire) -> None:
         return
 
     # Bandeau métriques principales
+    indic = _indicateurs_risque(analyse, rapport, dpgf)
     cols = st.columns(5)
     cols[0].metric("Pièces DCE", len(list(affaire.pieces_dir.glob("*.pdf"))))
     cols[1].metric("Exigences", len(analyse.exigences))
@@ -909,6 +912,27 @@ def render_tab_overview(affaire: Affaire) -> None:
         f"{dpgf.montant_dqe_he:,.0f} €".replace(",", " ") if dpgf else "—",
     )
     cols[4].metric("Date remise", analyse.date_remise[:30] if len(analyse.date_remise) > 30 else analyse.date_remise)
+
+    # Ligne 2 : indicateurs de risque
+    cols2 = st.columns(5)
+    if indic["jours"] is not None:
+        j = indic["jours"]
+        label_j = f"{'🔴' if j < 7 else '🟡' if j < 21 else '🟢'} {j} j"
+        cols2[0].metric("Jours avant clôture", label_j)
+    else:
+        cols2[0].metric("Jours avant clôture", "—")
+    nb_bloquantes = sum(1 for e in analyse.exigences if e.importance == "bloquant")
+    cols2[1].metric("Exigences bloquantes", nb_bloquantes)
+    if indic["risque_tech"] is not None:
+        rt = indic["risque_tech"]
+        cols2[2].metric("Risque technique", f"{'🔴' if rt > 20 else '🟡' if rt > 5 else '🟢'} {rt}%",
+                        help="% d'exigences bloquantes non couvertes par le MT")
+    else:
+        cols2[2].metric("Risque technique", "— (éval. MT)")
+    nb_imp = sum(1 for e in analyse.exigences if e.importance == "important")
+    cols2[3].metric("Importantes", nb_imp)
+    nb_min = sum(1 for e in analyse.exigences if e.importance == "mineur")
+    cols2[4].metric("Mineures", nb_min)
 
     st.divider()
 
@@ -1374,6 +1398,78 @@ def render_tab_mt(affaire: Affaire, client: LLMClient | None) -> None:
         st.warning(f"⚠️ {len(non_couvertes)} exigence(s) applicable(s) au MT non couverte(s) :")
         for d in non_couvertes:
             st.markdown(f"- **[{d.importance}/{d.categorie}]** {d.exigence_libelle} — _{d.commentaire}_")
+
+        # Bouton auto-complétion des lacunes
+        st.divider()
+        col_fix, col_info = st.columns([1, 3])
+        with col_fix:
+            fix_btn = st.button(
+                "🔧 Compléter les lacunes automatiquement",
+                type="primary",
+                use_container_width=True,
+                key="btn_fix_lacunes",
+                help="Génère un addendum au mémoire technique qui traite spécifiquement les exigences non couvertes.",
+            )
+        with col_info:
+            st.caption(
+                f"Gemini va rédiger un complément ciblé qui traite les {len(non_couvertes)} exigence(s) "
+                "non couverte(s) et l'intégrer au mémoire technique."
+            )
+
+        if fix_btn:
+            analyse_fix = charger_analyse(affaire)
+            mt_fix = charger_mt(affaire)
+            if analyse_fix and mt_fix:
+                # Construit la liste des lacunes pour le prompt
+                lacunes_txt = "\n".join(
+                    f"- [{d.importance}/{d.categorie}] {d.exigence_libelle} : {d.commentaire}"
+                    for d in non_couvertes
+                )
+                system_fix = (
+                    "Tu es un expert en rédaction de mémoires techniques pour marchés publics BET. "
+                    "Le mémoire technique existant présente des lacunes sur certaines exigences du DCE. "
+                    "Tu dois rédiger un **addendum** concis qui traite spécifiquement chaque lacune, "
+                    "en t'appuyant sur le contexte du marché. "
+                    "Format : pour chaque lacune, un paragraphe bref (5-8 lignes) avec un titre en ## "
+                    "qui reprend le libellé de l'exigence, puis le texte en markdown. "
+                    "Sois précis, technique, et adapté au marché décrit."
+                )
+                user_fix = (
+                    f"Marché : {analyse_fix.objet_resume} — {analyse_fix.pouvoir_adjudicateur}\n\n"
+                    f"Exigences non couvertes à traiter :\n{lacunes_txt}\n\n"
+                    "Rédige l'addendum."
+                )
+                with st.status("Génération de l'addendum…", expanded=True) as status_fix:
+                    st.write(f"Appel Gemini sur {len(non_couvertes)} lacunes…")
+                    try:
+                        addendum = client.call(
+                            system_prompt=system_fix,
+                            dce_context=None,
+                            user_message=user_fix,
+                            max_tokens=3000,
+                            temperature=0.3,
+                            thinking_budget=0,
+                        )
+                        # Injecte l'addendum comme nouvelle section dans le MT
+                        from i2ao.mt_engine import SectionMT
+                        section_add = SectionMT(
+                            paragraphe_id="addendum-lacunes",
+                            titre="Complément — Exigences spécifiques",
+                            sous_titre="Réponse aux points identifiés lors de l'évaluation de couverture",
+                            contenu_md=addendum,
+                        )
+                        mt_fix.sections.append(section_add)
+                        affaire.mt_json_path.write_text(
+                            mt_fix.model_dump_json(indent=2), encoding="utf-8"
+                        )
+                        # Régénère le DOCX
+                        exporter_mt_docx(mt_fix, affaire.mt_docx_path)
+                        st.write(f"Addendum intégré — MT mis à jour ({affaire.mt_docx_path.stat().st_size / 1024:.1f} KB)")
+                        status_fix.update(label="Lacunes comblées ✓", state="complete", expanded=False)
+                        st.rerun()
+                    except LLMError as e:
+                        status_fix.update(label="Échec", state="error")
+                        afficher_erreur_llm(e, "complétion des lacunes")
 
     # Détail pliable
     with st.expander("Voir le détail par exigence"):
@@ -2185,6 +2281,131 @@ def render_profils_admin() -> None:
         )
 
 
+# ---------------------------------------------------------------------------
+# Helper : calcul des indicateurs de risque
+# ---------------------------------------------------------------------------
+
+def _indicateurs_risque(analyse, rapport, dpgf) -> dict:
+    """Calcule jours avant clôture + risque technique (taux bloquantes non couvertes)."""
+    # Jours restants avant remise des offres
+    jours = None
+    if analyse and analyse.date_remise:
+        m = re.search(r"(\d{1,2})[/\-\.\s](\d{1,2})[/\-\.\s](\d{4})", analyse.date_remise)
+        if m:
+            try:
+                dt = datetime(int(m.group(3)), int(m.group(2)), int(m.group(1)))
+                jours = (dt - datetime.now()).days
+            except ValueError:
+                pass
+
+    # Risque technique : exigences bloquantes non couvertes
+    risque_tech = None
+    if rapport:
+        bloquantes = [d for d in rapport.details
+                      if d.importance == "bloquant" and d.statut != "non-applicable"]
+        non_couvertes = [d for d in bloquantes if d.statut == "non-couverte"]
+        if bloquantes:
+            risque_tech = int(len(non_couvertes) / len(bloquantes) * 100)
+
+    return {"jours": jours, "risque_tech": risque_tech}
+
+
+# ---------------------------------------------------------------------------
+# Onglet Assistant : chat contextuel sur l'AO
+# ---------------------------------------------------------------------------
+
+
+def render_tab_assistant(affaire: Affaire, client) -> None:
+    st.header("💬 Assistant I2AO")
+    st.caption(
+        "Pose toutes tes questions sur cet AO. L'assistant s'appuie sur l'analyse "
+        "structurée du DCE pour répondre — sans hallucination sur des données absentes."
+    )
+
+    if not affaire.has_analyse():
+        st.warning("Lance d'abord l'analyse dans l'onglet **🔍 Analyse**.")
+        return
+    if client is None:
+        st.error("Clé API Gemini absente.")
+        return
+
+    analyse = charger_analyse(affaire)
+    if analyse is None:
+        st.error("Impossible de charger l'analyse.")
+        return
+
+    chat_key = f"chat_{affaire.slug}"
+    if chat_key not in st.session_state:
+        st.session_state[chat_key] = []
+
+    # Questions suggérées — uniquement si conversation vide
+    if not st.session_state[chat_key]:
+        st.markdown("**💡 Questions fréquentes — clique pour lancer :**")
+        questions = [
+            "Quelles qualifications sont obligatoires pour candidater ?",
+            "Comment se positionner sur le prix pour être compétitif ?",
+            "Quels sont les délais critiques à ne pas rater ?",
+            "Quelles pièces sont absolument à fournir dans le dossier ?",
+            "Quels sont les 3 principaux risques de ce marché ?",
+            "Comment se différencier sur la valeur technique ?",
+            "Quel est le critère de jugement le plus important ?",
+            "Y a-t-il des conditions d'exclusion à surveiller ?",
+        ]
+        cols = st.columns(2)
+        for i, q in enumerate(questions):
+            with cols[i % 2]:
+                if st.button(q, key=f"sugg_{i}_{affaire.slug}", use_container_width=True):
+                    st.session_state[chat_key].append({"role": "user", "content": q})
+                    st.rerun()
+        st.divider()
+
+    # Affichage de l'historique
+    for msg in st.session_state[chat_key]:
+        with st.chat_message(msg["role"], avatar="🧑" if msg["role"] == "user" else "🤖"):
+            st.markdown(msg["content"])
+
+    # Champ de saisie
+    if prompt := st.chat_input("Ta question sur l'AO…"):
+        st.session_state[chat_key].append({"role": "user", "content": prompt})
+        with st.chat_message("user", avatar="🧑"):
+            st.markdown(prompt)
+
+        system_prompt = (
+            "Tu es I2AO, un assistant expert en réponse aux appels d'offres publics "
+            "pour bureau d'études structures (pathologie, diagnostic, confortement). "
+            "Tu réponds aux questions de l'équipe commerciale et technique du BET candidat. "
+            "Voici l'analyse structurée du DCE :\n\n"
+            + analyse.model_dump_json(indent=2)
+            + "\n\nRègles : "
+            "sois précis et concis (3-6 phrases sauf si détail demandé) ; "
+            "appuie-toi uniquement sur les données de l'analyse ; "
+            "si une info est absente de l'analyse, dis-le clairement plutôt qu'inventer ; "
+            "adopte le ton d'un expert qui connaît les marchés publics BET."
+        )
+
+        with st.chat_message("assistant", avatar="🤖"):
+            with st.spinner("Analyse en cours…"):
+                try:
+                    reponse = client.call(
+                        system_prompt=system_prompt,
+                        dce_context=None,
+                        user_message=prompt,
+                        max_tokens=1500,
+                        temperature=0.25,
+                        thinking_budget=0,
+                    )
+                    st.markdown(reponse)
+                    st.session_state[chat_key].append({"role": "assistant", "content": reponse})
+                except LLMError as e:
+                    afficher_erreur_llm(e, "assistant")
+
+    # Bouton effacer
+    if st.session_state[chat_key]:
+        if st.button("🗑️ Effacer la conversation", key=f"clear_chat_{affaire.slug}"):
+            st.session_state[chat_key] = []
+            st.rerun()
+
+
 def render_main(affaire: Affaire | None) -> None:
     if st.session_state.get("vue_active") == "comparaison":
         render_comparaison()
@@ -2209,7 +2430,7 @@ def render_main(affaire: Affaire | None) -> None:
 
     client = get_llm_client()
 
-    tab_overview, tab_dce, tab_analyse, tab_mt, tab_dpgf, tab_synthese, tab_pack = st.tabs(
+    tab_overview, tab_dce, tab_analyse, tab_mt, tab_dpgf, tab_synthese, tab_pack, tab_assistant = st.tabs(
         [
             "🏠 Vue d'ensemble",
             "📂 DCE",
@@ -2218,6 +2439,7 @@ def render_main(affaire: Affaire | None) -> None:
             "💰 DPGF",
             "📊 Go / No-go",
             "📦 Candidature",
+            "💬 Assistant",
         ]
     )
     with tab_overview:
@@ -2234,6 +2456,8 @@ def render_main(affaire: Affaire | None) -> None:
         render_tab_synthese(affaire, client)
     with tab_pack:
         render_tab_candidature(affaire, client)
+    with tab_assistant:
+        render_tab_assistant(affaire, client)
 
 
 # ---------------------------------------------------------------------------
