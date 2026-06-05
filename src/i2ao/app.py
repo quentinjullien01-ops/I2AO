@@ -61,6 +61,8 @@ from i2ao.charts import (
     donut_couverture,
     donut_repartition_dqe,
     gauge_score,
+    scatter3d_exigences,
+    surface3d_dqe,
 )
 from i2ao.config import (
     CANDIDAT_NOM,
@@ -514,53 +516,71 @@ hr {
 </style>
 """
 
-# Particules flottantes via canvas JS (exécuté une fois au chargement de la page)
-_PARTICLES_JS = """
-<canvas id="i2ao-cv" style="position:fixed;top:0;left:0;width:100vw;height:100vh;pointer-events:none;z-index:1;opacity:.35;"></canvas>
-<script>
-(function(){
-  var cv=document.getElementById('i2ao-cv');
-  if(!cv)return;
-  var ctx=cv.getContext('2d');
-  var W=cv.width=window.innerWidth, H=cv.height=window.innerHeight;
-  window.addEventListener('resize',function(){W=cv.width=window.innerWidth;H=cv.height=window.innerHeight;});
-  var N=55, pts=[];
-  for(var i=0;i<N;i++) pts.push({
-    x:Math.random()*W, y:Math.random()*H,
-    vx:(Math.random()-.5)*.4, vy:(Math.random()-.5)*.4,
-    r:Math.random()*1.8+.6
-  });
-  function draw(){
-    ctx.clearRect(0,0,W,H);
-    for(var i=0;i<N;i++){
-      var p=pts[i];
-      p.x+=p.vx; p.y+=p.vy;
-      if(p.x<0)p.x=W; if(p.x>W)p.x=0;
-      if(p.y<0)p.y=H; if(p.y>H)p.y=0;
-      ctx.beginPath();
-      ctx.arc(p.x,p.y,p.r,0,Math.PI*2);
-      ctx.fillStyle='rgba(56,189,248,.7)';
-      ctx.fill();
-      for(var j=i+1;j<N;j++){
-        var q=pts[j], dx=p.x-q.x, dy=p.y-q.y, d=Math.sqrt(dx*dx+dy*dy);
-        if(d<130){
-          ctx.beginPath();
-          ctx.moveTo(p.x,p.y); ctx.lineTo(q.x,q.y);
-          ctx.strokeStyle='rgba(56,189,248,'+(1-d/130)*.18+')';
-          ctx.lineWidth=.6;
-          ctx.stroke();
-        }
-      }
-    }
-    requestAnimationFrame(draw);
-  }
-  draw();
-})();
-</script>
+# Particules CSS pure — Streamlit bloque les <script>, on utilise des @keyframes
+# 30 points avec positions/durées/délais variés, entièrement CSS, aucun JS requis.
+_PARTICLES_CSS = """
+<style>
+.i2ao-particles {
+    position: fixed; inset: 0;
+    overflow: hidden; pointer-events: none; z-index: 1;
+}
+.i2ao-particles span {
+    position: absolute;
+    border-radius: 50%;
+    background: rgba(56,189,248,.65);
+    box-shadow: 0 0 6px rgba(56,189,248,.4);
+    animation: floatDot linear infinite;
+}
+@keyframes floatDot {
+    0%   { transform: translateY(100vh) scale(0); opacity: 0; }
+    10%  { opacity: 1; }
+    90%  { opacity: .6; }
+    100% { transform: translateY(-10vh) scale(1); opacity: 0; }
+}
+/* 30 particules avec positions, tailles et timings uniques */
+.i2ao-particles span:nth-child(1)  {left:3%;  width:3px; height:3px; animation-duration:18s; animation-delay:0s;}
+.i2ao-particles span:nth-child(2)  {left:8%;  width:2px; height:2px; animation-duration:22s; animation-delay:-4s;}
+.i2ao-particles span:nth-child(3)  {left:14%; width:4px; height:4px; animation-duration:16s; animation-delay:-8s;}
+.i2ao-particles span:nth-child(4)  {left:20%; width:2px; height:2px; animation-duration:25s; animation-delay:-2s;}
+.i2ao-particles span:nth-child(5)  {left:27%; width:3px; height:3px; animation-duration:19s; animation-delay:-12s;}
+.i2ao-particles span:nth-child(6)  {left:33%; width:2px; height:2px; animation-duration:21s; animation-delay:-6s;}
+.i2ao-particles span:nth-child(7)  {left:39%; width:4px; height:4px; animation-duration:17s; animation-delay:-3s;}
+.i2ao-particles span:nth-child(8)  {left:45%; width:2px; height:2px; animation-duration:23s; animation-delay:-9s;}
+.i2ao-particles span:nth-child(9)  {left:52%; width:3px; height:3px; animation-duration:20s; animation-delay:-1s;}
+.i2ao-particles span:nth-child(10) {left:58%; width:2px; height:2px; animation-duration:24s; animation-delay:-7s;}
+.i2ao-particles span:nth-child(11) {left:64%; width:4px; height:4px; animation-duration:15s; animation-delay:-11s;}
+.i2ao-particles span:nth-child(12) {left:70%; width:2px; height:2px; animation-duration:26s; animation-delay:-5s;}
+.i2ao-particles span:nth-child(13) {left:76%; width:3px; height:3px; animation-duration:18s; animation-delay:-13s;}
+.i2ao-particles span:nth-child(14) {left:82%; width:2px; height:2px; animation-duration:22s; animation-delay:-2s;}
+.i2ao-particles span:nth-child(15) {left:88%; width:4px; height:4px; animation-duration:19s; animation-delay:-8s;}
+.i2ao-particles span:nth-child(16) {left:94%; width:2px; height:2px; animation-duration:21s; animation-delay:-4s;}
+.i2ao-particles span:nth-child(17) {left:6%;  width:3px; height:3px; animation-duration:28s; animation-delay:-16s;}
+.i2ao-particles span:nth-child(18) {left:12%; width:2px; height:2px; animation-duration:20s; animation-delay:-10s;}
+.i2ao-particles span:nth-child(19) {left:24%; width:3px; height:3px; animation-duration:23s; animation-delay:-14s;}
+.i2ao-particles span:nth-child(20) {left:36%; width:2px; height:2px; animation-duration:17s; animation-delay:-6s;}
+.i2ao-particles span:nth-child(21) {left:48%; width:4px; height:4px; animation-duration:25s; animation-delay:-3s;}
+.i2ao-particles span:nth-child(22) {left:55%; width:2px; height:2px; animation-duration:18s; animation-delay:-17s;}
+.i2ao-particles span:nth-child(23) {left:62%; width:3px; height:3px; animation-duration:22s; animation-delay:-9s;}
+.i2ao-particles span:nth-child(24) {left:73%; width:2px; height:2px; animation-duration:16s; animation-delay:-5s;}
+.i2ao-particles span:nth-child(25) {left:79%; width:3px; height:3px; animation-duration:24s; animation-delay:-12s;}
+.i2ao-particles span:nth-child(26) {left:85%; width:2px; height:2px; animation-duration:20s; animation-delay:-1s;}
+.i2ao-particles span:nth-child(27) {left:91%; width:4px; height:4px; animation-duration:19s; animation-delay:-7s;}
+.i2ao-particles span:nth-child(28) {left:16%; width:2px; height:2px; animation-duration:27s; animation-delay:-15s;}
+.i2ao-particles span:nth-child(29) {left:43%; width:3px; height:3px; animation-duration:21s; animation-delay:-11s;}
+.i2ao-particles span:nth-child(30) {left:67%; width:2px; height:2px; animation-duration:23s; animation-delay:-4s;}
+</style>
+<div class="i2ao-particles">
+<span></span><span></span><span></span><span></span><span></span>
+<span></span><span></span><span></span><span></span><span></span>
+<span></span><span></span><span></span><span></span><span></span>
+<span></span><span></span><span></span><span></span><span></span>
+<span></span><span></span><span></span><span></span><span></span>
+<span></span><span></span><span></span><span></span><span></span>
+</div>
 """
 
 st.markdown(_CUSTOM_CSS, unsafe_allow_html=True)
-st.markdown(_PARTICLES_JS, unsafe_allow_html=True)
+st.markdown(_PARTICLES_CSS, unsafe_allow_html=True)
 
 
 # ---------------------------------------------------------------------------
@@ -969,6 +989,28 @@ def render_tab_overview(affaire: Affaire) -> None:
         else:
             st.markdown("##### Répartition du DQE")
             st.info("Génère la DPGF dans l'onglet 💰 DPGF.")
+
+    st.divider()
+
+    # ── Graphiques 3D WebGL ───────────────────────────────────────────────
+    st.markdown("##### 🌐 Vue 3D des exigences — rotatif à la souris")
+    st.caption("Chaque point = une exigence du DCE. Axes : catégorie × importance × rang. Interactif — clic + drag pour faire pivoter.")
+    st.plotly_chart(
+        scatter3d_exigences(analyse.exigences),
+        use_container_width=True,
+        config={"displayModeBar": True, "displaylogo": False},
+        key=f"overview_scatter3d_{affaire.slug}",
+    )
+
+    if dpgf and dpgf.dqe:
+        st.markdown("##### 🏔️ Paysage financier du DQE — surface 3D")
+        st.caption("Chaque montagne = un chapitre du DQE. Hauteur proportionnelle au montant HT. Interactif — faire pivoter pour explorer.")
+        st.plotly_chart(
+            surface3d_dqe(dpgf.dqe),
+            use_container_width=True,
+            config={"displayModeBar": True, "displaylogo": False},
+            key=f"overview_surface3d_{affaire.slug}",
+        )
 
 
 # ---------------------------------------------------------------------------
