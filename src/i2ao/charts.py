@@ -434,7 +434,6 @@ def scatter3d_exigences(exigences: list) -> go.Figure:
     if not exigences:
         return go.Figure()
 
-    # Mappings ordinaux
     importance_map = {"bloquant": 3, "important": 2, "mineur": 1}
     categories = sorted({e.categorie for e in exigences})
     cat_map = {c: i for i, c in enumerate(categories)}
@@ -442,7 +441,6 @@ def scatter3d_exigences(exigences: list) -> go.Figure:
     couleurs_imp = {"bloquant": "#ef4444", "important": "#f59e0b", "mineur": "#38bdf8"}
     taille_imp   = {"bloquant": 10,        "important": 7,         "mineur": 5}
 
-    # Compteur par (cat, imp) pour la coordonnée Z (rang dans le groupe)
     rang_counter: dict = {}
     xs, ys, zs, colors, sizes, texts = [], [], [], [], [], []
 
@@ -465,95 +463,86 @@ def scatter3d_exigences(exigences: list) -> go.Figure:
         go.Scatter3d(
             x=xs, y=ys, z=zs,
             mode="markers",
-            marker=dict(
-                size=sizes,
-                color=colors,
-                opacity=0.85,
-                line=dict(width=0),
-            ),
+            marker=dict(size=sizes, color=colors, opacity=0.85, line=dict(width=0)),
             text=texts,
             hovertemplate="%{text}<extra></extra>",
         )
     )
 
-    # Axes 3D avec labels catégories
-    axis_style = dict(
-        backgroundcolor="rgba(3,13,31,0.8)",
-        gridcolor="rgba(56,189,248,0.15)",
-        showbackground=True,
-        tickfont=dict(color="#94a3b8", size=9),
-        titlefont=dict(color="#38bdf8", size=11),
-        zerolinecolor="rgba(56,189,248,0.2)",
-    )
+    # axis_style sans titlefont (déprécié) — on passe title comme string
+    def _axis3d(title_text, **extra):
+        return dict(
+            backgroundcolor="rgba(3,13,31,0.8)",
+            gridcolor="rgba(56,189,248,0.15)",
+            showbackground=True,
+            tickfont=dict(color="#94a3b8", size=9),
+            zerolinecolor="rgba(56,189,248,0.2)",
+            title=title_text,
+            **extra,
+        )
 
     fig.update_layout(
         paper_bgcolor="rgba(0,0,0,0)",
-        plot_bgcolor="rgba(0,0,0,0)",
         height=500,
         margin=dict(l=0, r=0, t=10, b=0),
-        font=dict(color="#e2e8f0"),
+        font=dict(color="#e2e8f0", size=11),
         scene=dict(
-            xaxis=dict(
-                **axis_style,
-                title="Catégorie",
+            xaxis=_axis3d(
+                "Catégorie",
                 tickvals=list(cat_map.values()),
                 ticktext=[c.replace("-", "‑") for c in categories],
             ),
-            yaxis=dict(
-                **axis_style,
-                title="Importance",
+            yaxis=_axis3d(
+                "Importance",
                 tickvals=[1, 2, 3],
                 ticktext=["Mineur", "Important", "Bloquant"],
             ),
-            zaxis=dict(**axis_style, title="Rang"),
+            zaxis=_axis3d("Rang"),
             bgcolor="rgba(3,13,31,0.6)",
             camera=dict(eye=dict(x=1.6, y=-1.6, z=1.2)),
         ),
-        legend=dict(
-            font=dict(color="#94a3b8"),
-            bgcolor="rgba(0,0,0,0)",
-        ),
+        legend=dict(font=dict(color="#94a3b8"), bgcolor="rgba(0,0,0,0)"),
     )
     return fig
 
 
 # ---------------------------------------------------------------------------
-# Surface 3D — DQE par chapitre et importance (paysage financier)
+# Surface 3D — DQE par chapitre (paysage financier)
 # ---------------------------------------------------------------------------
 
 def surface3d_dqe(dqe_lignes: list) -> go.Figure:
-    """Surface 3D WebGL montrant la répartition financière du DQE :
-    chaque colonne = une catégorie, rendu comme un paysage 3D.
+    """Surface 3D WebGL : chaque chapitre DQE = une montagne gaussienne
+    dont la hauteur est proportionnelle au montant HT.
     """
     if not dqe_lignes:
         return go.Figure()
 
     par_cat: dict[str, float] = {}
-    for l in dqe_lignes:
-        par_cat[l.categorie] = par_cat.get(l.categorie, 0.0) + l.montant
+    for ligne in dqe_lignes:
+        par_cat[ligne.categorie] = par_cat.get(ligne.categorie, 0.0) + ligne.montant
 
     items = sorted(par_cat.items(), key=lambda x: x[1], reverse=True)
     labels = [c for c, _ in items]
     valeurs = [v for _, v in items]
     n = len(labels)
 
-    # Construire une surface — chaque catégorie = une "montagne" gaussienne
-    grid_size = 60
+    # Grille Z : superposition de gaussiennes
+    grid_size = 50
     Z = [[0.0] * grid_size for _ in range(grid_size)]
-    for i, (label, val) in enumerate(zip(labels, valeurs)):
+    sigma = max(grid_size / (n * 1.8), 3.0)
+    for i, (_, val) in enumerate(zip(labels, valeurs)):
         cx = (i + 0.5) / n * grid_size
         cy = grid_size / 2
-        sigma = grid_size / (n * 1.5)
         for row in range(grid_size):
             for col in range(grid_size):
-                d2 = (col - cx) ** 2 / (sigma ** 2) + (row - cy) ** 2 / (sigma * 1.5) ** 2
+                d2 = (col - cx) ** 2 / sigma ** 2 + (row - cy) ** 2 / (sigma * 1.5) ** 2
                 Z[row][col] += val * math.exp(-d2)
 
     colorscale = [
         [0.0,  "#030d1f"],
-        [0.25, "#0c2247"],
-        [0.5,  "#0ea5e9"],
-        [0.75, "#38bdf8"],
+        [0.3,  "#0c2247"],
+        [0.6,  "#0ea5e9"],
+        [0.85, "#38bdf8"],
         [1.0,  "#f0f9ff"],
     ]
 
@@ -562,47 +551,34 @@ def surface3d_dqe(dqe_lignes: list) -> go.Figure:
             z=Z,
             colorscale=colorscale,
             showscale=False,
-            opacity=0.92,
-            contours=dict(
-                z=dict(show=True, usecolormap=True, highlightcolor="#38bdf8", project_z=True)
-            ),
+            opacity=0.90,
+            contours=dict(z=dict(show=True, usecolormap=True, project=dict(z=True))),
             hovertemplate="Montant relatif : %{z:.0f}<extra></extra>",
         )
     )
 
-    axis_style = dict(
-        backgroundcolor="rgba(3,13,31,0.8)",
-        gridcolor="rgba(56,189,248,0.12)",
-        showbackground=True,
-        tickfont=dict(color="#94a3b8", size=9),
-        titlefont=dict(color="#38bdf8", size=11),
-        zerolinecolor="rgba(56,189,248,0.2)",
-    )
-
-    # Annotations texte pour chaque sommet
-    annotations = []
-    for i, (label, val) in enumerate(zip(labels, valeurs)):
-        col_idx = int((i + 0.5) / n * grid_size)
-        row_idx = grid_size // 2
-        annotations.append(dict(
-            x=col_idx, y=row_idx, z=Z[row_idx][col_idx] * 1.05,
-            text=f"<b>{label[:18]}</b><br>{val:,.0f} €".replace(",", " "),
-            showarrow=False,
-            font=dict(color="#e2e8f0", size=9),
-        ))
+    def _axis3d_s(title_text, **extra):
+        return dict(
+            backgroundcolor="rgba(3,13,31,0.8)",
+            gridcolor="rgba(56,189,248,0.12)",
+            showbackground=True,
+            tickfont=dict(color="#94a3b8", size=9),
+            zerolinecolor="rgba(56,189,248,0.2)",
+            title=title_text,
+            **extra,
+        )
 
     fig.update_layout(
         paper_bgcolor="rgba(0,0,0,0)",
-        height=480,
+        height=460,
         margin=dict(l=0, r=0, t=10, b=0),
-        font=dict(color="#e2e8f0"),
+        font=dict(color="#e2e8f0", size=11),
         scene=dict(
-            xaxis=dict(**axis_style, title="Chapitres →", showticklabels=False),
-            yaxis=dict(**axis_style, title="", showticklabels=False),
-            zaxis=dict(**axis_style, title="Montant HT (€)"),
+            xaxis=_axis3d_s("Chapitres →", showticklabels=False),
+            yaxis=_axis3d_s("", showticklabels=False),
+            zaxis=_axis3d_s("Montant HT (€)"),
             bgcolor="rgba(3,13,31,0.6)",
             camera=dict(eye=dict(x=1.8, y=-1.8, z=1.4)),
-            annotations=annotations,
         ),
     )
     return fig
