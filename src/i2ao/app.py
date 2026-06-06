@@ -141,13 +141,10 @@ _CUSTOM_CSS = """
    Fond clair, cartes blanches en relief, accents bleu vif
    ============================================================ */
 
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
-
 :root {
-    --c-bg:           #eef2f9;
-    --c-bg2:          #e4eaf5;
+    --c-bg:           #f0f4fb;
+    --c-bg2:          #e8edf7;
     --c-surface:      #ffffff;
-    --c-surface2:     #f7f9fd;
     --c-primary:      #1d4ed8;
     --c-primary-light:#3b82f6;
     --c-primary-glow: rgba(29,78,216,0.22);
@@ -156,28 +153,43 @@ _CUSTOM_CSS = """
     --c-warning:      #d97706;
     --c-danger:       #dc2626;
     --c-text:         #1e293b;
-    --c-text2:        #475569;
-    --c-muted:        #94a3b8;
-    --c-border:       #e2e8f0;
-    --c-border-strong:#cbd5e1;
+    --c-text2:        #374151;
+    --c-muted:        #6b7280;
+    --c-border:       #dde3f0;
+    --c-border-strong:#c1cce0;
 
-    /* Ombres portées "relief" */
-    --shadow-sm:  0 1px 3px rgba(15,23,42,.08), 0 1px 2px rgba(15,23,42,.06);
-    --shadow-md:  0 4px 14px rgba(15,23,42,.10), 0 2px 6px rgba(15,23,42,.07);
-    --shadow-lg:  0 12px 36px rgba(15,23,42,.13), 0 4px 12px rgba(15,23,42,.08);
-    --shadow-xl:  0 24px 64px rgba(15,23,42,.17), 0 8px 24px rgba(15,23,42,.10);
-    --shadow-blue:0 8px 32px rgba(29,78,216,.25),  0 2px 8px  rgba(29,78,216,.15);
+    --shadow-sm:  0 1px 3px rgba(15,23,42,.09), 0 1px 2px rgba(15,23,42,.06);
+    --shadow-md:  0 4px 16px rgba(15,23,42,.11), 0 2px 6px rgba(15,23,42,.07);
+    --shadow-lg:  0 12px 36px rgba(15,23,42,.14), 0 4px 12px rgba(15,23,42,.09);
+    --shadow-xl:  0 24px 60px rgba(15,23,42,.18), 0 8px 20px rgba(15,23,42,.10);
+    --shadow-blue:0 6px 28px rgba(29,78,216,.28),  0 2px 8px rgba(29,78,216,.16);
 }
 
-* { font-family: 'Inter', 'Segoe UI', sans-serif !important; }
+/* === BANDEAU HEADER STREAMLIT — masquer fond noir ============= */
+[data-testid="stHeader"] {
+    background: var(--c-bg) !important;
+    border-bottom: 1px solid var(--c-border) !important;
+    box-shadow: 0 1px 4px rgba(15,23,42,.06) !important;
+}
+[data-testid="stHeader"] * { color: var(--c-text2) !important; }
+[data-testid="stToolbar"] { background: transparent !important; }
 
 /* === FOND GÉNÉRAL ============================================= */
-[data-testid="stAppViewContainer"] {
+[data-testid="stAppViewContainer"],
+[data-testid="stMain"],
+.main {
     background:
-        radial-gradient(ellipse 900px 600px at 20% 0%,   rgba(99,102,241,.07)  0%, transparent 60%),
-        radial-gradient(ellipse 700px 500px at 90% 100%, rgba(29,78,216,.06)   0%, transparent 60%),
-        linear-gradient(170deg, #eef2f9 0%, #e8eef8 50%, #edf1fb 100%) !important;
+        radial-gradient(ellipse 800px 500px at 15% 0%,   rgba(99,102,241,.06) 0%, transparent 55%),
+        radial-gradient(ellipse 600px 400px at 90% 95%,  rgba(29,78,216,.05)  0%, transparent 55%),
+        linear-gradient(160deg, #f0f4fb 0%, #eaeff8 50%, #f0f4fb 100%) !important;
     min-height: 100vh;
+}
+
+/* Force fond clair sur tous les wrappers internes */
+[data-testid="stMainBlockContainer"],
+[data-testid="stBottom"],
+section.main > div {
+    background: transparent !important;
 }
 
 /* === SIDEBAR ================================================== */
@@ -194,9 +206,14 @@ section[data-testid="stSidebar"]::before {
         linear-gradient(180deg, rgba(255,255,255,.05) 0%, transparent 40%);
     pointer-events: none;
 }
-section[data-testid="stSidebar"] * { color: rgba(255,255,255,.90) !important; }
-section[data-testid="stSidebar"] .stSelectbox label,
-section[data-testid="stSidebar"] .stTextInput label { color: rgba(255,255,255,.60) !important; font-size:.78rem !important; }
+section[data-testid="stSidebar"] p,
+section[data-testid="stSidebar"] span,
+section[data-testid="stSidebar"] div,
+section[data-testid="stSidebar"] label,
+section[data-testid="stSidebar"] li,
+section[data-testid="stSidebar"] a,
+section[data-testid="stSidebar"] button { color: rgba(255,255,255,.88) !important; }
+section[data-testid="stSidebar"] label { color: rgba(255,255,255,.55) !important; font-size:.78rem !important; }
 section[data-testid="stSidebar"] h1 {
     background: linear-gradient(135deg, #fff 0%, #bfdbfe 60%, #a5b4fc 100%);
     -webkit-background-clip: text !important;
@@ -215,39 +232,47 @@ section[data-testid="stSidebar"] [data-baseweb="select"] {
 }
 
 /* === CONTENU PRINCIPAL ======================================= */
-.block-container { padding-top: 2.2rem !important; }
-.main p, .main li, .main td { color: var(--c-text2); }
-.main strong { color: var(--c-text); }
+.block-container { padding-top: 2rem !important; }
+
+/* Texte : forcer couleur sombre sur fond clair */
+p, li, td, span, label, div,
+.stMarkdown, .stMarkdown p, .stMarkdown li,
+[data-testid="stMarkdownContainer"],
+[data-testid="stMarkdownContainer"] p,
+[data-testid="stMarkdownContainer"] li {
+    color: var(--c-text2) !important;
+}
+strong, b,
+[data-testid="stMarkdownContainer"] strong { color: var(--c-text) !important; }
 
 /* Titres */
-.main h1 {
-    background: linear-gradient(120deg, #1e3a8a 0%, var(--c-primary) 50%, var(--c-indigo) 100%);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-    font-weight: 800;
-    letter-spacing: -.6px;
-    margin-bottom: 1.2rem;
+h1, .stMarkdown h1 {
+    background: linear-gradient(120deg, #1e3a8a 0%, #1d4ed8 55%, #6366f1 100%);
+    -webkit-background-clip: text !important;
+    -webkit-text-fill-color: transparent !important;
+    background-clip: text !important;
+    font-weight: 800 !important;
+    letter-spacing: -.5px;
+    margin-bottom: 1rem !important;
 }
-.main h2 {
-    color: var(--c-primary);
-    font-weight: 700;
-    position: relative;
-    padding-bottom: 8px;
+h2, .stMarkdown h2 {
+    color: var(--c-primary) !important;
+    -webkit-text-fill-color: var(--c-primary) !important;
+    font-weight: 700 !important;
+    padding-bottom: 6px;
+    border-bottom: 2px solid var(--c-border);
 }
-.main h2::after {
-    content: '';
-    position: absolute;
-    bottom: 0; left: 0;
-    height: 3px; width: 0;
-    background: linear-gradient(90deg, var(--c-primary), var(--c-indigo), transparent);
-    border-radius: 3px;
-    animation: lineGrow .5s cubic-bezier(.4,0,.2,1) forwards;
+h3, .stMarkdown h3 {
+    color: var(--c-text) !important;
+    -webkit-text-fill-color: var(--c-text) !important;
+    font-weight: 700 !important;
 }
-@keyframes lineGrow { to { width: 52px; } }
-
-.main h3 { color: var(--c-text); font-weight: 700; }
-.main h4, .main h5 { color: var(--c-text2); font-weight: 600; }
+h4, h5, h6,
+.stMarkdown h4, .stMarkdown h5 {
+    color: var(--c-text2) !important;
+    -webkit-text-fill-color: var(--c-text2) !important;
+    font-weight: 600 !important;
+}
 
 /* === CARTES MÉTRIQUES — relief fort ========================= */
 [data-testid="stMetric"] {
@@ -543,15 +568,22 @@ hr {
 }
 
 /* === CAPTIONS =============================================== */
-.stCaption, [data-testid="stCaptionContainer"] {
+.stCaption, [data-testid="stCaptionContainer"],
+[data-testid="stCaptionContainer"] p {
     color: var(--c-muted) !important;
     font-size: .82rem !important;
+    -webkit-text-fill-color: var(--c-muted) !important;
 }
 
-/* === MARKDOWN GÉNÉRAL ======================================= */
-.main [data-testid="stMarkdownContainer"] p {
-    color: var(--c-text2);
-    line-height: 1.65;
+/* === INPUTS LABELS ========================================== */
+[data-testid="stTextInput"] label,
+[data-testid="stSelectbox"] label,
+[data-testid="stMultiSelect"] label,
+[data-testid="stRadio"] label,
+[data-testid="stCheckbox"] label {
+    color: var(--c-text) !important;
+    font-weight: 500 !important;
+    font-size: .88rem !important;
 }
 
 /* Scrollbar fine */
