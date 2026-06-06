@@ -18,11 +18,12 @@ if not exist "%PYTHON%" (
     exit /b 1
 )
 
-:: ---- Trouve un port libre --------
+:: ---- Trouve un port libre (essaie jusqu'à +10) ---------------
+:FIND_PORT
 netstat -an | find ":%PORT% " >nul 2>&1
 if not errorlevel 1 (
-    :: Port occupe, essaie le suivant
     set /a PORT=%PORT%+1
+    if %PORT% LSS 8525 goto FIND_PORT
 )
 
 :: ---- Lance Streamlit (hérite de la fenêtre cachée du VBS) ----

@@ -82,10 +82,22 @@ def load_dpgf_catalog(profil: str | None = None) -> list[PrestationDPGF]:
         return prestations
 
     for path in sorted(dpgf_dir.glob("*.yaml")):
-        with path.open("r", encoding="utf-8") as f:
-            data = yaml.safe_load(f) or {}
-        for entry in data.get("prestations", []):
-            prestations.append(PrestationDPGF(**entry))
+        try:
+            with path.open("r", encoding="utf-8") as f:
+                data = yaml.safe_load(f) or {}
+            for entry in data.get("prestations", []):
+                try:
+                    prestations.append(PrestationDPGF(**entry))
+                except Exception as e:
+                    import logging
+                    logging.getLogger(__name__).warning(
+                        "Entrée DPGF invalide dans %s : %s — ignorée", path.name, e
+                    )
+        except Exception as e:
+            import logging
+            logging.getLogger(__name__).warning(
+                "Impossible de lire le catalogue DPGF %s : %s — ignoré", path.name, e
+            )
     return prestations
 
 

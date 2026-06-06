@@ -1541,10 +1541,12 @@ def render_tab_dpgf(affaire: Affaire, client: LLMClient | None) -> None:
             )
 
             st.write("Export XLSX…")
+            # Référence marché : slug de l'affaire (ex. "oph-isere-diag-moe")
+            _marche_ref = affaire.slug.upper().replace("-", "/")
             exporter_dpgf_xlsx(
                 dpgf,
                 affaire.dpgf_xlsx_path,
-                marche_ref="2026-MOE-STRUCT-01",
+                marche_ref=_marche_ref,
                 candidat=CANDIDAT_NOM,
             )
             st.write(f"XLSX produit ({affaire.dpgf_xlsx_path.stat().st_size / 1024:.1f} KB)")
@@ -1729,7 +1731,13 @@ def render_tab_synthese(affaire: Affaire, client: LLMClient | None) -> None:
 
     st.divider()
     st.subheader("Recommandation")
-    st.success(synth.recommandation_go_nogo)
+    _reco = synth.recommandation_go_nogo
+    if "NO-GO" in _reco.upper():
+        st.error(_reco)
+    elif "CONDITION" in _reco.upper() or "RÉSERVE" in _reco.upper() or "RESERVE" in _reco.upper():
+        st.warning(_reco)
+    else:
+        st.success(_reco)
 
     if affaire.synthese_docx_path.exists():
         st.download_button(

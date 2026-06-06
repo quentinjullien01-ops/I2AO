@@ -50,9 +50,13 @@ datas += [
     (str(ROOT / "assets"),     "assets"),
     (str(ROOT / ".streamlit"), ".streamlit"),
 ]
-# data/ uniquement s'il existe et n'est pas vide
-if (ROOT / "data").exists():
-    datas += [(str(ROOT / "data"), "data")]
+# data/ : on embarque uniquement les DCE de démo, PAS les affaires utilisateur
+# (data/affaires/ contient des données client confidentielles)
+for demo_dir in ["samples", "demo-artefacts-oph-isere", "demo-artefacts-saint-marcellin",
+                 "dce-oph-isere", "dce-confortement-saint-marcellin"]:
+    p = ROOT / "data" / demo_dir
+    if p.exists():
+        datas += [(str(p), f"data/{demo_dir}")]
 
 # ── Imports cachés ──────────────────────────────────────────────────────────
 

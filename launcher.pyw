@@ -166,19 +166,26 @@ def main() -> None:
         exe, args = browser
         cmd = [exe] + [a.replace("{url}", url) for a in args]
         browser_proc = subprocess.Popen(cmd)
-        browser_proc.wait()
+        browser_proc.wait()  # bloque jusqu'à fermeture de la fenêtre navigateur
     else:
         import webbrowser
         webbrowser.open(url)
+        # Sans navigateur tracé, on attend que l'utilisateur arrête le process
+        if proc:
+            try:
+                proc.wait()
+            except KeyboardInterrupt:
+                pass
 
-    # Arrêt propre
+    # Arrêt propre de Streamlit quand la fenêtre est fermée
     if proc:
         try:
             proc.terminate()
             proc.wait(timeout=5)
         except Exception:
             proc.kill()
-    # En mode frozen le thread daemon s'arrête automatiquement à la fin du process
+    # Mode frozen : sys.exit() stoppe le process entier et les threads daemon avec
+    sys.exit(0)
 
 
 if __name__ == "__main__":

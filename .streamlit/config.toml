@@ -1,18 +1,15 @@
 [theme]
-base                   = "light"
-primaryColor           = "#1d4ed8"
-backgroundColor        = "#f0f4fb"
+base                     = "light"
+primaryColor             = "#1d4ed8"
+backgroundColor          = "#f0f4fb"
 secondaryBackgroundColor = "#ffffff"
-textColor              = "#1e293b"
-font                   = "sans serif"
+textColor                = "#1e293b"
+font                     = "sans serif"
 
 [browser]
 gatherUsageStats = false
-# Désactive l'ouverture automatique du navigateur par Streamlit
-# (le lanceur s'en charge lui-même)
-serverAddress    = "127.0.0.1"
 
 [server]
-headless         = true
-address          = "127.0.0.1"   # localhost uniquement — inaccessible depuis le réseau
+headless             = true
+address              = "127.0.0.1"
 enableXsrfProtection = true

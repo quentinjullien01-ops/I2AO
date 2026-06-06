@@ -35,8 +35,9 @@ class UsageCumule:
 
     @property
     def cout_output_usd(self) -> float:
-        # thoughts_tokens sont facturés comme output
-        return (self.output_tokens + self.thoughts_tokens) * PRIX_OUTPUT_PAR_M / 1_000_000
+        # candidates_token_count (output_tokens) inclut déjà thoughts_token_count
+        # dans la réponse API Gemini — on ne les additionne pas en double
+        return self.output_tokens * PRIX_OUTPUT_PAR_M / 1_000_000
 
     @property
     def cout_total_usd(self) -> float:
