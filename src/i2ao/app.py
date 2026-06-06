@@ -192,43 +192,58 @@ section.main > div {
     background: transparent !important;
 }
 
-/* === SIDEBAR ================================================== */
+/* === SIDEBAR — thème clair, bordure bleue gauche ============= */
 section[data-testid="stSidebar"] {
-    background: linear-gradient(180deg, #1e3a5f 0%, #1a3256 100%) !important;
-    border-right: none !important;
-    box-shadow: 4px 0 24px rgba(15,23,42,.18) !important;
+    background: #ffffff !important;
+    border-right: 2px solid var(--c-border) !important;
+    box-shadow: 3px 0 18px rgba(15,23,42,.08) !important;
 }
+/* Liseré bleu en haut pour l'identité */
 section[data-testid="stSidebar"]::before {
     content: '';
-    position: absolute; inset: 0;
-    background:
-        radial-gradient(ellipse 300px 200px at 60% 10%, rgba(99,102,241,.18) 0%, transparent 65%),
-        linear-gradient(180deg, rgba(255,255,255,.05) 0%, transparent 40%);
+    position: absolute; top: 0; left: 0; right: 0;
+    height: 4px;
+    background: linear-gradient(90deg, var(--c-primary), var(--c-indigo));
     pointer-events: none;
+    z-index: 10;
 }
+/* Texte sombre sur fond blanc */
 section[data-testid="stSidebar"] p,
 section[data-testid="stSidebar"] span,
 section[data-testid="stSidebar"] div,
-section[data-testid="stSidebar"] label,
 section[data-testid="stSidebar"] li,
-section[data-testid="stSidebar"] a,
-section[data-testid="stSidebar"] button { color: rgba(255,255,255,.88) !important; }
-section[data-testid="stSidebar"] label { color: rgba(255,255,255,.55) !important; font-size:.78rem !important; }
+section[data-testid="stSidebar"] a { color: var(--c-text2) !important; -webkit-text-fill-color: var(--c-text2) !important; }
+section[data-testid="stSidebar"] label { color: var(--c-muted) !important; -webkit-text-fill-color: var(--c-muted) !important; font-size:.82rem !important; font-weight:500 !important; }
 section[data-testid="stSidebar"] h1 {
-    background: linear-gradient(135deg, #fff 0%, #bfdbfe 60%, #a5b4fc 100%);
+    background: linear-gradient(135deg, #1e3a8a 0%, var(--c-primary) 55%, var(--c-indigo) 100%);
     -webkit-background-clip: text !important;
     -webkit-text-fill-color: transparent !important;
     background-clip: text !important;
     font-weight: 800 !important;
     letter-spacing: -.4px;
 }
-/* Inputs dans sidebar */
+section[data-testid="stSidebar"] h2,
+section[data-testid="stSidebar"] h3 {
+    color: var(--c-text) !important;
+    -webkit-text-fill-color: var(--c-text) !important;
+    font-weight: 700 !important;
+}
+/* Inputs sidebar */
 section[data-testid="stSidebar"] [data-testid="stTextInput"] input,
 section[data-testid="stSidebar"] [data-baseweb="select"] {
-    background: rgba(255,255,255,.10) !important;
-    border: 1px solid rgba(255,255,255,.20) !important;
-    color: #fff !important;
+    background: var(--c-bg) !important;
+    border: 1.5px solid var(--c-border-strong) !important;
+    color: var(--c-text) !important;
     border-radius: 10px !important;
+}
+/* Boutons sidebar */
+section[data-testid="stSidebar"] .stButton button {
+    color: var(--c-text) !important;
+    -webkit-text-fill-color: var(--c-text) !important;
+}
+section[data-testid="stSidebar"] .stButton button[kind="primary"] {
+    color: #fff !important;
+    -webkit-text-fill-color: #fff !important;
 }
 
 /* === CONTENU PRINCIPAL ======================================= */
