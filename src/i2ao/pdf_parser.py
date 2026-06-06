@@ -57,8 +57,18 @@ def parse_pdf(
 
     avertissements: list[str] = []
 
-    pages = _extract_with_pdfplumber(data)
-    methode = "pdfplumber"
+    # ── Tentative 1 : pdfplumber ──────────────────────────────────────────
+    try:
+        pages = _extract_with_pdfplumber(data)
+        methode = "pdfplumber"
+    except Exception as e:
+        logger.warning("pdfplumber a échoué sur '%s' (%s) — bascule sur PyMuPDF", nom, e)
+        avertissements.append(
+            f"'{nom}' : pdfplumber n'a pas pu lire ce fichier ({type(e).__name__}). "
+            "Extraction via PyMuPDF utilisée à la place."
+        )
+        pages = []
+        methode = "pymupdf"
 
     if _is_quasi_empty(pages):
         pages_pmu = _extract_with_pymupdf(data)
@@ -112,20 +122,32 @@ def parse_pdf(
 
 
 def _extract_with_pdfplumber(data: bytes) -> list[str]:
+    """Lève une exception si le PDF est corrompu — géré par l'appelant."""
     out: list[str] = []
     with pdfplumber.open(io.BytesIO(data)) as pdf:
         for page in pdf.pages:
-            txt = page.extract_text() or ""
+            try:
+                txt = page.extract_text() or ""
+            except Exception:
+                txt = ""
             out.append(txt.strip())
     return out
 
 
 def _extract_with_pymupdf(data: bytes) -> list[str]:
+    """Fallback PyMuPDF — plus tolérant aux PDFs malformés."""
     out: list[str] = []
-    doc = fitz.open(stream=data, filetype="pdf")
+    try:
+        doc = fitz.open(stream=data, filetype="pdf")
+    except Exception as e:
+        logger.warning("PyMuPDF ne peut pas ouvrir le fichier : %s", e)
+        return []
     try:
         for page in doc:
-            out.append(page.get_text("text").strip())
+            try:
+                out.append(page.get_text("text").strip())
+            except Exception:
+                out.append("")
     finally:
         doc.close()
     return out
