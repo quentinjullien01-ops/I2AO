@@ -1,82 +1,89 @@
 ---
-status: template
-note: |
-  Profil de l'entreprise candidate pour les marchés de diagnostic post-sinistre
-  (assurance dommages-ouvrage, sinistres CATNAT, expertise contradictoire, etc.).
-
-  Fichier TEMPLATE — compléter les [À RENSEIGNER] avec les données réelles du BET.
+status: actif
+note: Profil Repair Ingénierie — calibré pour les marchés publics pathologie/consolidation
 ---
 
 # Profil de l'entreprise candidate
 
 ## Identité
 
-- **Raison sociale :** [À RENSEIGNER]
-- **Forme juridique :** [À RENSEIGNER — SAS, SARL, EURL…]
-- **Année de création :** [À RENSEIGNER]
-- **Localisation :** [À RENSEIGNER — siège, agences, rayon d'intervention]
-- **Effectif structures :** [À RENSEIGNER — typique pour BET post-sinistre : 4 à 15 personnes, dont 3-8 ingénieurs structures]
+- **Raison sociale :** Repair Ingénierie
+- **Forme juridique :** SAS
+- **Année de création :** 2010
+- **Localisation :** Isère (38) — interventions sur l'ensemble du territoire national, spécialisation Auvergne-Rhône-Alpes
+- **Effectif structures :** 8 collaborateurs dont 5 ingénieurs structures et 3 techniciens d'investigations
+- **Site web :** repairingenierie.fr
+- **Note clients :** 5,0 / 5 — 22 avis vérifiés
 
 ## Positionnement
 
-Bureau d'études structures spécialisé en **diagnostic post-sinistre** : expertise des désordres d'origine accidentelle ou catastrophique (incendie, explosion, choc, inondation, séisme, mouvements de terrain, CATNAT). Cœur de métier : évaluation de la sécurité résiduelle, qualification des dommages, identification des causes et rédaction des rapports d'expertise destinés aux assureurs, maîtres d'ouvrage et juridictions. Le diagnostic post-sinistre est notre pratique quotidienne — à la différence d'un BET généraliste qui l'aborde ponctuellement.
+Bureau d'études structures spécialisé exclusivement en **pathologie / expertise structurelle / consolidation et rigidification d'ouvrages existants**. Cœur de métier : analyse de désordres, diagnostic, conception et suivi de travaux de confortement sur bâtiments présentant des pathologies structurelles ou nécessitant un renforcement.
 
-## Types de sinistres traités
+À la différence d'un BET généraliste intervenant en neuf, **Repair Ingénierie n'intervient que sur l'existant** : c'est la spécialisation qui garantit la maîtrise des contraintes spécifiques (site occupé, bâti ancien, matériaux dégradés, continuité d'exploitation).
 
-- **Incendie / explosion :** évaluation de la résistance résiduelle des structures béton, métal, bois après exposition thermique ; qualification des dommages par niveaux Annex A de l'Eurocode 2
-- **Inondation / submersion :** évaluation de la stabilité au flottement, désordres sur fondations, dommages aux éléments porteurs sous-terrains
-- **Choc / impact :** percussions de véhicules sur poteaux, poutres, façades ; évaluation de la continuité structurale
-- **Effondrement partiel :** investigation des causes (surcharge, défaut de conception, altération de la résistance), stabilisation d'urgence
-- **CATNAT — Retrait-gonflement des argiles (RGA) :** diagnostic des fissurations liées aux mouvements de sol différentiels, estimation des dommages indemnisables
-- **CATNAT — Inondation / coulée de boue :** évaluation de la saturation des sols de fondation, des dommages aux planchers bas et aux murs
-- **Séisme :** évaluation post-sismique niveau 1 (inspection visuelle) et niveau 2 (calcul de vulnérabilité)
-- **Mouvement de terrain / glissement :** évaluation des désordres en lien avec les avis géotechniques
+## Filiale travaux
 
-## Rôle dans la chaîne de l'expertise
+- **Nom :** Syma Consolidation
+- **Périmètre :** réalisation des travaux de confortement (micropieux, injections, chemisages), garantissant la cohérence conception / exécution et la responsabilité unique vis-à-vis du maître d'ouvrage
+- **Atout clé :** maîtrise complète de la chaîne diagnostic → MOE → exécution, rare chez les BET pathologie et valorisée dans les marchés à bons de commande
 
-- **Mission D.O. (Dommages-Ouvrage) :** expertise structures dans le cadre des polices d'assurance dommages-ouvrage, rapport technique permettant la mise en jeu de la garantie
-- **Expertise contradictoire :** assistance maître d'ouvrage face à l'expert mandaté par l'assureur, contre-expertise technique
-- **Expertise judiciaire :** sapiteur technique auprès d'un expert judiciaire désigné, ou expert désigné directement
-- **Mission urgence / péril :** évaluation immédiate de la sécurité, proposition de mesures conservatoires, rapport de péril
+## Domaines d'intervention
+
+- **Matériaux maîtrisés :** béton armé, métal, bois, maçonnerie ancienne (pierre, brique, pisé)
+- **Typologies d'ouvrages :** logements collectifs, pavillons, bâtiments tertiaires, ERP, ouvrages industriels, monuments et bâti ancien
+- **Pathologies traitées :**
+  - Retrait-gonflement des argiles (RGA) — pathologie dominante sur le territoire
+  - Corrosion d'armatures et carbonatation du béton
+  - Désordres de planchers à corps creux (hourdis, poutrelles)
+  - Pathologies de maçonnerie ancienne (décollements, fissures en escalier, éclatements)
+  - Désordres de structures bois (champignons, insectes xylophages, flèches excessives)
+  - Tassements différentiels et défauts de fondation
+
+## Solutions de confortement maîtrisées
+
+- Reprise en sous-œuvre par **micropieux forés** (Ø 100 à 250 mm) et longrines de répartition
+- **Injection de résines expansives** pour traitement RGA (sans terrassement, site occupé)
+- Injection de coulis de ciment pour consolidation de fondations superficielles
+- **Chemisage béton armé** (reprise de poteaux, poutres, voiles)
+- Renforcement par **bandes de carbone TFC** (Sika CarboDur, Mapei MapeWrap)
+- Chemisages métalliques et systèmes de précontrainte additionnelle
+- Consolidation de structures bois (étrésillonnement, prothèses époxy, tirantage)
+- Mise en place de **chaînages périphériques** et contreventements sur bâti existant
 
 ## Expérience et références
 
-[À RENSEIGNER avec des références anonymisables réelles. À défaut, valeurs plausibles :]
-
-- Plus de **[X] expertises post-sinistre** réalisées sur les cinq dernières années
-- Interventions pour compagnies d'assurance : [À RENSEIGNER — AXA, Groupama, MMA, MAIF, SMABTP…]
-- Interventions CATNAT sur périmètres arrêtés : [À RENSEIGNER — communes, départements]
-- Délai moyen de remise du rapport : [À RENSEIGNER — ex : 15 jours ouvrés pour mission standard, 48 h pour intervention d'urgence]
-- Nombre d'expertises contradictoires conduites avec succès : [À RENSEIGNER]
+- Plus de **200 sinistres et expertises structurelles** traités depuis la création
+- Interventions régulières pour : **bailleurs sociaux, OPH, communes, copropriétés, propriétaires privés, assureurs (MACIF, MAIF, Axa, Allianz)**
+- Référence type : diagnostic structural d'un ensemble de 80 logements collectifs OPH, RGA sévère, MOE complète de confortement par micropieux — 18 mois, 45 k€ d'honoraires
+- Référence type : marché à bons de commande diagnostic + MOE, patrimoine bailleur social, 4 ans, 12 bons de commande émis
+- Capacité avérée d'intervention **en site occupé avec coordination locataires** (procédure d'information, phasage respectueux)
+- Réactivité : délai d'intervention pour première visite ≤ 5 jours ouvrés sur demande urgente
 
 ## Moyens techniques
 
-- **Logiciels de calcul :** [À RENSEIGNER — Robot Structural Analysis, Advance Design, Effel, Calculis…]
-- **Appareillage d'investigation :** caméra thermique, analyseur de gaz, hygromètre à sonde, pacomètre, scléromètre, fissuromètre à lecture automatique, drone pour inspection de toiture / façade inaccessible
-- **Partenariats :** [À RENSEIGNER — laboratoires COFRAC pour essais matériaux, BET géotechnique pour avis sol, laboratoires de pathologie du bâtiment]
-- **Accès à des bases de données sinistres :** [À RENSEIGNER si pertinent — accès BDMVT, GEORISQUES, base CATNAT]
+- **Logiciels de calcul :** Robot Structural Analysis (Autodesk), Advance Design (Graitec), calculs manuels Eurocodes 0/1/2/3/5
+- **Investigations in situ :** pacométrie (détection armatures), sclérométrie (résistance béton), endoscopie, instrumentation par fissuromètres électroniques (Saugnac) et capteurs de déplacement, nivellement de précision
+- **Partenariats :** laboratoire accrédité COFRAC pour essais matériaux (résistance béton, analyse chimique), BET géotechnique partenaire pour missions G2 (sondages, essais pressiométriques)
 
 ## Qualifications professionnelles
 
-[À RENSEIGNER — qualifications OPQIBI pertinentes :
-- 1801 : Diagnostic structurel
-- 1811 : Mission d'expertise (bâtiment)
-- 1812 : Prise en compte du risque sismique
-- Référencement auprès d'assureurs ou de cour d'appel si applicable]
+- **OPQIBI 1204** — Diagnostic technique de structures existantes
+- **OPQIBI 1207** — Maîtrise d'œuvre de travaux de réparation et renforcement de structures
+- **OPQIBI 1210** — Expertise et investigation sur ouvrages existants
+- Assurance RC professionnelle et décennale à jour — attestation disponible sur demande
 
-## Réactivité et organisation en mode sinistre
+## Démarche qualité
 
-- **Astreinte :** [À RENSEIGNER — ex : permanence téléphonique 7j/7 pour les urgences péril/effondrement]
-- **Délai d'intervention sur site :** [À RENSEIGNER — ex : sous 24 h pour péril imminent, sous 5 jours ouvrés pour mission standard]
-- **Modèle de rapport :** synthèse exécutive (2-3 pages, lisible par l'assureur et le MO) + dossier technique complet avec annexes photographiques et plans
+- Approche pragmatique sur ouvrages existants : **recherche systématique de la solution la moins invasive** techniquement compatible avec la pérennité attendue de l'ouvrage
+- Structure des rapports en deux niveaux : **synthèse exécutive** (décision du maître d'ouvrage) + **dossier technique détaillé** (justification, plans, calculs)
+- Restitution systématique à chaque phase : rapport de diagnostic préalable avant proposition de solutions, puis dossier de conception avant tout démarrage de travaux
+- Suivi de chantier avec **comptes-rendus hebdomadaires** et accès tableau de bord partagé
 
-## Atouts pour le marché public visé
+## Atouts pour les marchés publics de pathologie/confortement
 
-[À RENSEIGNER — 4 à 6 atouts SPÉCIFIQUES de l'entreprise. Exemples :]
-
-1. Spécialisation exclusive en diagnostic post-sinistre : lecture immédiate des mécanismes, sans courbe d'apprentissage
-2. Expérience des procédures d'indemnisation et du langage assureur : rapports directement exploitables sans reformulation
-3. Réactivité d'intervention avérée (délais tenus, références sur sinistres en urgence)
-4. Couverture géographique adaptée au patrimoine du donneur d'ordre
-5. Capacité d'expertise contradictoire : défense de positions techniques argumentées face à un expert adverse
-6. Maîtrise du cadre réglementaire CATNAT (arrêtés, délais d'indemnisation, plafonds légaux)
+1. **Cœur de métier 100% aligné** sur l'objet des marchés visés — pas un généraliste qui s'adapte, un spécialiste
+2. **Maîtrise RGA complète** (diagnostic, solutions sans fouilles par injections résines) — pathologie dominante dans le patrimoine des bailleurs sociaux en zone argilite
+3. **Filiale travaux Syma Consolidation** : responsabilité unique conception-réalisation, réduction des interfaces et risques pour le maître d'ouvrage
+4. **Réactivité éprouvée** : délais de première intervention inférieurs à 5 jours sur urgence, critère souvent discriminant dans les marchés à bons de commande
+5. **Expérience site occupé** : protocoles locataires rodés, coordination avec gardiens et syndics, intervention sans relogement quand possible
+6. **Note clients 5,0/5** sur 22 avis — indicateur de satisfaction maître d'ouvrage directement opposable aux critères de jugement qualitatifs

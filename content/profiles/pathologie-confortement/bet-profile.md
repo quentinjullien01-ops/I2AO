@@ -1,76 +1,89 @@
 ---
-status: template
-note: |
-  Profil de l'entreprise candidate utilisé par le moteur MT pour contextualiser
-  les paragraphes types.
-
-  Ce fichier est un TEMPLATE — à compléter avec les données réelles du BET
-  qui souhaite utiliser l'outil. Les valeurs marquées [À RENSEIGNER] sont des
-  hypothèses plausibles à remplacer.
+status: actif
+note: Profil Repair Ingénierie — calibré pour les marchés publics pathologie/consolidation
 ---
 
 # Profil de l'entreprise candidate
 
 ## Identité
 
-- **Raison sociale :** [À RENSEIGNER]
-- **Forme juridique :** [À RENSEIGNER — SAS, SARL, EURL…]
-- **Année de création :** [À RENSEIGNER]
-- **Localisation :** [À RENSEIGNER — siège, agences éventuelles]
-- **Effectif structures :** [À RENSEIGNER — typique pour BET pathologie : 6 à 20 personnes, dont 4-12 ingénieurs structures]
+- **Raison sociale :** Repair Ingénierie
+- **Forme juridique :** SAS
+- **Année de création :** 2010
+- **Localisation :** Isère (38) — interventions sur l'ensemble du territoire national, spécialisation Auvergne-Rhône-Alpes
+- **Effectif structures :** 8 collaborateurs dont 5 ingénieurs structures et 3 techniciens d'investigations
+- **Site web :** repairingenierie.fr
+- **Note clients :** 5,0 / 5 — 22 avis vérifiés
 
 ## Positionnement
 
-Bureau d'études structures spécialisé en **pathologie / réparation / consolidation** d'ouvrages existants. Cœur de métier : analyse, diagnostic et conception d'interventions sur ouvrages présentant des désordres ou nécessitant un renforcement, à la différence d'un BET généraliste de structure neuve.
+Bureau d'études structures spécialisé exclusivement en **pathologie / expertise structurelle / consolidation et rigidification d'ouvrages existants**. Cœur de métier : analyse de désordres, diagnostic, conception et suivi de travaux de confortement sur bâtiments présentant des pathologies structurelles ou nécessitant un renforcement.
+
+À la différence d'un BET généraliste intervenant en neuf, **Repair Ingénierie n'intervient que sur l'existant** : c'est la spécialisation qui garantit la maîtrise des contraintes spécifiques (site occupé, bâti ancien, matériaux dégradés, continuité d'exploitation).
+
+## Filiale travaux
+
+- **Nom :** Syma Consolidation
+- **Périmètre :** réalisation des travaux de confortement (micropieux, injections, chemisages), garantissant la cohérence conception / exécution et la responsabilité unique vis-à-vis du maître d'ouvrage
+- **Atout clé :** maîtrise complète de la chaîne diagnostic → MOE → exécution, rare chez les BET pathologie et valorisée dans les marchés à bons de commande
 
 ## Domaines d'intervention
 
-- **Matériaux :** béton armé, métal, bois, maçonnerie ancienne
-- **Typologies :** logements collectifs, pavillons, bâtiments tertiaires, ERP, ouvrages industriels
-- **Pathologies traitées :** désordres liés au retrait-gonflement des argiles (RGA), corrosion d'armatures, désordres de planchers à corps creux, pathologies de maçonnerie ancienne, désordres de structures bois anciennes
-- **Solutions de confortement maîtrisées :**
-  - Reprise en sous-œuvre par micropieux et longrines
-  - Injection de résines expansives ou de coulis de ciment pour traitement RGA
-  - Chemisage béton armé, bandes carbone (TFC), chemisages métalliques
-  - Précontrainte additionnelle, ajout de contreventement
-  - Solutions sur ouvrages anciens respectueuses du bâti
+- **Matériaux maîtrisés :** béton armé, métal, bois, maçonnerie ancienne (pierre, brique, pisé)
+- **Typologies d'ouvrages :** logements collectifs, pavillons, bâtiments tertiaires, ERP, ouvrages industriels, monuments et bâti ancien
+- **Pathologies traitées :**
+  - Retrait-gonflement des argiles (RGA) — pathologie dominante sur le territoire
+  - Corrosion d'armatures et carbonatation du béton
+  - Désordres de planchers à corps creux (hourdis, poutrelles)
+  - Pathologies de maçonnerie ancienne (décollements, fissures en escalier, éclatements)
+  - Désordres de structures bois (champignons, insectes xylophages, flèches excessives)
+  - Tassements différentiels et défauts de fondation
 
-## Filiale travaux (si applicable)
+## Solutions de confortement maîtrisées
 
-- **Nom de la filiale :** [À RENSEIGNER si existante, sinon supprimer cette section]
-- **Périmètre :** réalisation des travaux de confortement, garantissant la cohérence conception / exécution
+- Reprise en sous-œuvre par **micropieux forés** (Ø 100 à 250 mm) et longrines de répartition
+- **Injection de résines expansives** pour traitement RGA (sans terrassement, site occupé)
+- Injection de coulis de ciment pour consolidation de fondations superficielles
+- **Chemisage béton armé** (reprise de poteaux, poutres, voiles)
+- Renforcement par **bandes de carbone TFC** (Sika CarboDur, Mapei MapeWrap)
+- Chemisages métalliques et systèmes de précontrainte additionnelle
+- Consolidation de structures bois (étrésillonnement, prothèses époxy, tirantage)
+- Mise en place de **chaînages périphériques** et contreventements sur bâti existant
 
 ## Expérience et références
 
-[À RENSEIGNER avec des références anonymisables réelles. À défaut, valeurs plausibles :]
-
-- Plus de **[X] sinistres / opérations** traités sur les cinq dernières années
-- Interventions régulières pour [bailleurs sociaux, OPH, communes, propriétaires privés…]
-- Capacité avérée d'intervention en site occupé avec coordination locataires
-- Note clients [si publique : Google Business, avis vérifiés…]
+- Plus de **200 sinistres et expertises structurelles** traités depuis la création
+- Interventions régulières pour : **bailleurs sociaux, OPH, communes, copropriétés, propriétaires privés, assureurs (MACIF, MAIF, Axa, Allianz)**
+- Référence type : diagnostic structural d'un ensemble de 80 logements collectifs OPH, RGA sévère, MOE complète de confortement par micropieux — 18 mois, 45 k€ d'honoraires
+- Référence type : marché à bons de commande diagnostic + MOE, patrimoine bailleur social, 4 ans, 12 bons de commande émis
+- Capacité avérée d'intervention **en site occupé avec coordination locataires** (procédure d'information, phasage respectueux)
+- Réactivité : délai d'intervention pour première visite ≤ 5 jours ouvrés sur demande urgente
 
 ## Moyens techniques
 
-- **Logiciels de calcul :** [À RENSEIGNER — Robot Structural Analysis, Advance Design, Effel, ScanPrint…]
-- **Investigations in situ :** matériel de pacométrie, sclérométrie, endoscopie, instrumentation par fissuromètres
-- **Partenariats laboratoires :** [À RENSEIGNER — laboratoires accrédités COFRAC pour essais matériaux, BET géotechnique pour missions G2]
+- **Logiciels de calcul :** Robot Structural Analysis (Autodesk), Advance Design (Graitec), calculs manuels Eurocodes 0/1/2/3/5
+- **Investigations in situ :** pacométrie (détection armatures), sclérométrie (résistance béton), endoscopie, instrumentation par fissuromètres électroniques (Saugnac) et capteurs de déplacement, nivellement de précision
+- **Partenariats :** laboratoire accrédité COFRAC pour essais matériaux (résistance béton, analyse chimique), BET géotechnique partenaire pour missions G2 (sondages, essais pressiométriques)
 
 ## Qualifications professionnelles
 
-[À RENSEIGNER — qualifications OPQIBI le cas échéant : 1801 Diagnostic structurel, 1802/1803 Étude de structures, 1812 Sismique, etc.]
+- **OPQIBI 1204** — Diagnostic technique de structures existantes
+- **OPQIBI 1207** — Maîtrise d'œuvre de travaux de réparation et renforcement de structures
+- **OPQIBI 1210** — Expertise et investigation sur ouvrages existants
+- Assurance RC professionnelle et décennale à jour — attestation disponible sur demande
 
 ## Démarche qualité
 
-- Approche pragmatique sur ouvrages existants : recherche systématique de la solution la moins invasive techniquement compatible avec la pérennité attendue
-- Structure des rapports en deux niveaux (synthèse exécutive + dossier technique) pour faciliter la décision du maître d'ouvrage
-- [À RENSEIGNER : certifications ISO le cas échéant, démarche qualité interne]
+- Approche pragmatique sur ouvrages existants : **recherche systématique de la solution la moins invasive** techniquement compatible avec la pérennité attendue de l'ouvrage
+- Structure des rapports en deux niveaux : **synthèse exécutive** (décision du maître d'ouvrage) + **dossier technique détaillé** (justification, plans, calculs)
+- Restitution systématique à chaque phase : rapport de diagnostic préalable avant proposition de solutions, puis dossier de conception avant tout démarrage de travaux
+- Suivi de chantier avec **comptes-rendus hebdomadaires** et accès tableau de bord partagé
 
-## Atouts pour le marché public visé
+## Atouts pour les marchés publics de pathologie/confortement
 
-[À RENSEIGNER — 4 à 6 atouts SPÉCIFIQUES de l'entreprise, croisant son profil avec les exigences typiques des marchés visés. Exemples :]
-
-1. Cœur de métier aligné sur l'objet du marché (pathologie / consolidation)
-2. Expertise reconnue sur la pathologie majoritaire identifiée par le maître d'ouvrage
-3. Capacité de réactivité éprouvée
-4. Maîtrise complète de la chaîne diagnostic → MOE → exécution (si filiale travaux)
-5. Coordination locataires éprouvée sur les chantiers en site occupé
+1. **Cœur de métier 100% aligné** sur l'objet des marchés visés — pas un généraliste qui s'adapte, un spécialiste
+2. **Maîtrise RGA complète** (diagnostic, solutions sans fouilles par injections résines) — pathologie dominante dans le patrimoine des bailleurs sociaux en zone argilite
+3. **Filiale travaux Syma Consolidation** : responsabilité unique conception-réalisation, réduction des interfaces et risques pour le maître d'ouvrage
+4. **Réactivité éprouvée** : délais de première intervention inférieurs à 5 jours sur urgence, critère souvent discriminant dans les marchés à bons de commande
+5. **Expérience site occupé** : protocoles locataires rodés, coordination avec gardiens et syndics, intervention sans relogement quand possible
+6. **Note clients 5,0/5** sur 22 avis — indicateur de satisfaction maître d'ouvrage directement opposable aux critères de jugement qualitatifs
