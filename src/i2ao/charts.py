@@ -1,66 +1,48 @@
-"""Graphiques Plotly réutilisables — palette cohérente avec le thème Mission Control.
+"""Graphiques Plotly réutilisables — palette cohérente avec le thème Lumière & Relief.
 
-Charts adaptatifs au thème Streamlit (light / dark) :
-- Backgrounds transparents pour s'intégrer au fond Streamlit
-- Couleurs de texte et grilles ajustées selon le thème
+Fond transparent, texte sombre, couleurs vives sur fond clair.
 """
 
 from __future__ import annotations
 
-import math
 from collections import Counter
 
 import plotly.graph_objects as go
 
-# Palette projet — alignée sur le thème "Mission Control" (#38bdf8 primary)
-COULEUR_PRIMAIRE = "#38bdf8"
-COULEUR_PRIMAIRE_CLAIR = "#7dd3fc"
-COULEUR_SECONDAIRE = "#818cf8"
-COULEUR_VERT = "#10b981"
-COULEUR_ORANGE = "#f59e0b"
-COULEUR_ROUGE = "#ef4444"
+# Palette projet — alignée sur le thème "Lumière & Relief"
+COULEUR_PRIMAIRE = "#1d4ed8"
+COULEUR_PRIMAIRE_CLAIR = "#3b82f6"
+COULEUR_SECONDAIRE = "#6366f1"
+COULEUR_VERT = "#059669"
+COULEUR_ORANGE = "#d97706"
+COULEUR_ROUGE = "#dc2626"
 COULEUR_GRIS = "#64748b"
 
-# Palette catégories — couleurs vives, visibles sur fond sombre
+# Palette catégories — couleurs vives, lisibles sur fond blanc/clair
 PALETTE_CATEGORIES = [
-    "#38bdf8",
-    "#10b981",
-    "#f59e0b",
-    "#ef4444",
-    "#818cf8",
-    "#06b6d4",
-    "#f472b6",
-    "#a3e635",
-    "#fb923c",
-    "#c084fc",
-    "#2dd4bf",
+    "#1d4ed8",
+    "#059669",
+    "#d97706",
+    "#dc2626",
+    "#6366f1",
+    "#0891b2",
+    "#db2777",
+    "#65a30d",
+    "#ea580c",
+    "#7c3aed",
+    "#0d9488",
 ]
 
 
-def _is_dark_theme() -> bool:
-    """Toujours True — l'app utilise le thème Mission Control (fond sombre forcé)."""
-    return True
-
-
 def _theme_colors() -> dict:
-    """Couleurs adaptatives selon thème détecté."""
-    dark = _is_dark_theme()
-    if dark:
-        return {
-            "text": "#e5e7eb",
-            "text_secondaire": "#9ca3af",
-            "grid": "rgba(255,255,255,0.12)",
-            "annotation_centre": "#dbeafe",  # bleu très clair pour score au centre
-            "annotation_secondaire": "#9ca3af",
-            "donut_border": "#0e1117",       # bord donut = fond Streamlit dark
-        }
+    """Couleurs du thème Lumière & Relief (fond clair)."""
     return {
-        "text": "#374151",
-        "text_secondaire": "#6b7280",
-        "grid": "rgba(0,0,0,0.08)",
-        "annotation_centre": "#1a3d6e",
-        "annotation_secondaire": "#6b7280",
-        "donut_border": "#ffffff",
+        "text": "#1e293b",
+        "text_secondaire": "#475569",
+        "grid": "rgba(15,23,42,0.08)",
+        "annotation_centre": "#1e3a8a",
+        "annotation_secondaire": "#64748b",
+        "donut_border": "#f8faff",
     }
 
 
@@ -321,7 +303,6 @@ def donut_repartition_dqe(dqe_lignes: list, total_he: float) -> go.Figure:
 
 def gauge_score(score_pct: float, titre: str = "Score de couverture") -> go.Figure:
     theme = _theme_colors()
-    dark = _is_dark_theme()
     if score_pct >= 85:
         couleur_barre = COULEUR_VERT
     elif score_pct >= 70:
@@ -329,19 +310,11 @@ def gauge_score(score_pct: float, titre: str = "Score de couverture") -> go.Figu
     else:
         couleur_barre = COULEUR_ROUGE
 
-    # Zones de fond du gauge : plus sombres en thème dark, claires en light
-    if dark:
-        zone_rouge = "rgba(239, 68, 68, 0.18)"
-        zone_orange = "rgba(245, 158, 11, 0.18)"
-        zone_verte = "rgba(16, 185, 129, 0.18)"
-        bg_gauge = "rgba(255,255,255,0.04)"
-        border_gauge = "rgba(255,255,255,0.15)"
-    else:
-        zone_rouge = "#fef2f2"
-        zone_orange = "#fffbeb"
-        zone_verte = "#f0fdf4"
-        bg_gauge = "white"
-        border_gauge = "#e5e7eb"
+    zone_rouge = "rgba(220, 38, 38, 0.10)"
+    zone_orange = "rgba(217, 119, 6, 0.10)"
+    zone_verte = "rgba(5, 150, 105, 0.10)"
+    bg_gauge = "rgba(255,255,255,0.70)"
+    border_gauge = "rgba(203,213,225,0.80)"
 
     fig = go.Figure(
         go.Indicator(
@@ -418,167 +391,6 @@ def bar_comparatif(
             x=0.5,
             xanchor="center",
             font=dict(color=theme["text"]),
-        ),
-    )
-    return fig
-
-
-# ---------------------------------------------------------------------------
-# Scatter 3D — exigences dans l'espace catégorie × importance × rang
-# ---------------------------------------------------------------------------
-
-def scatter3d_exigences(exigences: list) -> go.Figure:
-    """Nuage de points 3D WebGL : chaque exigence est un point dans l'espace
-    catégorie (X) × importance (Y) × rang (Z). Interactif — rotatable à la souris.
-    """
-    if not exigences:
-        return go.Figure()
-
-    importance_map = {"bloquant": 3, "important": 2, "mineur": 1}
-    categories = sorted({e.categorie for e in exigences})
-    cat_map = {c: i for i, c in enumerate(categories)}
-
-    couleurs_imp = {"bloquant": "#ef4444", "important": "#f59e0b", "mineur": "#38bdf8"}
-    taille_imp   = {"bloquant": 10,        "important": 7,         "mineur": 5}
-
-    rang_counter: dict = {}
-    xs, ys, zs, colors, sizes, texts = [], [], [], [], [], []
-
-    for e in exigences:
-        key = (e.categorie, e.importance)
-        rang_counter[key] = rang_counter.get(key, 0) + 1
-        xs.append(cat_map[e.categorie] + (rang_counter[key] % 3) * 0.25)
-        ys.append(importance_map.get(e.importance, 1) + (rang_counter[key] // 3) * 0.15)
-        zs.append(rang_counter[key])
-        colors.append(couleurs_imp.get(e.importance, "#38bdf8"))
-        sizes.append(taille_imp.get(e.importance, 6))
-        texts.append(
-            f"<b>{e.libelle[:60]}</b><br>"
-            f"Catégorie : {e.categorie}<br>"
-            f"Importance : {e.importance}<br>"
-            f"Source : {e.source_piece}"
-        )
-
-    fig = go.Figure(
-        go.Scatter3d(
-            x=xs, y=ys, z=zs,
-            mode="markers",
-            marker=dict(size=sizes, color=colors, opacity=0.85, line=dict(width=0)),
-            text=texts,
-            hovertemplate="%{text}<extra></extra>",
-        )
-    )
-
-    # axis_style sans titlefont (déprécié) — on passe title comme string
-    def _axis3d(title_text, **extra):
-        return dict(
-            backgroundcolor="rgba(3,13,31,0.8)",
-            gridcolor="rgba(56,189,248,0.15)",
-            showbackground=True,
-            tickfont=dict(color="#94a3b8", size=9),
-            zerolinecolor="rgba(56,189,248,0.2)",
-            title=title_text,
-            **extra,
-        )
-
-    fig.update_layout(
-        paper_bgcolor="rgba(0,0,0,0)",
-        height=500,
-        margin=dict(l=0, r=0, t=10, b=0),
-        font=dict(color="#e2e8f0", size=11),
-        scene=dict(
-            xaxis=_axis3d(
-                "Catégorie",
-                tickvals=list(cat_map.values()),
-                ticktext=[c.replace("-", "‑") for c in categories],
-            ),
-            yaxis=_axis3d(
-                "Importance",
-                tickvals=[1, 2, 3],
-                ticktext=["Mineur", "Important", "Bloquant"],
-            ),
-            zaxis=_axis3d("Rang"),
-            bgcolor="rgba(3,13,31,0.6)",
-            camera=dict(eye=dict(x=1.6, y=-1.6, z=1.2)),
-        ),
-        legend=dict(font=dict(color="#94a3b8"), bgcolor="rgba(0,0,0,0)"),
-    )
-    return fig
-
-
-# ---------------------------------------------------------------------------
-# Surface 3D — DQE par chapitre (paysage financier)
-# ---------------------------------------------------------------------------
-
-def surface3d_dqe(dqe_lignes: list) -> go.Figure:
-    """Surface 3D WebGL : chaque chapitre DQE = une montagne gaussienne
-    dont la hauteur est proportionnelle au montant HT.
-    """
-    if not dqe_lignes:
-        return go.Figure()
-
-    par_cat: dict[str, float] = {}
-    for ligne in dqe_lignes:
-        par_cat[ligne.categorie] = par_cat.get(ligne.categorie, 0.0) + ligne.montant
-
-    items = sorted(par_cat.items(), key=lambda x: x[1], reverse=True)
-    labels = [c for c, _ in items]
-    valeurs = [v for _, v in items]
-    n = len(labels)
-
-    # Grille Z : superposition de gaussiennes
-    grid_size = 50
-    Z = [[0.0] * grid_size for _ in range(grid_size)]
-    sigma = max(grid_size / (n * 1.8), 3.0)
-    for i, (_, val) in enumerate(zip(labels, valeurs)):
-        cx = (i + 0.5) / n * grid_size
-        cy = grid_size / 2
-        for row in range(grid_size):
-            for col in range(grid_size):
-                d2 = (col - cx) ** 2 / sigma ** 2 + (row - cy) ** 2 / (sigma * 1.5) ** 2
-                Z[row][col] += val * math.exp(-d2)
-
-    colorscale = [
-        [0.0,  "#030d1f"],
-        [0.3,  "#0c2247"],
-        [0.6,  "#0ea5e9"],
-        [0.85, "#38bdf8"],
-        [1.0,  "#f0f9ff"],
-    ]
-
-    fig = go.Figure(
-        go.Surface(
-            z=Z,
-            colorscale=colorscale,
-            showscale=False,
-            opacity=0.90,
-            contours=dict(z=dict(show=True, usecolormap=True, project=dict(z=True))),
-            hovertemplate="Montant relatif : %{z:.0f}<extra></extra>",
-        )
-    )
-
-    def _axis3d_s(title_text, **extra):
-        return dict(
-            backgroundcolor="rgba(3,13,31,0.8)",
-            gridcolor="rgba(56,189,248,0.12)",
-            showbackground=True,
-            tickfont=dict(color="#94a3b8", size=9),
-            zerolinecolor="rgba(56,189,248,0.2)",
-            title=title_text,
-            **extra,
-        )
-
-    fig.update_layout(
-        paper_bgcolor="rgba(0,0,0,0)",
-        height=460,
-        margin=dict(l=0, r=0, t=10, b=0),
-        font=dict(color="#e2e8f0", size=11),
-        scene=dict(
-            xaxis=_axis3d_s("Chapitres →", showticklabels=False),
-            yaxis=_axis3d_s("", showticklabels=False),
-            zaxis=_axis3d_s("Montant HT (€)"),
-            bgcolor="rgba(3,13,31,0.6)",
-            camera=dict(eye=dict(x=1.8, y=-1.8, z=1.4)),
         ),
     )
     return fig

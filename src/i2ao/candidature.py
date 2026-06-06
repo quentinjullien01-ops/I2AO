@@ -12,6 +12,18 @@ from __future__ import annotations
 
 import zipfile
 from datetime import date
+
+_MOIS_FR = {
+    1: "janvier", 2: "février", 3: "mars", 4: "avril",
+    5: "mai", 6: "juin", 7: "juillet", 8: "août",
+    9: "septembre", 10: "octobre", 11: "novembre", 12: "décembre",
+}
+
+
+def _date_fr(d: date | None = None) -> str:
+    """Retourne la date formatée en français, indépendamment de la locale système."""
+    d = d or date.today()
+    return f"{d.day:02d} {_MOIS_FR[d.month]} {d.year}"
 from pathlib import Path
 
 from docx import Document
@@ -114,7 +126,7 @@ def generer_lettre(
 
 ## Date à indiquer
 
-{date.today().strftime('%d %B %Y').replace('January', 'janvier').replace('February', 'février').replace('March', 'mars').replace('April', 'avril').replace('May', 'mai').replace('June', 'juin').replace('July', 'juillet').replace('August', 'août').replace('September', 'septembre').replace('October', 'octobre').replace('November', 'novembre').replace('December', 'décembre')}
+{_date_fr()}
 
 ---
 

@@ -305,6 +305,75 @@ def _rendre_contenu_md(doc: Document, md: str) -> None:
             i += 1
             continue
 
+        # Titres ## et ### → sous-titre en gras souligné
+        if line.lstrip().startswith("###"):
+            titre_txt = line.lstrip().lstrip("#").strip()
+            p = doc.add_paragraph()
+            run = p.add_run(titre_txt)
+            run.bold = True
+            run.underline = True
+            run.font.name = "Times New Roman"
+            run.font.size = Pt(11)
+            run.font.color.rgb = COULEUR_TITRE
+            p.paragraph_format.space_before = Pt(8)
+            p.paragraph_format.space_after = Pt(4)
+            i += 1
+            continue
+
+        if line.lstrip().startswith("##"):
+            titre_txt = line.lstrip().lstrip("#").strip()
+            p = doc.add_paragraph()
+            run = p.add_run(titre_txt)
+            run.bold = True
+            run.font.name = "Times New Roman"
+            run.font.size = Pt(12)
+            run.font.color.rgb = COULEUR_TITRE
+            p.paragraph_format.space_before = Pt(10)
+            p.paragraph_format.space_after = Pt(4)
+            i += 1
+            continue
+
+        if line.lstrip().startswith("#"):
+            titre_txt = line.lstrip().lstrip("#").strip()
+            p = doc.add_paragraph()
+            run = p.add_run(titre_txt)
+            run.bold = True
+            run.font.name = "Times New Roman"
+            run.font.size = Pt(13)
+            run.font.color.rgb = COULEUR_TITRE
+            p.paragraph_format.space_before = Pt(12)
+            p.paragraph_format.space_after = Pt(5)
+            i += 1
+            continue
+
+        # Tableau markdown : collecte toutes les lignes | ... |
+        if "|" in line and line.strip().startswith("|"):
+            table_lines: list[str] = []
+            while i < len(lines) and "|" in lines[i] and lines[i].strip().startswith("|"):
+                if not re.match(r"^\s*\|[\s\-|:]+\|\s*$", lines[i]):  # sauter les séparateurs ---
+                    table_lines.append(lines[i])
+                i += 1
+            if table_lines:
+                rows = [
+                    [cell.strip() for cell in row.strip().strip("|").split("|")]
+                    for row in table_lines
+                ]
+                ncols = max(len(r) for r in rows)
+                table = doc.add_table(rows=len(rows), cols=ncols)
+                table.style = "Table Grid"
+                for ri, row_data in enumerate(rows):
+                    for ci, cell_txt in enumerate(row_data):
+                        cell = table.cell(ri, ci)
+                        cell.text = ""
+                        p_cell = cell.paragraphs[0]
+                        run_cell = p_cell.add_run(cell_txt)
+                        run_cell.font.name = "Times New Roman"
+                        run_cell.font.size = Pt(10)
+                        if ri == 0:
+                            run_cell.bold = True
+                doc.add_paragraph()  # espace après le tableau
+            continue
+
         if line.lstrip().startswith(("- ", "* ")):
             while i < len(lines) and lines[i].lstrip().startswith(("- ", "* ")):
                 content = lines[i].lstrip()[2:].strip()
@@ -325,6 +394,10 @@ def _rendre_contenu_md(doc: Document, md: str) -> None:
             if not ln.strip():
                 break
             if ln.lstrip().startswith(("- ", "* ")) or re.match(r"^\d+\.\s", ln.lstrip()):
+                break
+            if "|" in ln and ln.strip().startswith("|"):
+                break
+            if ln.lstrip().startswith("#"):
                 break
             para_lines.append(ln)
             i += 1

@@ -63,8 +63,7 @@ from i2ao.charts import (
     donut_couverture,
     donut_repartition_dqe,
     gauge_score,
-    scatter3d_exigences,
-    surface3d_dqe,
+
 )
 from i2ao.config import (
     CANDIDAT_NOM,
@@ -138,295 +137,310 @@ def _logo_data_url() -> str:
 _CUSTOM_CSS = """
 <style>
 /* ============================================================
-   I2AO — Design System 2.0  |  "Mission Control"
+   I2AO — Design System 3.0  |  "Lumière & Relief"
+   Fond clair, cartes blanches en relief, accents bleu vif
    ============================================================ */
 
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+
 :root {
-    --c-bg:           #030d1f;
-    --c-bg2:          #071428;
-    --c-glass:        rgba(255,255,255,0.04);
-    --c-glass-border: rgba(255,255,255,0.09);
-    --c-primary:      #38bdf8;
-    --c-primary-glow: rgba(56,189,248,0.35);
-    --c-indigo:       #818cf8;
-    --c-success:      #10b981;
-    --c-warning:      #f59e0b;
-    --c-danger:       #ef4444;
-    --c-text:         rgba(255,255,255,0.90);
-    --c-muted:        rgba(255,255,255,0.40);
+    --c-bg:           #eef2f9;
+    --c-bg2:          #e4eaf5;
+    --c-surface:      #ffffff;
+    --c-surface2:     #f7f9fd;
+    --c-primary:      #1d4ed8;
+    --c-primary-light:#3b82f6;
+    --c-primary-glow: rgba(29,78,216,0.22);
+    --c-indigo:       #6366f1;
+    --c-success:      #059669;
+    --c-warning:      #d97706;
+    --c-danger:       #dc2626;
+    --c-text:         #1e293b;
+    --c-text2:        #475569;
+    --c-muted:        #94a3b8;
+    --c-border:       #e2e8f0;
+    --c-border-strong:#cbd5e1;
+
+    /* Ombres portées "relief" */
+    --shadow-sm:  0 1px 3px rgba(15,23,42,.08), 0 1px 2px rgba(15,23,42,.06);
+    --shadow-md:  0 4px 14px rgba(15,23,42,.10), 0 2px 6px rgba(15,23,42,.07);
+    --shadow-lg:  0 12px 36px rgba(15,23,42,.13), 0 4px 12px rgba(15,23,42,.08);
+    --shadow-xl:  0 24px 64px rgba(15,23,42,.17), 0 8px 24px rgba(15,23,42,.10);
+    --shadow-blue:0 8px 32px rgba(29,78,216,.25),  0 2px 8px  rgba(29,78,216,.15);
 }
+
+* { font-family: 'Inter', 'Segoe UI', sans-serif !important; }
 
 /* === FOND GÉNÉRAL ============================================= */
 [data-testid="stAppViewContainer"] {
-    background: var(--c-bg) !important;
-}
-
-/* Orbes lumineux animés en arrière-plan */
-[data-testid="stAppViewContainer"]::before {
-    content: '';
-    position: fixed;
-    inset: 0;
     background:
-        radial-gradient(ellipse 900px 700px at 10% 35%,  rgba(56,189,248,0.07)  0%, transparent 65%),
-        radial-gradient(ellipse 700px 900px at 88% 15%,  rgba(129,140,248,0.06) 0%, transparent 65%),
-        radial-gradient(ellipse 800px 500px at 55% 95%,  rgba(16,185,129,0.04)  0%, transparent 65%);
-    animation: bgPulse 14s ease-in-out infinite alternate;
-    pointer-events: none;
-    z-index: 0;
-}
-@keyframes bgPulse {
-    0%   { opacity:.6; transform: scale(1)    translate(0,0); }
-    50%  { opacity:1;  transform: scale(1.06) translate(1%,-1%); }
-    100% { opacity:.7; transform: scale(.97)  translate(-1%,1%); }
-}
-
-/* Grille fine en arrière-plan */
-[data-testid="stAppViewContainer"]::after {
-    content: '';
-    position: fixed;
-    inset: 0;
-    background-image:
-        linear-gradient(rgba(56,189,248,.025) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(56,189,248,.025) 1px, transparent 1px);
-    background-size: 64px 64px;
-    pointer-events: none;
-    z-index: 0;
+        radial-gradient(ellipse 900px 600px at 20% 0%,   rgba(99,102,241,.07)  0%, transparent 60%),
+        radial-gradient(ellipse 700px 500px at 90% 100%, rgba(29,78,216,.06)   0%, transparent 60%),
+        linear-gradient(170deg, #eef2f9 0%, #e8eef8 50%, #edf1fb 100%) !important;
+    min-height: 100vh;
 }
 
 /* === SIDEBAR ================================================== */
 section[data-testid="stSidebar"] {
-    background: rgba(3,13,31,.96) !important;
-    border-right: 1px solid rgba(56,189,248,.14) !important;
-    backdrop-filter: blur(20px);
+    background: linear-gradient(180deg, #1e3a5f 0%, #1a3256 100%) !important;
+    border-right: none !important;
+    box-shadow: 4px 0 24px rgba(15,23,42,.18) !important;
 }
 section[data-testid="stSidebar"]::before {
     content: '';
     position: absolute; inset: 0;
-    background: linear-gradient(180deg, rgba(56,189,248,.06) 0%, transparent 35%);
+    background:
+        radial-gradient(ellipse 300px 200px at 60% 10%, rgba(99,102,241,.18) 0%, transparent 65%),
+        linear-gradient(180deg, rgba(255,255,255,.05) 0%, transparent 40%);
     pointer-events: none;
 }
-section[data-testid="stSidebar"] * { color: var(--c-text) !important; }
+section[data-testid="stSidebar"] * { color: rgba(255,255,255,.90) !important; }
+section[data-testid="stSidebar"] .stSelectbox label,
+section[data-testid="stSidebar"] .stTextInput label { color: rgba(255,255,255,.60) !important; font-size:.78rem !important; }
 section[data-testid="stSidebar"] h1 {
-    background: linear-gradient(135deg, #e0f2fe, var(--c-primary));
+    background: linear-gradient(135deg, #fff 0%, #bfdbfe 60%, #a5b4fc 100%);
     -webkit-background-clip: text !important;
     -webkit-text-fill-color: transparent !important;
     background-clip: text !important;
-    font-family: 'Times New Roman', Georgia, serif;
     font-weight: 800 !important;
+    letter-spacing: -.4px;
+}
+/* Inputs dans sidebar */
+section[data-testid="stSidebar"] [data-testid="stTextInput"] input,
+section[data-testid="stSidebar"] [data-baseweb="select"] {
+    background: rgba(255,255,255,.10) !important;
+    border: 1px solid rgba(255,255,255,.20) !important;
+    color: #fff !important;
+    border-radius: 10px !important;
 }
 
 /* === CONTENU PRINCIPAL ======================================= */
-.block-container { padding-top: 2rem !important; }
-.main p, .main li, .main td { color: var(--c-text); }
-.main strong { color: #fff; }
+.block-container { padding-top: 2.2rem !important; }
+.main p, .main li, .main td { color: var(--c-text2); }
+.main strong { color: var(--c-text); }
 
-/* Titres avec gradient animé */
+/* Titres */
 .main h1 {
-    background: linear-gradient(120deg, #e0f2fe 0%, var(--c-primary) 45%, var(--c-indigo) 100%);
-    background-size: 200% auto;
+    background: linear-gradient(120deg, #1e3a8a 0%, var(--c-primary) 50%, var(--c-indigo) 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
-    font-family: 'Times New Roman', Georgia, serif;
     font-weight: 800;
-    letter-spacing: -.5px;
-    animation: gradShift 6s linear infinite alternate;
+    letter-spacing: -.6px;
+    margin-bottom: 1.2rem;
 }
-@keyframes gradShift {
-    from { background-position: 0% center; }
-    to   { background-position: 100% center; }
-}
-
 .main h2 {
     color: var(--c-primary);
-    font-weight: 600;
+    font-weight: 700;
     position: relative;
-    padding-bottom: 6px;
+    padding-bottom: 8px;
 }
 .main h2::after {
     content: '';
     position: absolute;
     bottom: 0; left: 0;
-    height: 2px; width: 0;
-    background: linear-gradient(90deg, var(--c-primary), transparent);
-    border-radius: 2px;
-    animation: lineGrow .55s ease forwards;
+    height: 3px; width: 0;
+    background: linear-gradient(90deg, var(--c-primary), var(--c-indigo), transparent);
+    border-radius: 3px;
+    animation: lineGrow .5s cubic-bezier(.4,0,.2,1) forwards;
 }
-@keyframes lineGrow {
-    to { width: 48px; }
-}
+@keyframes lineGrow { to { width: 52px; } }
 
-.main h3, .main h4, .main h5 {
-    color: rgba(255,255,255,.85);
-}
+.main h3 { color: var(--c-text); font-weight: 700; }
+.main h4, .main h5 { color: var(--c-text2); font-weight: 600; }
 
-/* === CARTES MÉTRIQUES — glassmorphism + 3D tilt ============= */
+/* === CARTES MÉTRIQUES — relief fort ========================= */
 [data-testid="stMetric"] {
-    background: var(--c-glass) !important;
-    border: 1px solid var(--c-glass-border) !important;
-    border-radius: 18px !important;
-    padding: 1.3rem 1.5rem !important;
-    backdrop-filter: blur(14px) !important;
-    transition: transform .25s ease, box-shadow .25s ease !important;
-    transform-style: preserve-3d;
+    background: var(--c-surface) !important;
+    border: 1px solid var(--c-border) !important;
+    border-radius: 16px !important;
+    padding: 1.25rem 1.5rem !important;
+    box-shadow: var(--shadow-md) !important;
+    transition: transform .22s cubic-bezier(.4,0,.2,1), box-shadow .22s ease !important;
     position: relative;
     overflow: hidden;
     cursor: default;
 }
+/* Barre de couleur en haut de chaque carte */
 [data-testid="stMetric"]::before {
     content: '';
-    position: absolute; top:-60%; left:-60%;
-    width: 220%; height: 220%;
-    background: radial-gradient(circle at 50% 50%, rgba(56,189,248,.07), transparent 55%);
-    opacity: 0;
-    transition: opacity .3s;
+    position: absolute; top: 0; left: 0; right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, var(--c-primary), var(--c-indigo));
+    opacity: .7;
 }
 [data-testid="stMetric"]:hover {
-    transform: translateY(-7px) rotateX(5deg) scale(1.03) !important;
-    box-shadow:
-        0 22px 55px rgba(56,189,248,.22),
-        0 0 0 1px rgba(56,189,248,.22) !important;
+    transform: translateY(-5px) !important;
+    box-shadow: var(--shadow-xl), 0 0 0 1px rgba(29,78,216,.12) !important;
 }
-[data-testid="stMetric"]:hover::before { opacity: 1; }
-
 [data-testid="stMetricValue"] {
     color: var(--c-primary) !important;
     font-weight: 800 !important;
     font-size: 2rem !important;
-    text-shadow: 0 0 22px var(--c-primary-glow);
 }
 [data-testid="stMetricLabel"] {
     color: var(--c-muted) !important;
-    font-size: .74rem !important;
+    font-size: .72rem !important;
     text-transform: uppercase;
-    letter-spacing: 1.4px;
+    letter-spacing: 1.3px;
+    font-weight: 600;
 }
 
 /* === ONGLETS ================================================= */
 [data-testid="stTabs"] {
-    border-bottom: 1px solid rgba(56,189,248,.12) !important;
+    background: var(--c-surface);
+    border-radius: 14px 14px 0 0;
+    border-bottom: 2px solid var(--c-border) !important;
+    box-shadow: var(--shadow-sm);
 }
 [data-testid="stTabs"] button[role="tab"] {
     color: var(--c-muted) !important;
-    font-weight: 500;
+    font-weight: 600;
+    font-size: .85rem;
     border-radius: 10px 10px 0 0 !important;
-    transition: all .2s ease !important;
+    transition: all .18s ease !important;
     position: relative;
 }
 [data-testid="stTabs"] button[role="tab"]:hover {
     color: var(--c-primary) !important;
-    background: rgba(56,189,248,.07) !important;
+    background: rgba(29,78,216,.05) !important;
 }
 [data-testid="stTabs"] button[role="tab"][aria-selected="true"] {
     color: var(--c-primary) !important;
     font-weight: 700;
-    background: rgba(56,189,248,.09) !important;
+    background: rgba(29,78,216,.06) !important;
 }
 [data-testid="stTabs"] button[role="tab"][aria-selected="true"]::after {
     content: '';
     position: absolute;
-    bottom: 0; left: 10%; right: 10%;
-    height: 2px;
-    background: linear-gradient(90deg, transparent, var(--c-primary), transparent);
-    border-radius: 2px;
-    box-shadow: 0 0 10px var(--c-primary-glow);
+    bottom: -2px; left: 8%; right: 8%;
+    height: 3px;
+    background: var(--c-primary);
+    border-radius: 3px 3px 0 0;
+    box-shadow: 0 0 12px var(--c-primary-glow);
 }
 
-/* Fade-in sur chaque rendu de panneau d'onglet */
 [data-testid="stTabPanel"] {
-    animation: fadeUp .38s ease;
+    animation: fadeUp .32s cubic-bezier(.4,0,.2,1);
+    background: var(--c-surface);
+    border-radius: 0 0 16px 16px;
+    padding: 1.5rem !important;
+    box-shadow: var(--shadow-md);
+    border: 1px solid var(--c-border);
+    border-top: none;
 }
 @keyframes fadeUp {
-    from { opacity: 0; transform: translateY(14px); }
+    from { opacity: 0; transform: translateY(10px); }
     to   { opacity: 1; transform: translateY(0); }
 }
 
 /* === BOUTONS ================================================= */
 .stButton button {
-    border-radius: 11px !important;
+    border-radius: 10px !important;
     font-weight: 600 !important;
-    transition: all .22s ease !important;
+    font-size: .88rem !important;
+    transition: all .18s cubic-bezier(.4,0,.2,1) !important;
     position: relative;
     overflow: hidden;
 }
 .stButton button[kind="primary"] {
-    background: linear-gradient(135deg, #0ea5e9 0%, #1a3d6e 100%) !important;
+    background: linear-gradient(135deg, var(--c-primary-light) 0%, var(--c-primary) 100%) !important;
     border: none !important;
     color: #fff !important;
-    box-shadow: 0 4px 22px rgba(14,165,233,.32) !important;
+    box-shadow: var(--shadow-blue) !important;
+    letter-spacing: .2px;
 }
 .stButton button[kind="primary"]:hover {
-    transform: translateY(-3px) !important;
-    box-shadow: 0 10px 32px rgba(14,165,233,.5) !important;
+    transform: translateY(-2px) !important;
+    box-shadow: 0 14px 40px rgba(29,78,216,.35), 0 4px 12px rgba(29,78,216,.20) !important;
 }
-/* Shimmer continu sur les boutons primaires */
+.stButton button[kind="primary"]:active {
+    transform: translateY(0) !important;
+    box-shadow: var(--shadow-sm) !important;
+}
+/* Shimmer sur boutons primaires */
 .stButton button[kind="primary"]::after {
     content: '';
     position: absolute;
-    top: -50%; left: -70%;
-    width: 35%; height: 200%;
-    background: rgba(255,255,255,.18);
-    transform: skewX(-22deg);
-    animation: shimmer 3.5s ease infinite;
+    top: -50%; left: -75%;
+    width: 30%; height: 200%;
+    background: rgba(255,255,255,.22);
+    transform: skewX(-20deg);
+    animation: shimmer 3s ease-in-out infinite;
 }
 @keyframes shimmer {
-    0%   { left: -70%; }
-    100% { left: 170%; }
+    0%   { left: -75%; }
+    100% { left: 175%; }
+}
+
+/* Boutons secondaires */
+.stButton button[kind="secondary"] {
+    background: var(--c-surface) !important;
+    border: 1.5px solid var(--c-border-strong) !important;
+    color: var(--c-text) !important;
+    box-shadow: var(--shadow-sm) !important;
+}
+.stButton button[kind="secondary"]:hover {
+    border-color: var(--c-primary) !important;
+    color: var(--c-primary) !important;
+    box-shadow: var(--shadow-md) !important;
+    transform: translateY(-1px) !important;
 }
 
 /* Boutons de téléchargement */
 .stDownloadButton button {
-    background: rgba(16,185,129,.1) !important;
-    border: 1px solid rgba(16,185,129,.35) !important;
+    background: linear-gradient(135deg, #d1fae5, #ecfdf5) !important;
+    border: 1.5px solid #6ee7b7 !important;
     color: var(--c-success) !important;
-    border-radius: 11px !important;
-    transition: all .2s ease !important;
+    border-radius: 10px !important;
+    font-weight: 600 !important;
+    box-shadow: 0 4px 14px rgba(5,150,105,.15) !important;
+    transition: all .18s ease !important;
 }
 .stDownloadButton button:hover {
-    background: rgba(16,185,129,.2) !important;
-    box-shadow: 0 6px 22px rgba(16,185,129,.3) !important;
+    background: linear-gradient(135deg, #a7f3d0, #d1fae5) !important;
+    box-shadow: 0 8px 24px rgba(5,150,105,.25) !important;
     transform: translateY(-2px) !important;
 }
 
 /* === LIGNE DE STATUT ========================================= */
 .i2ao-status-line {
-    background: rgba(56,189,248,.05);
-    border: 1px solid rgba(56,189,248,.18);
-    border-left: 3px solid var(--c-primary);
+    background: var(--c-surface);
+    border: 1px solid var(--c-border);
+    border-left: 4px solid var(--c-primary);
     border-radius: 12px;
-    padding: 12px 18px;
-    font-size: .88rem;
-    color: var(--c-text);
-    margin-bottom: 1.3rem;
-    box-shadow: 0 0 24px rgba(56,189,248,.06);
+    padding: 12px 20px;
+    font-size: .86rem;
+    color: var(--c-text2);
+    margin-bottom: 1.4rem;
+    box-shadow: var(--shadow-sm);
     animation: fadeUp .4s ease;
 }
 .i2ao-status-line .ok {
     color: var(--c-success);
     font-weight: 700;
-    text-shadow: 0 0 10px rgba(16,185,129,.45);
 }
-.i2ao-status-line .ko { opacity: .28; }
+.i2ao-status-line .ko { color: var(--c-muted); }
 
 /* === HERO LANDING ============================================ */
 .i2ao-hero {
-    background: linear-gradient(135deg, #020d1e 0%, #071428 45%, #0d2247 100%);
-    border: 1px solid rgba(56,189,248,.18);
-    border-radius: 22px;
-    padding: 3.5rem 3rem;
+    background: linear-gradient(135deg, #1e3a8a 0%, #1d4ed8 50%, #4338ca 100%);
+    border-radius: 20px;
+    padding: 3.5rem 3.5rem;
     margin: .5rem 0 2rem;
     position: relative;
     overflow: hidden;
     box-shadow:
-        0 28px 80px rgba(56,189,248,.10),
-        inset 0 1px 0 rgba(255,255,255,.06);
+        0 32px 80px rgba(29,78,216,.30),
+        0 8px 24px rgba(29,78,216,.20),
+        inset 0 1px 0 rgba(255,255,255,.15);
 }
 /* Orbe droit */
 .i2ao-hero::before {
     content: '';
-    position: absolute; top:-120px; right:-120px;
-    width: 450px; height: 450px;
-    background: radial-gradient(circle, rgba(56,189,248,.13) 0%, transparent 65%);
+    position: absolute; top:-100px; right:-100px;
+    width: 420px; height: 420px;
+    background: radial-gradient(circle, rgba(255,255,255,.12) 0%, transparent 65%);
     animation: heroOrb 7s ease-in-out infinite alternate;
 }
 /* Orbe gauche */
@@ -450,139 +464,108 @@ section[data-testid="stSidebar"] h1 {
     position: relative; z-index: 1;
 }
 .i2ao-hero p {
-    color: rgba(255,255,255,.75);
-    font-size: 1.12rem;
+    color: rgba(255,255,255,.82);
+    font-size: 1.1rem;
     position: relative; z-index: 1;
+    line-height: 1.6;
 }
 
 /* === EXPANDERS =============================================== */
 [data-testid="stExpander"] {
-    background: var(--c-glass) !important;
-    border: 1px solid var(--c-glass-border) !important;
+    background: var(--c-surface) !important;
+    border: 1px solid var(--c-border) !important;
     border-radius: 14px !important;
-    backdrop-filter: blur(10px);
-    transition: border-color .2s;
+    box-shadow: var(--shadow-sm);
+    transition: box-shadow .2s ease, border-color .2s ease;
 }
 [data-testid="stExpander"]:hover {
-    border-color: rgba(56,189,248,.26) !important;
+    border-color: var(--c-border-strong) !important;
+    box-shadow: var(--shadow-md) !important;
 }
 [data-testid="stExpander"] summary {
     color: var(--c-text) !important;
+    font-weight: 600;
 }
 
 /* === DATAFRAMES ============================================== */
 [data-testid="stDataFrame"] {
-    border-radius: 14px !important;
+    border-radius: 12px !important;
     overflow: hidden;
-    border: 1px solid var(--c-glass-border) !important;
+    border: 1px solid var(--c-border) !important;
+    box-shadow: var(--shadow-sm);
 }
 
 /* === ALERTES ================================================= */
 [data-testid="stAlert"] {
-    border-radius: 14px !important;
-    border-left-width: 3px !important;
-    backdrop-filter: blur(8px);
+    border-radius: 12px !important;
+    border-left-width: 4px !important;
+    background: var(--c-surface) !important;
+    box-shadow: var(--shadow-sm);
 }
 
 /* === CONTAINERS À BORD ====================================== */
 [data-testid="stVerticalBlockBorderWrapper"] {
-    background: var(--c-glass) !important;
-    border: 1px solid var(--c-glass-border) !important;
-    border-radius: 18px !important;
-    backdrop-filter: blur(10px);
+    background: var(--c-surface) !important;
+    border: 1px solid var(--c-border) !important;
+    border-radius: 16px !important;
+    box-shadow: var(--shadow-md);
+}
+
+/* === INPUTS & SELECTS ======================================= */
+[data-testid="stTextInput"] input,
+[data-baseweb="select"] {
+    background: var(--c-surface) !important;
+    border: 1.5px solid var(--c-border-strong) !important;
+    border-radius: 10px !important;
+    color: var(--c-text) !important;
+    box-shadow: var(--shadow-sm) !important;
+    transition: border-color .18s, box-shadow .18s !important;
+}
+[data-testid="stTextInput"] input:focus,
+[data-baseweb="select"]:focus-within {
+    border-color: var(--c-primary) !important;
+    box-shadow: 0 0 0 3px rgba(29,78,216,.12) !important;
+}
+
+/* === STATUS / SPINNER ======================================= */
+[data-testid="stStatusContainer"] {
+    background: var(--c-surface) !important;
+    border: 1px solid var(--c-border) !important;
+    border-radius: 14px !important;
+    box-shadow: var(--shadow-md) !important;
 }
 
 /* === DIVIDERS =============================================== */
 hr {
     border: none !important;
-    border-top: 1px solid rgba(56,189,248,.10) !important;
-    margin: 1.8rem 0 !important;
+    border-top: 1.5px solid var(--c-border) !important;
+    margin: 2rem 0 !important;
 }
 
 /* === CAPTIONS =============================================== */
 .stCaption, [data-testid="stCaptionContainer"] {
     color: var(--c-muted) !important;
-    font-style: italic;
+    font-size: .82rem !important;
 }
 
-/* Scrollbar fine et discrète */
-::-webkit-scrollbar { width: 5px; height: 5px; }
-::-webkit-scrollbar-track { background: transparent; }
+/* === MARKDOWN GÉNÉRAL ======================================= */
+.main [data-testid="stMarkdownContainer"] p {
+    color: var(--c-text2);
+    line-height: 1.65;
+}
+
+/* Scrollbar fine */
+::-webkit-scrollbar { width: 6px; height: 6px; }
+::-webkit-scrollbar-track { background: var(--c-bg2); border-radius: 4px; }
 ::-webkit-scrollbar-thumb {
-    background: rgba(56,189,248,.25);
+    background: var(--c-border-strong);
     border-radius: 4px;
 }
-::-webkit-scrollbar-thumb:hover {
-    background: rgba(56,189,248,.45);
-}
+::-webkit-scrollbar-thumb:hover { background: var(--c-primary); }
 </style>
-"""
-
-# Particules CSS pure — Streamlit bloque les <script>, on utilise des @keyframes
-# 30 points avec positions/durées/délais variés, entièrement CSS, aucun JS requis.
-_PARTICLES_CSS = """
-<style>
-.i2ao-particles {
-    position: fixed; inset: 0;
-    overflow: hidden; pointer-events: none; z-index: 1;
-}
-.i2ao-particles span {
-    position: absolute;
-    border-radius: 50%;
-    background: rgba(56,189,248,.65);
-    box-shadow: 0 0 6px rgba(56,189,248,.4);
-    animation: floatDot linear infinite;
-}
-@keyframes floatDot {
-    0%   { transform: translateY(100vh) scale(0); opacity: 0; }
-    10%  { opacity: 1; }
-    90%  { opacity: .6; }
-    100% { transform: translateY(-10vh) scale(1); opacity: 0; }
-}
-/* 30 particules avec positions, tailles et timings uniques */
-.i2ao-particles span:nth-child(1)  {left:3%;  width:3px; height:3px; animation-duration:18s; animation-delay:0s;}
-.i2ao-particles span:nth-child(2)  {left:8%;  width:2px; height:2px; animation-duration:22s; animation-delay:-4s;}
-.i2ao-particles span:nth-child(3)  {left:14%; width:4px; height:4px; animation-duration:16s; animation-delay:-8s;}
-.i2ao-particles span:nth-child(4)  {left:20%; width:2px; height:2px; animation-duration:25s; animation-delay:-2s;}
-.i2ao-particles span:nth-child(5)  {left:27%; width:3px; height:3px; animation-duration:19s; animation-delay:-12s;}
-.i2ao-particles span:nth-child(6)  {left:33%; width:2px; height:2px; animation-duration:21s; animation-delay:-6s;}
-.i2ao-particles span:nth-child(7)  {left:39%; width:4px; height:4px; animation-duration:17s; animation-delay:-3s;}
-.i2ao-particles span:nth-child(8)  {left:45%; width:2px; height:2px; animation-duration:23s; animation-delay:-9s;}
-.i2ao-particles span:nth-child(9)  {left:52%; width:3px; height:3px; animation-duration:20s; animation-delay:-1s;}
-.i2ao-particles span:nth-child(10) {left:58%; width:2px; height:2px; animation-duration:24s; animation-delay:-7s;}
-.i2ao-particles span:nth-child(11) {left:64%; width:4px; height:4px; animation-duration:15s; animation-delay:-11s;}
-.i2ao-particles span:nth-child(12) {left:70%; width:2px; height:2px; animation-duration:26s; animation-delay:-5s;}
-.i2ao-particles span:nth-child(13) {left:76%; width:3px; height:3px; animation-duration:18s; animation-delay:-13s;}
-.i2ao-particles span:nth-child(14) {left:82%; width:2px; height:2px; animation-duration:22s; animation-delay:-2s;}
-.i2ao-particles span:nth-child(15) {left:88%; width:4px; height:4px; animation-duration:19s; animation-delay:-8s;}
-.i2ao-particles span:nth-child(16) {left:94%; width:2px; height:2px; animation-duration:21s; animation-delay:-4s;}
-.i2ao-particles span:nth-child(17) {left:6%;  width:3px; height:3px; animation-duration:28s; animation-delay:-16s;}
-.i2ao-particles span:nth-child(18) {left:12%; width:2px; height:2px; animation-duration:20s; animation-delay:-10s;}
-.i2ao-particles span:nth-child(19) {left:24%; width:3px; height:3px; animation-duration:23s; animation-delay:-14s;}
-.i2ao-particles span:nth-child(20) {left:36%; width:2px; height:2px; animation-duration:17s; animation-delay:-6s;}
-.i2ao-particles span:nth-child(21) {left:48%; width:4px; height:4px; animation-duration:25s; animation-delay:-3s;}
-.i2ao-particles span:nth-child(22) {left:55%; width:2px; height:2px; animation-duration:18s; animation-delay:-17s;}
-.i2ao-particles span:nth-child(23) {left:62%; width:3px; height:3px; animation-duration:22s; animation-delay:-9s;}
-.i2ao-particles span:nth-child(24) {left:73%; width:2px; height:2px; animation-duration:16s; animation-delay:-5s;}
-.i2ao-particles span:nth-child(25) {left:79%; width:3px; height:3px; animation-duration:24s; animation-delay:-12s;}
-.i2ao-particles span:nth-child(26) {left:85%; width:2px; height:2px; animation-duration:20s; animation-delay:-1s;}
-.i2ao-particles span:nth-child(27) {left:91%; width:4px; height:4px; animation-duration:19s; animation-delay:-7s;}
-.i2ao-particles span:nth-child(28) {left:16%; width:2px; height:2px; animation-duration:27s; animation-delay:-15s;}
-.i2ao-particles span:nth-child(29) {left:43%; width:3px; height:3px; animation-duration:21s; animation-delay:-11s;}
-.i2ao-particles span:nth-child(30) {left:67%; width:2px; height:2px; animation-duration:23s; animation-delay:-4s;}
-</style>
-<div class="i2ao-particles">
-<span></span><span></span><span></span><span></span><span></span>
-<span></span><span></span><span></span><span></span><span></span>
-<span></span><span></span><span></span><span></span><span></span>
-<span></span><span></span><span></span><span></span><span></span>
-<span></span><span></span><span></span><span></span><span></span>
-<span></span><span></span><span></span><span></span><span></span>
-</div>
 """
 
 st.markdown(_CUSTOM_CSS, unsafe_allow_html=True)
-st.markdown(_PARTICLES_CSS, unsafe_allow_html=True)
 
 
 # ---------------------------------------------------------------------------
@@ -656,70 +639,49 @@ def dce_concatene_pour(affaire: Affaire) -> str:
     return concatener_dce([(type_p, texte) for _, type_p, texte, _, _ in pieces])
 
 
+def _charger_json(path, model, label: str):
+    """Charge un fichier JSON et valide le modèle Pydantic. Affiche un warning si corrompu."""
+    try:
+        return model.model_validate(json.loads(path.read_text(encoding="utf-8")))
+    except Exception as exc:
+        st.warning(f"⚠️ Fichier {label} illisible ou corrompu ({path.name}) — regénère-le. Détail : {exc}")
+        return None
+
+
 def charger_analyse(affaire: Affaire) -> AnalyseAO | None:
     if not affaire.has_analyse():
         return None
-    try:
-        return AnalyseAO.model_validate(
-            json.loads(affaire.analyse_path.read_text(encoding="utf-8"))
-        )
-    except Exception:
-        return None
+    return _charger_json(affaire.analyse_path, AnalyseAO, "analyse")
 
 
 def charger_mt(affaire: Affaire) -> MemoireTechniqueGenere | None:
     if not affaire.has_mt():
         return None
-    try:
-        return MemoireTechniqueGenere.model_validate(
-            json.loads(affaire.mt_json_path.read_text(encoding="utf-8"))
-        )
-    except Exception:
-        return None
+    return _charger_json(affaire.mt_json_path, MemoireTechniqueGenere, "mémoire technique")
 
 
 def charger_dpgf(affaire: Affaire) -> DPGFGeneree | None:
     if not affaire.has_dpgf():
         return None
-    try:
-        return DPGFGeneree.model_validate(
-            json.loads(affaire.dpgf_json_path.read_text(encoding="utf-8"))
-        )
-    except Exception:
-        return None
+    return _charger_json(affaire.dpgf_json_path, DPGFGeneree, "DPGF")
 
 
 def charger_couverture(affaire: Affaire) -> RapportCouverture | None:
     if not affaire.has_couverture():
         return None
-    try:
-        return RapportCouverture.model_validate(
-            json.loads(affaire.couverture_path.read_text(encoding="utf-8"))
-        )
-    except Exception:
-        return None
+    return _charger_json(affaire.couverture_path, RapportCouverture, "couverture")
 
 
 def charger_synthese(affaire: Affaire) -> SyntheseDirection | None:
     if not affaire.has_synthese():
         return None
-    try:
-        return SyntheseDirection.model_validate(
-            json.loads(affaire.synthese_json_path.read_text(encoding="utf-8"))
-        )
-    except Exception:
-        return None
+    return _charger_json(affaire.synthese_json_path, SyntheseDirection, "synthèse")
 
 
 def charger_lettre(affaire: Affaire) -> LettrePresentation | None:
     if not affaire.lettre_json_path.exists():
         return None
-    try:
-        return LettrePresentation.model_validate(
-            json.loads(affaire.lettre_json_path.read_text(encoding="utf-8"))
-        )
-    except Exception:
-        return None
+    return _charger_json(affaire.lettre_json_path, LettrePresentation, "lettre")
 
 
 # ---------------------------------------------------------------------------
@@ -911,7 +873,7 @@ def render_tab_overview(affaire: Affaire) -> None:
         "DQE HT",
         f"{dpgf.montant_dqe_he:,.0f} €".replace(",", " ") if dpgf else "—",
     )
-    cols[4].metric("Date remise", analyse.date_remise[:30] if len(analyse.date_remise) > 30 else analyse.date_remise)
+    cols[4].metric("Date remise", analyse.date_remise.split("\n")[0][:40])
 
     # Ligne 2 : indicateurs de risque
     cols2 = st.columns(5)
@@ -1015,26 +977,6 @@ def render_tab_overview(affaire: Affaire) -> None:
             st.info("Génère la DPGF dans l'onglet 💰 DPGF.")
 
     st.divider()
-
-    # ── Graphiques 3D WebGL ───────────────────────────────────────────────
-    st.markdown("##### 🌐 Vue 3D des exigences — rotatif à la souris")
-    st.caption("Chaque point = une exigence du DCE. Axes : catégorie × importance × rang. Interactif — clic + drag pour faire pivoter.")
-    st.plotly_chart(
-        scatter3d_exigences(analyse.exigences),
-        use_container_width=True,
-        config={"displayModeBar": True, "displaylogo": False},
-        key=f"overview_scatter3d_{affaire.slug}",
-    )
-
-    if dpgf and dpgf.dqe:
-        st.markdown("##### 🏔️ Paysage financier du DQE — surface 3D")
-        st.caption("Chaque montagne = un chapitre du DQE. Hauteur proportionnelle au montant HT. Interactif — faire pivoter pour explorer.")
-        st.plotly_chart(
-            surface3d_dqe(dpgf.dqe),
-            use_container_width=True,
-            config={"displayModeBar": True, "displaylogo": False},
-            key=f"overview_surface3d_{affaire.slug}",
-        )
 
 
 # ---------------------------------------------------------------------------
@@ -1295,9 +1237,18 @@ def render_tab_mt(affaire: Affaire, client: LLMClient | None) -> None:
         st.info("Génère le MT pour voir l'aperçu et le télécharger.")
         return
 
+    # Récupère la pondération technique depuis la synthèse si elle existe
+    _synth_mt = charger_synthese(affaire)
+    _pond_tech = "—"
+    if _synth_mt and _synth_mt.criteres_jugement:
+        for _c in _synth_mt.criteres_jugement:
+            if any(k in _c.libelle.lower() for k in ("technique", "valeur", "qualité", "qualite")):
+                _pond_tech = _c.ponderation
+                break
+
     cols = st.columns(2)
     cols[0].metric("Sections", len(mt.sections))
-    cols[1].metric("Pondération valeur technique attendue", "60%")
+    cols[1].metric("Pondération valeur technique", _pond_tech)
 
     st.subheader("Aperçu")
     for s in mt.sections:
@@ -1466,6 +1417,7 @@ def render_tab_mt(affaire: Affaire, client: LLMClient | None) -> None:
                         exporter_mt_docx(mt_fix, affaire.mt_docx_path)
                         st.write(f"Addendum intégré — MT mis à jour ({affaire.mt_docx_path.stat().st_size / 1024:.1f} KB)")
                         status_fix.update(label="Lacunes comblées ✓", state="complete", expanded=False)
+                        st.info("ℹ️ Le MT a été complété. Re-lance l'évaluation de couverture (bouton ci-dessus) pour mettre à jour le score.")
                         st.rerun()
                     except LLMError as e:
                         status_fix.update(label="Échec", state="error")
@@ -1560,6 +1512,12 @@ def render_tab_dpgf(affaire: Affaire, client: LLMClient | None) -> None:
     cols[0].metric("Prestations BPU", len(dpgf.bpu))
     cols[1].metric("Lignes DQE", len(dpgf.dqe))
     cols[2].metric("Total DQE HT", f"{dpgf.montant_dqe_he:,.0f} €".replace(",", " "))
+
+    if dpgf.lignes_orphelines:
+        st.warning(
+            f"⚠️ **{len(dpgf.lignes_orphelines)} code(s) non trouvé(s) dans le catalogue** "
+            f"(non inclus dans le DQE) : {', '.join(dpgf.lignes_orphelines)}"
+        )
 
     st.caption(f"**Programme indicatif :** {dpgf.description_programme}")
 
