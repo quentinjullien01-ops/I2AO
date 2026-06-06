@@ -4,12 +4,14 @@
 ' ============================================================
 
 Dim ROOT, launcher, shell
-ROOT    = Left(WScript.ScriptFullName, InStrRev(WScript.ScriptFullName, "\"))
+ROOT     = Left(WScript.ScriptFullName, InStrRev(WScript.ScriptFullName, "\"))
 launcher = ROOT & "lancer.bat"
 
 Set shell = CreateObject("WScript.Shell")
 
-' Lance lancer.bat sans fenetre console (0 = hidden)
+' windowStyle = 0  → fenêtre complètement cachée
+' bWaitOnReturn = False → le VBS ne bloque pas
 shell.Run "cmd /c """ & launcher & """", 0, False
 
 Set shell = Nothing
+WScript.Quit

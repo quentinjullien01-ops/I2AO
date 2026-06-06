@@ -25,8 +25,8 @@ if not errorlevel 1 (
     set /a PORT=%PORT%+1
 )
 
-:: ---- Lance Streamlit -------------
-start /min "" "%PYTHON%" -m streamlit run "%APP%" ^
+:: ---- Lance Streamlit (hérite de la fenêtre cachée du VBS) ----
+start /B "" "%PYTHON%" -m streamlit run "%APP%" ^
     --server.port %PORT% ^
     --server.address 127.0.0.1 ^
     --server.headless true ^

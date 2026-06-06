@@ -15,5 +15,4 @@ serverAddress    = "127.0.0.1"
 [server]
 headless         = true
 address          = "127.0.0.1"   # localhost uniquement — inaccessible depuis le réseau
-enableCORS       = false
 enableXsrfProtection = true
