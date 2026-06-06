@@ -1848,7 +1848,7 @@ def render_tab_candidature(affaire: Affaire, client: LLMClient | None) -> None:
     st.divider()
 
     # ----- Pack ZIP -----
-    st.subheader("📦 Pack candidature complet")
+    st.subheader("🗜️ Assembler le ZIP de dépôt")
     pieces_pack = []
     if affaire.lettre_docx_path.exists():
         pieces_pack.append("01-Lettre-presentation.docx")
